@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="user"
+            type="com.happy.auction.tab.me.UserDataVM"/>
+        <variable
+            name="fragment"
+            type="com.happy.auction.tab.me.TabMeFragment"/>
+        <import type="com.happy.auction.R"/>
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/divider"
+        tools:context="com.happy.auction.tab.me.TabMeFragment">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/bg_header"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:background="@color/main_red"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{fragment.onClickSetting}"
+                android:padding="10dp"
+                android:src="@drawable/ic_setting"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:clickable="true"
+                android:onClick="@{fragment.onClickAvatar}"
+                android:padding="9dp"
+                app:avatar="@{user == null ? null : user.avatar}"
+                app:layout_constraintBottom_toTopOf="@+id/tv_username"
+                app:layout_constraintLeft_toLeftOf="@+id/bg_header"
+                app:layout_constraintRight_toRightOf="@+id/bg_header"/>
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="@{fragment.onClickAvatar}"
+                android:paddingBottom="21dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@{user == null ? @string/login_register : user.username}"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_header"
+                app:layout_constraintLeft_toLeftOf="@+id/bg_header"
+                app:layout_constraintRight_toRightOf="@+id/bg_header"
+                tools:text="@string/app_name"/>
+
+            <View
+                android:id="@+id/bg_info"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:background="@android:color/white"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bg_header"/>
+            <View
+                android:id="@+id/divider25"
+                style="@style/TabMeDivider"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bg_info"/>
+            <View
+                android:id="@+id/divider50"
+                style="@style/TabMeDivider"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bg_info"/>
+            <View
+                android:id="@+id/divider75"
+                style="@style/TabMeDivider"
+                app:layout_constraintHorizontal_bias="0.75"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bg_info"/>
+
+            <TextView
+                android:id="@+id/tv_auction_coin"
+                style="@style/TabMeTextCoin"
+                android:onClick="@{fragment.onClickAuctionCoin}"
+                android:text="@{String.valueOf(user == null ? 0 : user.auction_coin)}"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/divider25"
+                app:layout_constraintTop_toTopOf="@+id/bg_info"
+                tools:text="100000"/>
+            <TextView
+                style="@style/TabMeTextCoinLabel"
+                android:onClick="@{fragment.onClickAuctionCoin}"
+                android:text="@string/auction_coin"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_info"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/divider25"
+                app:layout_constraintTop_toBottomOf="@+id/tv_auction_coin"/>
+
+            <TextView
+                android:id="@+id/tv_free_coin"
+                style="@style/TabMeTextCoin"
+                android:onClick="@{fragment.onClickFreeCoin}"
+                android:text="@{String.valueOf(user == null ? 0 : user.free_coin)}"
+                app:layout_constraintLeft_toLeftOf="@+id/divider25"
+                app:layout_constraintRight_toLeftOf="@+id/divider50"
+                app:layout_constraintTop_toTopOf="@+id/bg_info"
+                tools:text="990000"/>
+            <TextView
+                style="@style/TabMeTextCoinLabel"
+                android:onClick="@{fragment.onClickFreeCoin}"
+                android:text="@string/free_coin"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_info"
+                app:layout_constraintLeft_toLeftOf="@+id/divider25"
+                app:layout_constraintRight_toLeftOf="@+id/divider50"
+                app:layout_constraintTop_toBottomOf="@+id/tv_free_coin"/>
+
+            <TextView
+                android:id="@+id/tv_point"
+                style="@style/TabMeTextCoin"
+                android:onClick="@{fragment.onClickPoint}"
+                android:text="@{String.valueOf(user == null ? 0 : user.point)}"
+                app:layout_constraintLeft_toLeftOf="@+id/divider50"
+                app:layout_constraintRight_toLeftOf="@+id/divider75"
+                app:layout_constraintTop_toTopOf="@+id/bg_info"
+                tools:text="0"/>
+            <TextView
+                style="@style/TabMeTextCoinLabel"
+                android:onClick="@{fragment.onClickPoint}"
+                android:text="@string/point"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_info"
+                app:layout_constraintLeft_toLeftOf="@+id/divider50"
+                app:layout_constraintRight_toLeftOf="@+id/divider75"
+                app:layout_constraintTop_toBottomOf="@+id/tv_point"/>
+
+            <ImageView
+                android:id="@+id/btn_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:clickable="true"
+                android:onClick="@{fragment.onClickCharge}"
+                app:layout_constraintLeft_toRightOf="@+id/divider75"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bg_info"
+                app:srcCompat="@drawable/btn_charge"/>
+
+            <TextView
+                android:id="@+id/tv_order"
+                style="@style/TabMeTextItem"
+                android:layout_height="36dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="8dp"
+                android:onClick="@{fragment.onClickOrder}"
+                android:text="@string/my_order"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bg_info"/>
+            <View
+                android:id="@+id/bg_order"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="1dp"
+                android:background="@android:color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_order"/>
+
+            <TextView
+                android:id="@+id/tv_auction_going"
+                style="@style/TabMeTextAuction"
+                android:drawableTop="@drawable/ic_auction_going"
+                android:onClick="@{fragment.onClickAuctionGoing}"
+                android:text="@string/auction_going"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/tv_auction_win"
+                app:layout_constraintTop_toTopOf="@+id/bg_order"/>
+
+            <TextView
+                android:id="@+id/tv_auction_win"
+                style="@style/TabMeTextAuction"
+                android:drawableTop="@drawable/ic_auction_win"
+                android:onClick="@{fragment.onClickAuctionWin}"
+                android:text="@string/auction_win"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bg_order"/>
+
+            <TextView
+                android:id="@+id/tv_auction_unpaid"
+                style="@style/TabMeTextAuction"
+                android:drawableTop="@drawable/ic_auction_unpaid"
+                android:onClick="@{fragment.onClickAuctionUnpaid}"
+                android:text="@string/auction_unpaid"
+                app:layout_constraintLeft_toRightOf="@+id/tv_auction_win"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bg_order"/>
+
+            <TextView
+                android:id="@+id/tv_card"
+                style="@style/TabMeTextItem"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:onClick="@{fragment.onClickMyCard}"
+                android:text="@string/my_card"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_auction_win"/>
+
+            <TextView
+                android:id="@+id/tv_publish"
+                style="@style/TabMeTextItem"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:onClick="@{fragment.onClickMyPublish}"
+                android:text="@string/my_publish"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_card"/>
+
+            <TextView
+                android:id="@+id/tv_service"
+                style="@style/TabMeTextItem"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:onClick="@{fragment.onClickMyService}"
+                android:text="@string/my_service"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_publish"/>
+
+            <TextView
+                android:id="@+id/tv_message"
+                style="@style/TabMeTextItem"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:onClick="@{fragment.onClickMyMessage}"
+                android:text="@string/my_message"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_service"/>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</layout>

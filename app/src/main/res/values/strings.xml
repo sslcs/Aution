@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">王者竞拍</string>
+    <string name="detail_btn_bid">出价（1夺宝币/次）</string>
+    <string name="detail_btn_go_latest">前往最新一期</string>
+
+    <!-- tab -->
+    <string name="tab_home">首页</string>
+    <string name="tab_latest">最新成交</string>
+    <string name="tab_category">全部商品</string>
+    <string name="tab_me">个人中心</string>
+
+    <!-- tab me -->
+    <string name="login_register">登录/注册</string>
+    <string name="auction_coin">拍币</string>
+    <string name="free_coin">赠币</string>
+    <string name="point">积分</string>
+    <string name="my_order">我的订单</string>
+    <string name="my_card">我的卡密</string>
+    <string name="my_publish">我的晒单</string>
+    <string name="my_service">客服中心</string>
+    <string name="my_message">消息通知</string>
+    <string name="auction_going">正在拍</string>
+    <string name="auction_win">已拍中</string>
+    <string name="auction_unpaid">待付款</string>
+</resources>

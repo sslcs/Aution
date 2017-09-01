@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.happy.auction.ui.AuctionDetailActivity">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/include_toolbar"/>
+
+        <ImageView
+            android:id="@+id/iv_goods_image"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/pic_default"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+
+        <TextView
+            android:id="@+id/tv_goods_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_goods_image"
+            tools:text="商品名称"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/v_auction_record"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffff00"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_goods_name"
+            app:layout_constraintHorizontal_bias="1.0">
+
+            <TextView
+                android:id="@+id/tv_auction_status"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="#666666"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="@id/v_auction_record"
+                app:layout_constraintRight_toRightOf="@id/v_auction_record"
+                app:layout_constraintTop_toTopOf="@id/v_auction_record"
+                tools:text="竞拍结束"/>
+
+            <View
+                android:id="@+id/divider_auction_record"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/main_red"
+                app:layout_constraintLeft_toLeftOf="@id/v_auction_record"
+                app:layout_constraintRight_toRightOf="@id/v_auction_record"
+                app:layout_constraintTop_toBottomOf="@+id/tv_auction_status"/>
+
+            <TextView
+                android:id="@+id/tv_current_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="13dp"
+                android:text="当前价：0.0"
+                android:textColor="#666666"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="@id/v_auction_record"
+                app:layout_constraintRight_toLeftOf="@+id/tv_original_price"
+                app:layout_constraintTop_toBottomOf="@+id/divider_auction_record"
+                app:layout_constraintHorizontal_bias="0.505"/>
+
+            <TextView
+                android:id="@+id/tv_original_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="市场价：10.0"
+                android:textColor="#666666"
+                android:textSize="16sp"
+                app:layout_constraintDimensionRatio="w,1:1"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_current_price"
+                android:layout_marginTop="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_current_price"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_current_person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@id/v_auction_record"
+                app:layout_constraintRight_toRightOf="@id/v_auction_record"
+                app:layout_constraintTop_toBottomOf="@+id/tv_current_price"
+                tools:text="当前出价人：嘻嘻嘻嘻信息"/>
+
+            <TextView
+                android:id="@+id/btn_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:padding="8dp"
+                android:text="查看更多 》"
+                app:layout_constraintLeft_toLeftOf="@id/v_auction_record"
+                app:layout_constraintRight_toRightOf="@id/v_auction_record"
+                app:layout_constraintTop_toBottomOf="@+id/recycler_view"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintLeft_toLeftOf="@id/v_auction_record"
+                app:layout_constraintRight_toRightOf="@id/v_auction_record"
+                app:layout_constraintTop_toBottomOf="@+id/tv_current_person"/>
+        </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_join_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:clickable="true"
+            android:onClick="onClickSend"
+            android:padding="10dp"
+            android:text="我已竞拍"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v_auction_record"/>
+
+        <TextView
+            android:id="@+id/tv_join_times"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:padding="10dp"
+            android:text="0次"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v_auction_record"/>
+
+        <TextView
+            android:id="@+id/btn_bottom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#00ff00"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onClickJoin"
+            android:padding="10dp"
+            android:text="@string/detail_btn_bid"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>
