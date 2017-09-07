@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="user"
+            type="com.happy.auction.tab.me.UserDataVM"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.happy.auction.tab.me.SettingActivity">
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            style="@style/TextTitle"
+            android:text="@string/setting"/>
+
+        <ImageView
+            style="@style/IconBack"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_toolbar_title"
+            app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
+
+        <TextView
+            android:id="@+id/tv_service_contract"
+            style="@style/TextItemSetting"
+            android:onClick="onClickServiceContract"
+            android:text="@string/service_contract"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title"/>
+
+        <TextView
+            android:id="@+id/tv_about_us"
+            style="@style/TextItemSetting"
+            android:layout_marginTop="1dp"
+            android:onClick="onClickAboutUs"
+            android:text="@string/about_us"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_service_contract"/>
+
+        <Button
+            style="@style/ButtonCorner"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginTop="30dp"
+            android:onClick="onClickLogout"
+            android:text="@string/logout"
+            android:visibility="@{user==null ? View.GONE : View.VISIBLE}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_about_us"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

@@ -48,6 +48,10 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="TextItemSetting" parent="TabMeTextItem">
+        <item name="android:layout_height">50dp</item>
+    </style>
+
     <style name="TabMeTextAuction" parent="Clickable">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">80dp</item>
@@ -64,5 +68,28 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="IconBack">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:paddingLeft">@dimen/ic_back_padding</item>
+        <item name="android:paddingRight">@dimen/ic_back_padding</item>
+        <item name="android:src">@drawable/ic_back</item>
+        <item name="android:onClick">onClickBack</item>
+    </style>
+
+    <style name="ButtonCorner">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_corner</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TransparentDialog" parent="android:style/Theme.Dialog">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 </resources>

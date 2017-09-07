@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="main_red">#e93f37</color>
+    <color name="main_red_alpha">#a0e93f37</color>
 
     <color name="text_title">#666666</color>
     <color name="text_dark">#333333</color>

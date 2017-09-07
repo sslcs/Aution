@@ -22,4 +22,10 @@
     <string name="auction_going">正在拍</string>
     <string name="auction_win">已拍中</string>
     <string name="auction_unpaid">待付款</string>
+
+    <!-- setting -->
+    <string name="setting">设置</string>
+    <string name="service_contract">服务协议</string>
+    <string name="about_us">关于我们</string>
+    <string name="logout">退出登录</string>
 </resources>

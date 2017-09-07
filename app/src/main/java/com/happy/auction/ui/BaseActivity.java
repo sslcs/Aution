@@ -14,11 +14,7 @@ import com.happy.auction.databinding.IncludeToolbarBinding;
  */
 
 public class BaseActivity extends AppCompatActivity {
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        DataBindingUtil.setContentView(this, R.layout.activity_auction_detail);
-    }
+
 
     class ToolbarBuilder {
         private IncludeToolbarBinding binding;

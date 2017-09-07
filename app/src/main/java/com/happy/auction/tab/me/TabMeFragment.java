@@ -1,7 +1,7 @@
 package com.happy.auction.tab.me;
 
+import android.content.Intent;
 import android.databinding.BindingAdapter;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Spannable;
@@ -13,9 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.databinding.FragmentTabMeBinding;
 import com.happy.auction.utils.DebugLog;
+import com.happy.auction.utils.RxBus;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * 个人中心
@@ -27,24 +31,6 @@ public class TabMeFragment extends Fragment {
 
     public static TabMeFragment newInstance() {
         return new TabMeFragment();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle bundle) {
-        binding = FragmentTabMeBinding.inflate(inflater);
-        initLayout();
-        return binding.getRoot();
-    }
-
-    private void initLayout() {
-        UserDataVM user = new UserDataVM();
-        user.username = "不是本人";
-        user.avatar = "https://avatars1.githubusercontent.com/u/66577?v=4&s=60";
-        user.auction_coin = 90000;
-        user.free_coin = 888888;
-        user.points = 6666;
-        binding.setUser(user);
-        binding.setFragment(this);
     }
 
     @BindingAdapter("spanLength")
@@ -61,8 +47,27 @@ public class TabMeFragment extends Fragment {
         ((TextView) v).setText(sString);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle bundle) {
+        binding = FragmentTabMeBinding.inflate(inflater);
+        initLayout();
+        return binding.getRoot();
+    }
+
+    private void initLayout() {
+        binding.setUser(AppInstance.getInstance().getUser());
+        binding.setFragment(this);
+
+        RxBus.getDefault().subscribe(this, LogoutEvent.class, new Consumer<LogoutEvent>() {
+            @Override
+            public void accept(LogoutEvent event) throws Exception {
+                binding.setUser(null);
+            }
+        });
+    }
+
     public void onClickSetting(View view) {
-        DebugLog.e("onClick");
+        startActivity(new Intent(view.getContext(), SettingActivity.class));
     }
 
     public void onClickAvatar(View view) {
