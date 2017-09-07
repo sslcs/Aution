@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.happy.auction.R;
 import com.happy.auction.tab.latest.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,10 +17,21 @@ import java.util.List;
  */
 public class TabLatestAdapter extends RecyclerView.Adapter<TabLatestAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private List<DummyItem> mValues;
 
     public TabLatestAdapter(List<DummyItem> items) {
-        mValues = items;
+        addAll(items);
+    }
+
+    public void clear() {
+        mValues.clear();
+    }
+
+    public void addAll(List<DummyItem> items) {
+        if (mValues == null) {
+            mValues = new ArrayList<>();
+        }
+        mValues.addAll(items);
     }
 
     @Override
@@ -32,7 +44,7 @@ public class TabLatestAdapter extends RecyclerView.Adapter<TabLatestAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
+        holder.mIdView.setText(String.valueOf(position));
         holder.mContentView.setText(mValues.get(position).content);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -56,8 +68,8 @@ public class TabLatestAdapter extends RecyclerView.Adapter<TabLatestAdapter.View
         ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = view.findViewById(R.id.id);
+            mContentView = view.findViewById(R.id.content);
         }
 
         @Override

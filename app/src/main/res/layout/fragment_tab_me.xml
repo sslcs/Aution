@@ -102,61 +102,40 @@
                 android:id="@+id/tv_auction_coin"
                 style="@style/TabMeTextCoin"
                 android:onClick="@{fragment.onClickAuctionCoin}"
-                android:text="@{String.valueOf(user == null ? 0 : user.auction_coin)}"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/divider25"
-                app:layout_constraintTop_toTopOf="@+id/bg_info"
-                tools:text="100000"/>
-            <TextView
-                style="@style/TabMeTextCoinLabel"
-                android:onClick="@{fragment.onClickAuctionCoin}"
-                android:text="@string/auction_coin"
+                android:text="@{@string/auction_coin(user == null ? 0 : user.auction_coin)}"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_info"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/divider25"
-                app:layout_constraintTop_toBottomOf="@+id/tv_auction_coin"/>
-
+                app:layout_constraintTop_toTopOf="@+id/bg_info"
+                app:spanLength="@{2}"
+                tools:text="@string/auction_coin"/>
             <TextView
                 android:id="@+id/tv_free_coin"
                 style="@style/TabMeTextCoin"
                 android:onClick="@{fragment.onClickFreeCoin}"
-                android:text="@{String.valueOf(user == null ? 0 : user.free_coin)}"
-                app:layout_constraintLeft_toLeftOf="@+id/divider25"
-                app:layout_constraintRight_toLeftOf="@+id/divider50"
-                app:layout_constraintTop_toTopOf="@+id/bg_info"
-                tools:text="990000"/>
-            <TextView
-                style="@style/TabMeTextCoinLabel"
-                android:onClick="@{fragment.onClickFreeCoin}"
-                android:text="@string/free_coin"
+                android:text="@{@string/free_coin(user == null ? 0 : user.free_coin)}"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_info"
                 app:layout_constraintLeft_toLeftOf="@+id/divider25"
                 app:layout_constraintRight_toLeftOf="@+id/divider50"
-                app:layout_constraintTop_toBottomOf="@+id/tv_free_coin"/>
-
+                app:layout_constraintTop_toTopOf="@+id/bg_info"
+                app:spanLength="@{2}"
+                tools:text="@string/free_coin"/>
             <TextView
                 android:id="@+id/tv_point"
                 style="@style/TabMeTextCoin"
                 android:onClick="@{fragment.onClickPoint}"
-                android:text="@{String.valueOf(user == null ? 0 : user.point)}"
-                app:layout_constraintLeft_toLeftOf="@+id/divider50"
-                app:layout_constraintRight_toLeftOf="@+id/divider75"
-                app:layout_constraintTop_toTopOf="@+id/bg_info"
-                tools:text="0"/>
-            <TextView
-                style="@style/TabMeTextCoinLabel"
-                android:onClick="@{fragment.onClickPoint}"
-                android:text="@string/point"
+                android:text="@{@string/point(user == null ? 0 : user.points)}"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_info"
                 app:layout_constraintLeft_toLeftOf="@+id/divider50"
                 app:layout_constraintRight_toLeftOf="@+id/divider75"
-                app:layout_constraintTop_toBottomOf="@+id/tv_point"/>
+                app:layout_constraintTop_toTopOf="@+id/bg_info"
+                app:spanLength="@{2}"
+                tools:text="@string/point"/>
 
             <ImageView
                 android:id="@+id/btn_charge"
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
-                android:clickable="true"
                 android:onClick="@{fragment.onClickCharge}"
                 app:layout_constraintLeft_toRightOf="@+id/divider75"
                 app:layout_constraintRight_toRightOf="parent"

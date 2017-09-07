@@ -11,9 +11,9 @@
 
     <!-- tab me -->
     <string name="login_register">登录/注册</string>
-    <string name="auction_coin">拍币</string>
-    <string name="free_coin">赠币</string>
-    <string name="point">积分</string>
+    <string name="auction_coin">%1$d\n拍币</string>
+    <string name="free_coin">%1$d\n赠币</string>
+    <string name="point">%1$d\n积分</string>
     <string name="my_order">我的订单</string>
     <string name="my_card">我的卡密</string>
     <string name="my_publish">我的晒单</string>

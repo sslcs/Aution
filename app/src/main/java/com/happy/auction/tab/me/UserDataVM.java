@@ -16,14 +16,16 @@ public class UserDataVM {
     /**
      * 拍币
      */
+    @SerializedName("coin")
     public int auction_coin;
     /**
      * 赠币
      */
+    @SerializedName("gift_coin")
     public int free_coin;
     /**
      * 积分
      */
-    public int point;
+    public int points;
 
 }

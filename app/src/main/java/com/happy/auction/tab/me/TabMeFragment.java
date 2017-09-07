@@ -1,11 +1,17 @@
 package com.happy.auction.tab.me;
 
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.happy.auction.R;
 import com.happy.auction.databinding.FragmentTabMeBinding;
@@ -25,10 +31,9 @@ public class TabMeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle bundle) {
-        View view = inflater.inflate(R.layout.fragment_tab_me, parent, false);
-        binding = DataBindingUtil.bind(view);
+        binding = FragmentTabMeBinding.inflate(inflater);
         initLayout();
-        return view;
+        return binding.getRoot();
     }
 
     private void initLayout() {
@@ -37,9 +42,23 @@ public class TabMeFragment extends Fragment {
         user.avatar = "https://avatars1.githubusercontent.com/u/66577?v=4&s=60";
         user.auction_coin = 90000;
         user.free_coin = 888888;
-        user.point = 6666;
+        user.points = 6666;
         binding.setUser(user);
         binding.setFragment(this);
+    }
+
+    @BindingAdapter("spanLength")
+    public static void setSpannable(View v, int spanLength) {
+        final String itemText = ((TextView) v).getText().toString();
+        final SpannableString sString = new SpannableString(itemText);
+
+        sString.setSpan(new RelativeSizeSpan(0.765f), itemText.length() - spanLength, itemText.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        final int color = v.getContext().getResources().getColor(R.color.text_normal);
+        sString.setSpan(new ForegroundColorSpan(color), itemText.length() - spanLength, itemText.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        ((TextView) v).setText(sString);
     }
 
     public void onClickSetting(View view) {

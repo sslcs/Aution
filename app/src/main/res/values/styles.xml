@@ -29,20 +29,12 @@
 
     <style name="TabMeTextCoin" parent="Clickable">
         <item name="android:layout_width">0dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/main_red</item>
-        <item name="android:paddingTop">23dp</item>
-        <item name="android:textSize">17sp</item>
-    </style>
-
-    <style name="TabMeTextCoinLabel" parent="Clickable">
-        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
-        <item name="android:textColor">@color/text_normal</item>
-        <item name="android:padding">3dp</item>
-        <item name="android:gravity">center_horizontal</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:lineSpacingExtra">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/main_red</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:paddingTop">17dp</item>
     </style>
 
     <style name="TabMeTextItem" parent="Clickable">

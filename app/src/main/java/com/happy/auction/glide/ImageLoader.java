@@ -109,7 +109,7 @@ public class ImageLoader {
 //                        @Override
 //                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
 //                            BitmapDrawable bitmapDrawable = new BitmapDrawable(resource);
-//                            drawables.add(bitmapDrawable);
+//                            drawables.addAll(bitmapDrawable);
 //                            if (drawables.size() == urlList.size() && onResultListener != null) {
 //                                onResultListener.onLoadingComplete(drawables);
 //                            }
