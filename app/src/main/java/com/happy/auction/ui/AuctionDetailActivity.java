@@ -255,6 +255,8 @@ public class AuctionDetailActivity extends BaseActivity {
         socket.connect();
     }
 
+
+
     private void onEvent(final CountdownEvent item) {
         runOnUiThread(new Runnable() {
             @Override

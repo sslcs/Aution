@@ -47,13 +47,13 @@ public class MainActivity extends AppCompatActivity {
         tab = binding.tabLayout.getTabAt(3);
         if (tab != null) tab.setCustomView(R.layout.tab_me);
 
-        UserDataVM user = new UserDataVM();
-        user.username = "不是本人";
-        user.avatar = "https://avatars1.githubusercontent.com/u/66577?v=4&s=60";
-        user.auction_coin = 90000;
-        user.free_coin = 888888;
-        user.points = 6666;
-        AppInstance.getInstance().setUser(user);
+//        UserDataVM user = new UserDataVM();
+//        user.username = "不是本人";
+//        user.avatar = "https://avatars1.githubusercontent.com/u/66577?v=4&s=60";
+//        user.auction_coin = 90000;
+//        user.free_coin = 888888;
+//        user.points = 6666;
+//        AppInstance.getInstance().setUser(user);
     }
 
     public void onClickJoin(View view) {

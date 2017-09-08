@@ -24,6 +24,10 @@
         </activity>
         <activity android:name=".tab.me.SettingActivity">
         </activity>
+        <activity android:name=".tab.login.LoginActivity">
+        </activity>
+        <activity android:name=".tab.login.ForgetActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -11,7 +11,8 @@ import com.happy.auction.tab.me.UserDataVM;
 
 public class AppInstance extends Application {
     private static AppInstance instance;
-
+    public String uid;
+    public String token;
     private UserDataVM userData;
 
     public static AppInstance getInstance() {
@@ -30,5 +31,9 @@ public class AppInstance extends Application {
 
     public void setUser(UserDataVM userData) {
         this.userData = userData;
+    }
+
+    public boolean isLogin() {
+        return userData != null;
     }
 }

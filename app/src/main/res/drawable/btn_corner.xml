@@ -6,6 +6,12 @@
             <solid android:color="@color/main_red_alpha"/>
         </shape>
     </item>
+    <item android:state_enabled="false">
+        <shape>
+            <corners android:radius="5dp"/>
+            <solid android:color="@color/text_normal"/>
+        </shape>
+    </item>
     <item>
         <shape>
             <corners android:radius="5dp"/>

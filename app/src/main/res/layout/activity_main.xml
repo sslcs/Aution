@@ -25,6 +25,7 @@
             android:layout_alignParentBottom="true"
             app:tabGravity="fill"
             app:tabIndicatorHeight="0dp"
+            android:background="@android:color/white"
             app:tabMode="fixed"/>
     </RelativeLayout>
 </layout>

@@ -31,11 +31,10 @@ public class SettingActivity extends BaseActivity {
     }
 
     public void onClickLogout(View view) {
-        DebugLog.e("onClick");
         new CustomDialog.Builder()
-                .content("是否确认退出该账号")
-                .textLeft("取消")
-                .textRight("确认")
+                .content(getString(R.string.tip_logout))
+                .textLeft(getString(R.string.cancel))
+                .textRight(getString(R.string.ok))
                 .setOnClickRightListener(new CustomDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogFragment dialog) {

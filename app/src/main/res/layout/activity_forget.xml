@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="activity"
+            type="com.happy.auction.tab.login.ForgetActivity"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.happy.auction.tab.login.ForgetActivity">
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            style="@style/TextTitle"
+            android:text="@string/find_password"/>
+
+        <ImageView
+            style="@style/IconBack"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_toolbar_title"
+            app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
+
+        <EditText
+            android:id="@+id/et_phone"
+            style="@style/EditText"
+            android:afterTextChanged="@{activity.afterPhoneChanged}"
+            android:hint="@string/hint_phone"
+            android:inputType="phone"
+            android:maxLength="11"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title"/>
+
+        <Button
+            android:id="@+id/btn_captcha"
+            style="@style/ButtonCorner"
+            android:layout_width="100dp"
+            android:layout_height="32dp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:enabled="false"
+            android:onClick="onClickCaptcha"
+            android:text="@string/get_captcha"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/et_phone"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/et_phone"/>
+
+        <EditText
+            android:id="@+id/et_captcha"
+            style="@style/EditText"
+            android:layout_marginTop="1dp"
+            android:afterTextChanged="@{activity.afterTextChanged}"
+            android:hint="@string/hint_captcha"
+            android:inputType="numberSigned"
+            android:maxLength="6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_phone"/>
+
+        <EditText
+            android:id="@+id/et_password"
+            style="@style/EditText"
+            android:layout_marginTop="1dp"
+            android:afterTextChanged="@{activity.afterTextChanged}"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            android:maxLength="18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_captcha"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:onClick="onClickEye"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@drawable/ic_eye"
+            app:layout_constraintBottom_toBottomOf="@+id/et_password"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/et_password"/>
+
+        <EditText
+            android:id="@+id/et_password_confirm"
+            style="@style/EditText"
+            android:layout_marginTop="1dp"
+            android:afterTextChanged="@{activity.afterTextChanged}"
+            android:hint="@string/hint_password_confirm"
+            android:inputType="textPassword"
+            android:maxLength="18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_password"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:onClick="onClickEyeConfirm"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@drawable/ic_eye"
+            app:layout_constraintBottom_toBottomOf="@+id/et_password_confirm"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/et_password_confirm"/>
+
+        <Button
+            android:id="@+id/btn_OK"
+            style="@style/ButtonCorner"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginTop="30dp"
+            android:enabled="false"
+            android:onClick="onClickConfirm"
+            android:text="@string/ok"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_password_confirm"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

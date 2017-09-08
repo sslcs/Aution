@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.databinding.FragmentTabMeBinding;
+import com.happy.auction.tab.login.LoginActivity;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.RxBus;
 
@@ -66,12 +67,22 @@ public class TabMeFragment extends Fragment {
         });
     }
 
+    private boolean isLogin() {
+        if (AppInstance.getInstance().isLogin()) {
+            return true;
+        }
+        startActivity(new Intent(getActivity(), LoginActivity.class));
+        return false;
+    }
+
     public void onClickSetting(View view) {
         startActivity(new Intent(view.getContext(), SettingActivity.class));
     }
 
     public void onClickAvatar(View view) {
-        DebugLog.e("onClick");
+        if (isLogin()) {
+            DebugLog.e("showInfo");
+        }
     }
 
     public void onClickAuctionCoin(View view) {
