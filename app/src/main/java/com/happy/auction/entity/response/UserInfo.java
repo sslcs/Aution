@@ -1,4 +1,4 @@
-package com.happy.auction.tab.me;
+package com.happy.auction.entity.response;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * User data view model
  */
 
-public class UserDataVM {
+public class UserInfo {
     public String username;
     public String phone;
     @SerializedName("headimg")

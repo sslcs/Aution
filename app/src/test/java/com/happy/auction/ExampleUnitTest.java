@@ -1,7 +1,7 @@
 package com.happy.auction;
 
 import com.happy.auction.entity.AuctionDetailParam;
-import com.happy.auction.entity.BaseRequest;
+import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.utils.GsonSingleton;
 
 import org.junit.Test;

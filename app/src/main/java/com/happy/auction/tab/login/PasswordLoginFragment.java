@@ -13,7 +13,10 @@ import android.view.ViewGroup;
 
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentPasswordLoginBinding;
-import com.happy.auction.utils.DebugLog;
+import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.SendEvent;
+import com.happy.auction.entity.param.LoginParam;
+import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.Validation;
 
 /**
@@ -67,7 +70,13 @@ public class PasswordLoginFragment extends BaseFragment {
     }
 
     public void onClickLogin(View view) {
-        DebugLog.e("onClick");
+        LoginParam param = new LoginParam();
+        param.phone = binding.etPhone.getText().toString();
+        param.pwd = binding.etPassword.getText().toString();
+        param.login_type = LoginParam.TYPE_PASSWORD;
+
+        BaseRequest<LoginParam> request = new BaseRequest<>(param);
+        RxBus.getDefault().post(new SendEvent(request.toString()));
     }
 
     public void onClickForget(View view) {

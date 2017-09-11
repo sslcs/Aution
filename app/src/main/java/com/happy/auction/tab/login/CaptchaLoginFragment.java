@@ -1,7 +1,6 @@
 package com.happy.auction.tab.login;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -12,7 +11,11 @@ import android.view.ViewGroup;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentCaptchaLoginBinding;
-import com.happy.auction.utils.DebugLog;
+import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.SendEvent;
+import com.happy.auction.entity.param.CaptchaParam;
+import com.happy.auction.entity.param.LoginParam;
+import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.Validation;
 
 /**
@@ -84,10 +87,23 @@ public class CaptchaLoginFragment extends BaseFragment {
                 timer = null;
             }
         }.start();
+
+        CaptchaParam param = new CaptchaParam();
+        param.forgetPwd = 3;
+        param.phone = binding.etPhone.getText().toString();
+
+        BaseRequest<CaptchaParam> request = new BaseRequest<>(param);
+        RxBus.getDefault().post(new SendEvent(request.toString()));
     }
 
     public void onClickLogin(View view) {
-        DebugLog.e("onClick");
+        LoginParam param = new LoginParam();
+        param.phone = binding.etPhone.getText().toString();
+        param.code = binding.etCaptcha.getText().toString();
+        param.login_type = LoginParam.TYPE_CAPTCHA;
+
+        BaseRequest<LoginParam> request = new BaseRequest<>(param);
+        RxBus.getDefault().post(new SendEvent(request.toString()));
     }
 
     @Override
@@ -99,10 +115,5 @@ public class CaptchaLoginFragment extends BaseFragment {
         binding.etPhone.setText(parent.getPhone());
         Editable text = binding.etPhone.getText();
         binding.etPhone.setSelection(text.length());
-    }
-
-    public void onLoginSuccess() {
-        getActivity().setResult(Activity.RESULT_OK);
-        getActivity().finish();
     }
 }

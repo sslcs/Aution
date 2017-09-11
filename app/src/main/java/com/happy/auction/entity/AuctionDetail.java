@@ -1,5 +1,7 @@
 package com.happy.auction.entity;
 
+import com.happy.auction.entity.response.BaseEvent;
+
 import java.util.ArrayList;
 
 /**
@@ -7,7 +9,7 @@ import java.util.ArrayList;
  * 竞拍详情
  */
 
-public class AuctionDetail extends BaseEvent{
+public class AuctionDetail extends BaseEvent {
     /**
      * "original_price": "6699.00",
      * "expire": 1503303896249,

@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".tab.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -28,6 +28,9 @@
         </activity>
         <activity android:name=".tab.login.ForgetActivity">
         </activity>
+        <activity android:name=".tab.me.BalanceActivity">
+        </activity>
+        <activity android:name=".tab.me.RecordActivity"/>
     </application>
 
 </manifest>

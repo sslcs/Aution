@@ -6,7 +6,7 @@
     <data>
         <variable
             name="user"
-            type="com.happy.auction.tab.me.UserDataVM"/>
+            type="com.happy.auction.entity.response.UserInfo"/>
         <variable
             name="fragment"
             type="com.happy.auction.tab.me.TabMeFragment"/>
@@ -102,24 +102,24 @@
                 android:id="@+id/tv_auction_coin"
                 style="@style/TabMeTextCoin"
                 android:onClick="@{fragment.onClickAuctionCoin}"
-                android:text="@{@string/auction_coin(user == null ? 0 : user.auction_coin)}"
+                android:text="@{@string/auction_coin_formatter(user == null ? 0 : user.auction_coin)}"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_info"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/divider25"
                 app:layout_constraintTop_toTopOf="@+id/bg_info"
                 app:spanLength="@{2}"
-                tools:text="@string/auction_coin"/>
+                tools:text="@string/auction_coin_formatter"/>
             <TextView
                 android:id="@+id/tv_free_coin"
                 style="@style/TabMeTextCoin"
                 android:onClick="@{fragment.onClickFreeCoin}"
-                android:text="@{@string/free_coin(user == null ? 0 : user.free_coin)}"
+                android:text="@{@string/free_coin_formatter(user == null ? 0 : user.free_coin)}"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_info"
                 app:layout_constraintLeft_toLeftOf="@+id/divider25"
                 app:layout_constraintRight_toLeftOf="@+id/divider50"
                 app:layout_constraintTop_toTopOf="@+id/bg_info"
                 app:spanLength="@{2}"
-                tools:text="@string/free_coin"/>
+                tools:text="@string/free_coin_formatter"/>
             <TextView
                 android:id="@+id/tv_point"
                 style="@style/TabMeTextCoin"

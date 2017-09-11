@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.databinding.FragmentTabMeBinding;
+import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.tab.login.LoginActivity;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.RxBus;
@@ -62,7 +63,16 @@ public class TabMeFragment extends Fragment {
         RxBus.getDefault().subscribe(this, LogoutEvent.class, new Consumer<LogoutEvent>() {
             @Override
             public void accept(LogoutEvent event) throws Exception {
+                AppInstance.getInstance().setUser(null);
                 binding.setUser(null);
+            }
+        });
+
+        RxBus.getDefault().subscribe(this, UserInfo.class, new Consumer<UserInfo>() {
+            @Override
+            public void accept(UserInfo user) throws Exception {
+                AppInstance.getInstance().setUser(user);
+                binding.setUser(user);
             }
         });
     }
@@ -86,11 +96,13 @@ public class TabMeFragment extends Fragment {
     }
 
     public void onClickAuctionCoin(View view) {
-        DebugLog.e("onClick");
+        if (!isLogin()) return;
+        startActivity(BalanceActivity.newInstance(getActivity(), 0));
     }
 
     public void onClickFreeCoin(View view) {
-        DebugLog.e("onClick");
+        if (!isLogin()) return;
+        startActivity(BalanceActivity.newInstance(getActivity(), 1));
     }
 
     public void onClickPoint(View view) {
@@ -102,19 +114,23 @@ public class TabMeFragment extends Fragment {
     }
 
     public void onClickOrder(View view) {
-        DebugLog.e("onClick");
+        if (!isLogin()) return;
+        startActivity(RecordActivity.newInstance(getActivity(), 0));
     }
 
     public void onClickAuctionGoing(View view) {
-        DebugLog.e("onClick");
+        if (!isLogin()) return;
+        startActivity(RecordActivity.newInstance(getActivity(), 1));
     }
 
     public void onClickAuctionWin(View view) {
-        DebugLog.e("onClick");
+        if (!isLogin()) return;
+        startActivity(RecordActivity.newInstance(getActivity(), 2));
     }
 
     public void onClickAuctionUnpaid(View view) {
-        DebugLog.e("onClick");
+        if (!isLogin()) return;
+        startActivity(RecordActivity.newInstance(getActivity(), 3));
     }
 
     public void onClickMyCard(View view) {

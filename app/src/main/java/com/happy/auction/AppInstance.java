@@ -1,8 +1,11 @@
 package com.happy.auction;
 
 import android.app.Application;
+import android.text.TextUtils;
 
-import com.happy.auction.tab.me.UserDataVM;
+import com.happy.auction.entity.response.LoginResponse;
+import com.happy.auction.entity.response.UserInfo;
+import com.happy.auction.utils.Preference;
 
 /**
  * Created by LiuCongshan on 17-8-16.
@@ -13,7 +16,7 @@ public class AppInstance extends Application {
     private static AppInstance instance;
     public String uid;
     public String token;
-    private UserDataVM userData;
+    private UserInfo user;
 
     public static AppInstance getInstance() {
         return instance;
@@ -23,17 +26,26 @@ public class AppInstance extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        uid = Preference.getUid();
+        token = Preference.getToken();
     }
 
-    public UserDataVM getUser() {
-        return userData;
+    public UserInfo getUser() {
+        return user;
     }
 
-    public void setUser(UserDataVM userData) {
-        this.userData = userData;
+    public void setUser(UserInfo user) {
+        this.user = user;
     }
 
     public boolean isLogin() {
-        return userData != null;
+        return !TextUtils.isEmpty(uid);
+    }
+
+    public void setLoginResponse(LoginResponse response) {
+        uid = response.uid;
+        token = response.token;
+        Preference.setUid(uid);
+        Preference.setToken(token);
     }
 }

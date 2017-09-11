@@ -4,7 +4,7 @@
         <import type="android.view.View"/>
         <variable
             name="user"
-            type="com.happy.auction.tab.me.UserDataVM"/>
+            type="com.happy.auction.entity.response.UserInfo"/>
     </data>
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

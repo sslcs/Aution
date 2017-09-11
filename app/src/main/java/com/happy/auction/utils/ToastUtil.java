@@ -18,4 +18,12 @@ public class ToastUtil {
     public static void show(@StringRes int resId) {
         Toast.makeText(AppInstance.getInstance(), resId, Toast.LENGTH_LONG).show();
     }
+
+    public static void showShort(String s) {
+        Toast.makeText(AppInstance.getInstance(), s, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showShort(@StringRes int resId) {
+        Toast.makeText(AppInstance.getInstance(), resId, Toast.LENGTH_SHORT).show();
+    }
 }

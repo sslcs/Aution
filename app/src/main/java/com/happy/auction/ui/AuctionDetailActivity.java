@@ -10,27 +10,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.AuctionDetailJoinAdapter;
 import com.happy.auction.databinding.ActivityAuctionDetailBinding;
 import com.happy.auction.entity.AuctionDetail;
 import com.happy.auction.entity.AuctionDetailParam;
-import com.happy.auction.entity.BaseEvent;
-import com.happy.auction.entity.BaseRequest;
-import com.happy.auction.entity.BaseResponse;
 import com.happy.auction.entity.CountdownEvent;
 import com.happy.auction.entity.JoinRecord;
 import com.happy.auction.glide.ImageLoader;
-import com.happy.auction.utils.DebugLog;
-import com.happy.auction.utils.GsonSingleton;
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
-
-import java.lang.reflect.Type;
-import java.net.URI;
 import java.util.Locale;
 
 /**
@@ -43,7 +32,6 @@ public class AuctionDetailActivity extends BaseActivity {
 
     private CountDownTimer timer;
     private AnimatorSet animator;
-    private WebSocketClient socket;
 
     public static Intent newIntent() {
         Intent intent = new Intent(AppInstance.getInstance(), AuctionDetailActivity.class);
@@ -63,8 +51,6 @@ public class AuctionDetailActivity extends BaseActivity {
         new ToolbarBuilder(binding.toolbar).setTitle("竞拍详情");
 
         initLayout();
-
-        initWebSocket();
     }
 
     private void initLayout() {
@@ -179,17 +165,11 @@ public class AuctionDetailActivity extends BaseActivity {
         JoinRecord item = new JoinRecord();
         auctionDetail.current_price += 0.1;
 
-        BaseRequest<AuctionDetailParam> request = new BaseRequest<>();
-        request.action = "bid";
         AuctionDetailParam data = new AuctionDetailParam();
         data.uid = "不是本人";
         data.sid = "10086";
-        request.data = data;
-        String message = GsonSingleton.get().toJson(request);
-        DebugLog.e("message : " + message);
-        sendMessage(message);
 
-        auctionDetail.current_bidder =  data.uid;
+        auctionDetail.current_bidder = data.uid;
         auctionDetail.bid_times += 1;
         binding.tvJoinTimes.setText(auctionDetail.bid_times + "次");
         setCurrentPrice();
@@ -199,62 +179,7 @@ public class AuctionDetailActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         cancelTimer();
-
-        if (socket != null) {
-            socket.close();
-        }
     }
-
-
-    private void initWebSocket() {
-        URI server = URI.create("ws://192.168.1.64:9999/bid/ws");
-        socket = new WebSocketClient(server) {
-            @Override
-            public void onOpen(ServerHandshake shake) {
-                DebugLog.e("onOpen");
-                BaseRequest<AuctionDetailParam> request = new BaseRequest<>();
-                request.action = "enter";
-                AuctionDetailParam data = new AuctionDetailParam();
-                data.uid = "10086";
-                data.sid = "10086";
-                request.data = data;
-                String message = GsonSingleton.get().toJson(request);
-                DebugLog.e("message : " + message);
-                sendMessage(message);
-            }
-
-            @Override
-            public void onMessage(final String message) {
-                DebugLog.e("onMessage : " + message);
-                Type type = new TypeToken<BaseResponse<BaseEvent>>() {}.getType();
-                BaseResponse<BaseEvent> response = GsonSingleton.get().fromJson(message, type);
-                if (BaseEvent.EVENT_UPDATE.equals(response.data.event)) {
-                    type = new TypeToken<BaseResponse<CountdownEvent>>() {}.getType();
-                    BaseResponse<CountdownEvent> item = GsonSingleton.get().fromJson(message, type);
-                    onEvent(item.data);
-                } else if (BaseEvent.EVENT_DETAIL.equals(response.data.event)) {
-                    type = new TypeToken<BaseResponse<AuctionDetail>>() {}.getType();
-                    BaseResponse<AuctionDetail> detail = GsonSingleton.get().fromJson(message, type);
-                    onEvent(detail.data);
-                } else if (BaseEvent.EVENT_FINISH.equals(response.data.event)) {
-                    onFinish();
-                }
-            }
-
-            @Override
-            public void onClose(int code, String reason, boolean remote) {
-                DebugLog.e("onClose : " + reason);
-            }
-
-            @Override
-            public void onError(Exception ex) {
-                DebugLog.e("onError");
-                ex.printStackTrace();
-            }
-        };
-        socket.connect();
-    }
-
 
 
     private void onEvent(final CountdownEvent item) {
@@ -279,19 +204,5 @@ public class AuctionDetailActivity extends BaseActivity {
                 startTimer(auctionDetail.expire - System.currentTimeMillis());
             }
         });
-    }
-
-    private void onFinish() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                setFinishView();
-            }
-        });
-    }
-
-    private void sendMessage(String message) {
-        if (socket == null || socket.isClosed()) return;
-        socket.send(message);
     }
 }
