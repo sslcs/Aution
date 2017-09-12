@@ -1,4 +1,4 @@
-package com.happy.auction.tab;
+package com.happy.auction.main;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -16,10 +16,11 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.SyncParam;
 import com.happy.auction.entity.param.UserInfoParam;
 import com.happy.auction.entity.response.LoginResponse;
-import com.happy.auction.tab.category.TabCategoryFragment;
-import com.happy.auction.tab.home.TabHomeFragment;
-import com.happy.auction.tab.latest.TabLatestFragment;
-import com.happy.auction.tab.me.TabMeFragment;
+import com.happy.auction.entity.response.UserInfo;
+import com.happy.auction.main.category.TabCategoryFragment;
+import com.happy.auction.main.home.TabHomeFragment;
+import com.happy.auction.main.latest.TabLatestFragment;
+import com.happy.auction.main.me.TabMeFragment;
 import com.happy.auction.ui.AuctionDetailActivity;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.RxBus;
@@ -73,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
                 AppInstance.getInstance().setLoginResponse(response);
                 syncClient();
                 getUserInfo();
+            }
+        });
+
+        RxBus.getDefault().subscribe(this, UserInfo.class, new Consumer<UserInfo>() {
+            @Override
+            public void accept(UserInfo user) throws Exception {
+                AppInstance.getInstance().setUser(user);
             }
         });
     }
@@ -182,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (System.currentTimeMillis() - lastBackPressedTime > 1500) {
-            ToastUtil.showShort(R.string.tip_exit);
+            ToastUtil.show(R.string.tip_exit);
             lastBackPressedTime = System.currentTimeMillis();
         } else {
             super.onBackPressed();

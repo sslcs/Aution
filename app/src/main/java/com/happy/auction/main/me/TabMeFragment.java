@@ -1,4 +1,4 @@
-package com.happy.auction.tab.me;
+package com.happy.auction.main.me;
 
 import android.content.Intent;
 import android.databinding.BindingAdapter;
@@ -17,7 +17,7 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.databinding.FragmentTabMeBinding;
 import com.happy.auction.entity.response.UserInfo;
-import com.happy.auction.tab.login.LoginActivity;
+import com.happy.auction.main.login.LoginActivity;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.RxBus;
 
@@ -71,7 +71,6 @@ public class TabMeFragment extends Fragment {
         RxBus.getDefault().subscribe(this, UserInfo.class, new Consumer<UserInfo>() {
             @Override
             public void accept(UserInfo user) throws Exception {
-                AppInstance.getInstance().setUser(user);
                 binding.setUser(user);
             }
         });
@@ -115,22 +114,22 @@ public class TabMeFragment extends Fragment {
 
     public void onClickOrder(View view) {
         if (!isLogin()) return;
-        startActivity(RecordActivity.newInstance(getActivity(), 0));
+        startActivity(OrderActivity.newInstance(getActivity(), 0));
     }
 
     public void onClickAuctionGoing(View view) {
         if (!isLogin()) return;
-        startActivity(RecordActivity.newInstance(getActivity(), 1));
+        startActivity(OrderActivity.newInstance(getActivity(), 1));
     }
 
     public void onClickAuctionWin(View view) {
         if (!isLogin()) return;
-        startActivity(RecordActivity.newInstance(getActivity(), 2));
+        startActivity(OrderActivity.newInstance(getActivity(), 2));
     }
 
     public void onClickAuctionUnpaid(View view) {
         if (!isLogin()) return;
-        startActivity(RecordActivity.newInstance(getActivity(), 3));
+        startActivity(OrderActivity.newInstance(getActivity(), 3));
     }
 
     public void onClickMyCard(View view) {
@@ -147,5 +146,11 @@ public class TabMeFragment extends Fragment {
 
     public void onClickMyMessage(View view) {
         DebugLog.e("onClick");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RxBus.getDefault().unsubscribe(this);
     }
 }

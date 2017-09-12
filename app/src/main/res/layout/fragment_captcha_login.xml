@@ -5,12 +5,12 @@
     <data>
         <variable
             name="fragment"
-            type="com.happy.auction.tab.login.CaptchaLoginFragment"/>
+            type="com.happy.auction.main.login.CaptchaLoginFragment"/>
     </data>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.happy.auction.tab.login.CaptchaLoginFragment">
+        tools:context="com.happy.auction.main.login.CaptchaLoginFragment">
         <EditText
             android:id="@+id/et_phone"
             style="@style/EditText"

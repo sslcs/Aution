@@ -1,10 +1,9 @@
-package com.happy.auction.tab.login;
+package com.happy.auction.main.login;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
-import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.ViewPagerAdapter;
 import com.happy.auction.base.BaseActivity;

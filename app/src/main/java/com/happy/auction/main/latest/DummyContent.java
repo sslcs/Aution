@@ -1,4 +1,4 @@
-package com.happy.auction.tab.latest;
+package com.happy.auction.main.latest;
 
 import java.util.ArrayList;
 import java.util.HashMap;

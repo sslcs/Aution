@@ -1,4 +1,4 @@
-package com.happy.auction.tab.me;
+package com.happy.auction.main.me;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +10,12 @@ import com.happy.auction.adapter.ViewPagerAdapter;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityTabPagerBinding;
 
-public class RecordActivity extends BaseActivity {
+public class BalanceActivity extends BaseActivity {
     private static final String KEY_SELECTION = "selection";
     private ActivityTabPagerBinding binding;
 
     public static Intent newInstance(Context context, int selection) {
-        Intent intent = new Intent(context, RecordActivity.class);
+        Intent intent = new Intent(context, BalanceActivity.class);
         intent.putExtra(KEY_SELECTION, selection);
         return intent;
     }
@@ -28,17 +28,12 @@ public class RecordActivity extends BaseActivity {
     }
 
     private void initLayout() {
-        binding.tvToolbarTitle.setText(R.string.record);
+        binding.tvToolbarTitle.setText(R.string.account_balance);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.add(AuctionCoinFragment.newInstance());
-        adapter.add(AuctionCoinFragment.newInstance());
-        adapter.add(AuctionCoinFragment.newInstance());
-        adapter.add(AuctionCoinFragment.newInstance());
-        adapter.setTitles(new String[]{getString(R.string.record_all),
-                getString(R.string.record_going),
-                getString(R.string.record_win),
-                getString(R.string.record_unpaid)});
+        adapter.add(FreeCoinFragment.newInstance());
+        adapter.setTitles(new String[]{getString(R.string.auction_coin), getString(R.string.free_coin)});
         binding.viewPager.setAdapter(adapter);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 

@@ -12,6 +12,7 @@ public class BaseEvent {
 
     public final static String RESPONSE_LOGIN = "user_login";
     public final static String RESPONSE_USER_INFO = "user_info_get";
+    public final static String RESPONSE_RECORD = "purchase_my_records";
 
     /**
      * 事件代码

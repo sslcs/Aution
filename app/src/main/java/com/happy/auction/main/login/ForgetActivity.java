@@ -1,4 +1,4 @@
-package com.happy.auction.tab.login;
+package com.happy.auction.main.login;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

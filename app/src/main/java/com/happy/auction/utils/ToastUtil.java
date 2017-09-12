@@ -12,18 +12,18 @@ import com.happy.auction.AppInstance;
 
 public class ToastUtil {
     public static void show(String s) {
-        Toast.makeText(AppInstance.getInstance(), s, Toast.LENGTH_LONG).show();
-    }
-
-    public static void show(@StringRes int resId) {
-        Toast.makeText(AppInstance.getInstance(), resId, Toast.LENGTH_LONG).show();
-    }
-
-    public static void showShort(String s) {
         Toast.makeText(AppInstance.getInstance(), s, Toast.LENGTH_SHORT).show();
     }
 
-    public static void showShort(@StringRes int resId) {
+    public static void show(@StringRes int resId) {
         Toast.makeText(AppInstance.getInstance(), resId, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showLong(String s) {
+        Toast.makeText(AppInstance.getInstance(), s, Toast.LENGTH_LONG).show();
+    }
+
+    public static void showLong(@StringRes int resId) {
+        Toast.makeText(AppInstance.getInstance(), resId, Toast.LENGTH_LONG).show();
     }
 }

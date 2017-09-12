@@ -24,7 +24,6 @@ public class RxBus {
     private Map<Object, List<Disposable>> subscriptions;
 
     private RxBus() {
-        //非线程安全的PublishSubject包装成线程安全的SerializedSubject
         bus = PublishSubject.create();
     }
 
@@ -81,26 +80,17 @@ public class RxBus {
     /**
      * 订阅事件
      *
-     * @param eventType 事件对象
-     * @param callback  事件回调
-     * @param <T>       事件类型
+     * @param subscriber 订阅者
+     * @param callback   事件回调
+     * @param <T>        事件类型
      */
-    public <T> Disposable subscribe(Class<T> eventType, Consumer<T> callback) {
-        return bus.subscribeOn(Schedulers.io())
+    public <T> void subscribe(Object subscriber, Consumer<T> callback) {
+        Class<T> eventType = RawType.getRawType(callback);
+        Disposable subscription = bus.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .ofType(eventType)
                 .subscribe(callback);
-    }
-
-    /**
-     * 订阅事件
-     *
-     * @param eventType 事件对象
-     * @param <T>       事件类型
-     * @return 特定类型的Observable
-     */
-    public <T> Observable<T> observe(Class<T> eventType) {
-        return bus.ofType(eventType);
+        add(subscriber, subscription);
     }
 
     /**

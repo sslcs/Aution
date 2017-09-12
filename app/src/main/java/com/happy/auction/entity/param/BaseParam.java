@@ -5,6 +5,8 @@ package com.happy.auction.entity.param;
  * 公有临时参数action
  */
 
-class BaseParam {
+public class BaseParam {
     transient String action;
+
+    public final static  int DEFAULT_LIMIT = 10;
 }

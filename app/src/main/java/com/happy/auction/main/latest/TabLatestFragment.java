@@ -1,4 +1,4 @@
-package com.happy.auction.tab.latest;
+package com.happy.auction.main.latest;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -49,7 +49,6 @@ public class TabLatestFragment extends Fragment {
         final AdapterWrapper<TabLatestAdapter> wrapper = new AdapterWrapper<>(adapter);
         wrapper.setEmptyView(R.layout.empty_view);
         wrapper.setLoadMoreView(R.layout.item_load_more);
-        wrapper.setRefreshView(R.layout.item_load_more);
 
         wrapper.setLoadMoreListener(new AdapterWrapper.LoadMoreListener() {
             @Override
@@ -62,23 +61,6 @@ public class TabLatestFragment extends Fragment {
                                 DebugLog.e("loadMore");
                                 wrapper.getInnerAdapter().addAll(DummyContent.ITEMS);
                                 wrapper.setHasMore(wrapper.getInnerAdapter().getItemCount() < 200);
-                            }
-                        });
-            }
-        });
-        wrapper.setOnRefreshListener(new AdapterWrapper.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Observable.timer(1, TimeUnit.SECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(@NonNull Long aLong) throws Exception {
-                                DebugLog.e("onRefresh");
-                                wrapper.getInnerAdapter().clear();
-                                wrapper.getInnerAdapter().addAll(DummyContent.ITEMS);
-                                wrapper.setHasMore(true);
-                                wrapper.setRefreshing(false);
                             }
                         });
             }

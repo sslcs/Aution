@@ -1,4 +1,4 @@
-package com.happy.auction.tab.latest;
+package com.happy.auction.main.me;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,33 +7,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.happy.auction.R;
-import com.happy.auction.tab.latest.DummyContent.DummyItem;
+import com.happy.auction.base.BaseAdapter;
+import com.happy.auction.entity.item.ItemOrder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 最新成交Adapter
+ * 订单记录Adapter
  */
-public class TabLatestAdapter extends RecyclerView.Adapter<TabLatestAdapter.ViewHolder> {
-
-    private List<DummyItem> mValues;
-
-    public TabLatestAdapter(List<DummyItem> items) {
-        addAll(items);
-    }
-
-    public void clear() {
-        mValues.clear();
-    }
-
-    public void addAll(List<DummyItem> items) {
-        if (mValues == null) {
-            mValues = new ArrayList<>();
-        }
-        mValues.addAll(items);
-    }
-
+public class OrderAdapter extends BaseAdapter<ItemOrder, OrderAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -43,9 +25,9 @@ public class TabLatestAdapter extends RecyclerView.Adapter<TabLatestAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
+        holder.mItem = getItem(position);
         holder.mIdView.setText(String.valueOf(position));
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mContentView.setText(holder.mItem.title);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,16 +36,11 @@ public class TabLatestAdapter extends RecyclerView.Adapter<TabLatestAdapter.View
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return mValues.size();
-    }
-
     class ViewHolder extends RecyclerView.ViewHolder {
         final View mView;
         final TextView mIdView;
         final TextView mContentView;
-        DummyItem mItem;
+        ItemOrder mItem;
 
         ViewHolder(View view) {
             super(view);

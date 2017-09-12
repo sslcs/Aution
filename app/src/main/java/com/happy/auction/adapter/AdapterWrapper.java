@@ -1,7 +1,6 @@
 package com.happy.auction.adapter;
 
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
     static final int ITEM_TYPE_FOOTER_BASE = 0XFF000;
     private static final int ITEM_TYPE_EMPTY = Integer.MAX_VALUE - 1;
     private static final int ITEM_TYPE_LOAD_MORE = Integer.MAX_VALUE - 2;
-    private static final int ITEM_TYPE_REFRESH = Integer.MAX_VALUE - 3;
 
     private T mInnerAdapter;
 
@@ -31,12 +29,6 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
     private LoadMoreListener mLoadMoreListener;
     private boolean hasMore = false;
 
-    private View mRefreshView;
-    private int mRefreshLayoutId;
-    private OnRefreshListener mOnRefreshListener;
-    private boolean isRefreshing = false;
-    private RecyclerView mRecyclerView;
-
     public AdapterWrapper(T adapter) {
         mInnerAdapter = adapter;
     }
@@ -45,15 +37,12 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
         return mInnerAdapter;
     }
 
-    private int getRealItemCount() {
+    public int getRealItemCount() {
         return mInnerAdapter.getItemCount();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (isShowRefresh(position)) {
-            return ITEM_TYPE_REFRESH;
-        }
         if (isEmpty()) {
             return ITEM_TYPE_EMPTY;
         }
@@ -81,20 +70,12 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
             return ViewHolder.createViewHolder(parent.getContext(), mLoadMoreView);
         }
 
-        if (viewType == ITEM_TYPE_REFRESH) {
-            if (mRefreshView == null) {
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                mRefreshView = inflater.inflate(mRefreshLayoutId, parent, false);
-            }
-            return ViewHolder.createViewHolder(parent.getContext(), mRefreshView);
-        }
-
         return mInnerAdapter.onCreateViewHolder(parent, viewType);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (isEmpty() || isShowRefresh(position)) {
+        if (isEmpty()) {
             return;
         }
 
@@ -104,7 +85,7 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
             }
             return;
         }
-        mInnerAdapter.onBindViewHolder(holder, position - (hasRefresh() ? 1 : 0));
+        mInnerAdapter.onBindViewHolder(holder, position);
     }
 
     @Override
@@ -112,7 +93,7 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
         WrapperUtils.onAttachedToRecyclerView(mInnerAdapter, recyclerView, new WrapperUtils.SpanSizeCallback() {
             @Override
             public int getSpanSize(GridLayoutManager layoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position) {
-                if (isEmpty() || isShowLoadMore(position) || isShowRefresh(position)) {
+                if (isEmpty() || isShowLoadMore(position)) {
                     return layoutManager.getSpanCount();
                 }
 
@@ -122,47 +103,6 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
                 return 1;
             }
         });
-
-        if (hasRefresh()) {
-            mRecyclerView = recyclerView;
-            recyclerView.scrollToPosition(1);
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    // Stop at first item while flying up.
-                    if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_SETTLING) {
-                        if (dy < 0) {
-                            RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
-                            if (manager instanceof LinearLayoutManager) {
-                                LinearLayoutManager llm = (LinearLayoutManager) manager;
-                                if (llm.findFirstVisibleItemPosition() == 0) {
-                                    recyclerView.stopScroll();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    if (newState != RecyclerView.SCROLL_STATE_IDLE) return;
-                    RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
-                    if (manager instanceof LinearLayoutManager) {
-                        LinearLayoutManager llm = (LinearLayoutManager) manager;
-                        if (llm.findFirstCompletelyVisibleItemPosition() == 0) {
-                            if (mOnRefreshListener != null && !isRefreshing) {
-                                isRefreshing = true;
-                                mOnRefreshListener.onRefresh();
-                            }
-                        } else if (llm.findFirstVisibleItemPosition() == 0) {
-                            scrollTop();
-                        }
-                    }
-                }
-            });
-        }
     }
 
     @Override
@@ -170,8 +110,7 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
         mInnerAdapter.onViewAttachedToWindow(holder);
         if (isEmpty()) {
             WrapperUtils.setFullSpan(holder);
-        } else if (isShowLoadMore(holder.getLayoutPosition()) ||
-                isShowRefresh(holder.getLayoutPosition())) {
+        } else if (isShowLoadMore(holder.getLayoutPosition())) {
             setFullSpan(holder);
         }
     }
@@ -186,8 +125,8 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
 
     @Override
     public int getItemCount() {
-        if (isEmpty()) return 1 + (hasRefresh() ? 1 : 0);
-        return mInnerAdapter.getItemCount() + (hasLoadMore() ? 1 : 0) + (hasRefresh() ? 1 : 0);
+        if (isEmpty()) return 1;
+        return mInnerAdapter.getItemCount() + (hasLoadMore() ? 1 : 0);
     }
 
     // Empty adapter begin-----------------------------------------
@@ -198,11 +137,11 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
     public void setEmptyView(View emptyView) {
         mEmptyView = emptyView;
     }
+    //Empty adapter end-----------------------------------------
 
     public void setEmptyView(int layoutId) {
         mEmptyLayoutId = layoutId;
     }
-    //Empty adapter end-----------------------------------------
 
     // LoadMore adapter begin-----------------------------------------
     public void setHasMore(boolean hasMore) {
@@ -215,7 +154,7 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
     }
 
     private boolean isShowLoadMore(int position) {
-        return hasLoadMore() && (position >= getItemCount() - 1);
+        return hasLoadMore() && (position == getItemCount() - 1);
     }
 
     public void setLoadMoreListener(LoadMoreListener listener) {
@@ -231,51 +170,9 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
     public void setLoadMoreView(int layoutId) {
         mLoadMoreLayoutId = layoutId;
     }
-    // LoadMore adapter end-----------------------------------------
-
-    // Refresh adapter begin-----------------------------------------
-    private boolean hasRefresh() {
-        return mRefreshView != null || mRefreshLayoutId != 0;
-    }
-
-    private boolean isShowRefresh(int position) {
-        return hasRefresh() && position == 0;
-    }
-
-    public void setRefreshing(boolean isRefreshing) {
-        if (!isRefreshing) {
-            scrollTop();
-        }
-        this.isRefreshing = isRefreshing;
-    }
-
-    private void scrollTop() {
-        if (getItemCount() > 1) {
-            int top = mRecyclerView.getChildAt(1).getTop();
-            mRecyclerView.scrollBy(0, top);
-        }
-    }
-
-    public void setOnRefreshListener(OnRefreshListener listener) {
-        if (listener != null) {
-            mOnRefreshListener = listener;
-        }
-    }
-
-    public void setRefreshView(View view) {
-        mRefreshView = view;
-    }
-
-    public void setRefreshView(int layoutId) {
-        mRefreshLayoutId = layoutId;
-    }
-    // Refresh adapter end-----------------------------------------
 
     public interface LoadMoreListener {
         void loadMore();
     }
-
-    public interface OnRefreshListener {
-        void onRefresh();
-    }
+    // LoadMore adapter end-----------------------------------------
 }

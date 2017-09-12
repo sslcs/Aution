@@ -56,4 +56,7 @@
     <string name="record_going">正在拍</string>
     <string name="record_win">已拍中</string>
     <string name="record_unpaid">未付款</string>
+    <string name="charge">充值</string>
+    <string name="balance_formatter">拍币余额：%1$d</string>
+    <string name="free_balance_formatter">赠币余额：%1$d</string>
 </resources>
