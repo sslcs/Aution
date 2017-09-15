@@ -6,17 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.reflect.TypeToken;
 import com.happy.auction.adapter.AdapterWrapper;
 import com.happy.auction.adapter.CustomAdapter;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentListBinding;
-import com.happy.auction.entity.SendEvent;
+import com.happy.auction.entity.DataResponse;
+import com.happy.auction.entity.RequestEvent;
 import com.happy.auction.entity.item.ItemOrder;
 import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.OrderParam;
+import com.happy.auction.entity.response.GoodsResponse;
+import com.happy.auction.net.ResponseHandler;
+import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import io.reactivex.functions.Consumer;
@@ -68,10 +74,19 @@ public class OrderFragment extends BaseFragment {
         if (getUserVisibleHint()) {
             loadData(1);
         }
+    }
 
-        RxBus.getDefault().subscribe(this, new Consumer<ArrayList<ItemOrder>>() {
+    private void loadData(int start) {
+        this.start = start;
+        OrderParam param = new OrderParam();
+        param.records_status = getArguments().getInt(KEY_TYPE);
+        BaseRequest<OrderParam> request = new BaseRequest<>(param);
+        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
             @Override
-            public void accept(ArrayList<ItemOrder> data) throws Exception {
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<ArrayList<ItemOrder>>>() {}.getType();
+                DataResponse<ArrayList<ItemOrder>> obj = GsonSingleton.get().fromJson(response, type);
+                ArrayList<ItemOrder> data = obj.data;
                 if (data != null) {
                     adapter.getInnerAdapter().addAll(data);
                     adapter.setHasMore(data.size() >= BaseParam.DEFAULT_LIMIT);
@@ -80,20 +95,7 @@ public class OrderFragment extends BaseFragment {
                 }
             }
         });
-    }
-
-    private void loadData(int start) {
-        this.start = start;
-        OrderParam param = new OrderParam();
-        param.records_status = getArguments().getInt(KEY_TYPE);
-        BaseRequest<OrderParam> request = new BaseRequest<>(param);
-        RxBus.getDefault().post(new SendEvent(request.toString()));
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        RxBus.getDefault().unsubscribe(this);
+        RxBus.getDefault().post(event);
     }
 
     @Override

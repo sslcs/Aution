@@ -8,7 +8,7 @@ import com.happy.auction.utils.GsonSingleton;
  */
 
 public class BaseRequest<T extends BaseParam> {
-    private String action;
+    public String action;
 
     private T data;
 

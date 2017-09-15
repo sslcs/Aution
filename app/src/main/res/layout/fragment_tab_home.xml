@@ -4,19 +4,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.happy.auction.main.latest.TabLatestFragment">
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/tv_toolbar_title"
             style="@style/TextTitle"
             android:text="@string/app_name"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/v_list"
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/tv_toolbar_title"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_latest"/>
-    </RelativeLayout>
+            app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/divider">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="banner"
+                    android:layout_marginBottom="1dp"
+                    app:layout_scrollFlags="scroll|enterAlways"/>
+                <include
+                    android:id="@+id/menu"
+                    layout="@layout/fragment_tab_home_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlways"/>
+                <com.happy.auction.ui.MarqueeTextView
+                    android:id="@+id/tv_announce"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="1dp"
+                    android:background="@android:color/white"
+                    android:drawableLeft="@drawable/ic_announce"
+                    android:drawablePadding="10dp"
+                    android:ellipsize="marquee"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    app:layout_scrollFlags="scroll|enterAlways"/>
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    app:tabSelectedTextColor="@color/main_red">
+                    <android.support.design.widget.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/type_hot"/>
+                    <android.support.design.widget.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/type_newbie"/>
+                </android.support.design.widget.TabLayout>
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v7.widget.RecyclerView
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:id="@+id/v_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="GridLayoutManager"
+                tools:listitem="@layout/item_latest"/>
+        </android.support.design.widget.CoordinatorLayout>
+    </android.support.constraint.ConstraintLayout>
 </layout>

@@ -58,7 +58,20 @@ public class ImageLoader {
                 .into(imageView);
     }
 
-//    public static void displayImage(String url, final ImageView view, final OnSuccessListener listener) {
+    @BindingAdapter("image_url")
+    public static void loadImage(ImageView imageView, String url) {
+        if(TextUtils.isEmpty(url)){
+            imageView.setImageResource(R.drawable.pic_default);
+            return;
+        }
+        GlideApp.with(imageView.getContext())
+                .load(url)
+                .placeholder(R.drawable.pic_default)
+                .error(R.drawable.pic_default)
+                .into(imageView);
+    }
+
+//    public static void displayImage(String url, final ImageView view, final OnSuccessListener handler) {
 //        Glide.with(AppInstance.getInstance().getApplicationContext())
 //                .asBitmap()
 //                .load(url)
@@ -66,7 +79,7 @@ public class ImageLoader {
 //                    @Override
 //                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
 //                        view.setImageBitmap(resource);
-//                        listener.onSuccess();
+//                        handler.onSuccess();
 //                        LogUtils.v(this,"onSuccess");
 //                    }
 //

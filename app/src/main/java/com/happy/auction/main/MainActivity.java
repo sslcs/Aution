@@ -7,11 +7,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.ViewPagerAdapter;
 import com.happy.auction.databinding.ActivityMainBinding;
-import com.happy.auction.entity.SendEvent;
+import com.happy.auction.entity.DataResponse;
+import com.happy.auction.entity.RequestEvent;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.SyncParam;
 import com.happy.auction.entity.param.UserInfoParam;
@@ -21,11 +23,19 @@ import com.happy.auction.main.category.TabCategoryFragment;
 import com.happy.auction.main.home.TabHomeFragment;
 import com.happy.auction.main.latest.TabLatestFragment;
 import com.happy.auction.main.me.TabMeFragment;
+import com.happy.auction.net.ResponseHandler;
 import com.happy.auction.ui.AuctionDetailActivity;
 import com.happy.auction.utils.DebugLog;
+import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -55,16 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
         init();
         initWebSocket();
-        initLayout();
     }
 
     private void init() {
         messagePresenter = new MessagePresenter();
-        RxBus.getDefault().subscribe(this, SendEvent.class, new Consumer<SendEvent>() {
+        RxBus.getDefault().subscribe(this, RequestEvent.class, new Consumer<RequestEvent>() {
             @Override
-            public void accept(SendEvent sendEvent) throws Exception {
-                DebugLog.e("sendMessage: " + sendEvent.message);
-                sendMessage(sendEvent.message);
+            public void accept(RequestEvent requestEvent) throws Exception {
+                sendMessage(requestEvent);
             }
         });
 
@@ -91,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.add(TabLatestFragment.newInstance());
         adapter.add(TabCategoryFragment.newInstance());
         adapter.add(TabMeFragment.newInstance());
+        binding.viewPager.setOffscreenPageLimit(4);
         binding.viewPager.setAdapter(adapter);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
         TabLayout.Tab tab = binding.tabLayout.getTabAt(0);
@@ -120,9 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 DebugLog.e("onOpen");
                 client = webSocket;
                 syncClient();
-                if (AppInstance.getInstance().isLogin()) {
-                    getUserInfo();
-                }
             }
 
             @Override
@@ -169,15 +175,26 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMessage(String message) {
+    private void sendMessage(RequestEvent event) {
         if (client == null) return;
-        client.send(message);
+        DebugLog.e("sendMessage: " + event.message);
+        messagePresenter.addHandler(event.handler);
+        client.send(event.message);
     }
 
     private void syncClient() {
         SyncParam data = new SyncParam();
         BaseRequest<SyncParam> request = new BaseRequest<>(data);
-        RxBus.getDefault().post(new SendEvent(request.toString()));
+        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
+            @Override
+            public void onSuccess(String response, String message) {
+                initLayout();
+                if (AppInstance.getInstance().isLogin()) {
+                    getUserInfo();
+                }
+            }
+        });
+        RxBus.getDefault().post(event);
     }
 
     @Override
@@ -200,6 +217,14 @@ public class MainActivity extends AppCompatActivity {
     private void getUserInfo() {
         UserInfoParam data = new UserInfoParam();
         BaseRequest<UserInfoParam> request = new BaseRequest<>(data);
-        RxBus.getDefault().post(new SendEvent(request.toString()));
+        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<UserInfo>>() {}.getType();
+                DataResponse<UserInfo> obj = GsonSingleton.get().fromJson(response, type);
+                RxBus.getDefault().post(obj.data);
+            }
+        });
+        RxBus.getDefault().post(event);
     }
 }

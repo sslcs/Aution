@@ -11,4 +11,5 @@
     <color name="text_dark">#333333</color>
     <color name="text_normal">#555555</color>
     <color name="divider">#ececec</color>
+    <color name="transparent">#aaffffff</color>
 </resources>

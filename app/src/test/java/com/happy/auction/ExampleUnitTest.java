@@ -1,12 +1,11 @@
 package com.happy.auction;
 
-import com.happy.auction.entity.AuctionDetailParam;
-import com.happy.auction.entity.param.BaseRequest;
-import com.happy.auction.utils.GsonSingleton;
-
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.Vector;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -16,15 +15,6 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        BaseRequest<AuctionDetailParam> param = new BaseRequest<>();
-        param.action = "bid";
-        AuctionDetailParam data = new AuctionDetailParam();
-        data.uid = "10086";
-        data.sid = "10086";
-        param.data = data;
-        String message = GsonSingleton.get().toJson(param);
-        System.out.println("message : " + message);
-
         assertEquals(4, 2 + 2);
     }
 }

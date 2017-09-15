@@ -11,13 +11,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.reflect.TypeToken;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentPasswordLoginBinding;
+import com.happy.auction.entity.DataResponse;
 import com.happy.auction.entity.param.BaseRequest;
-import com.happy.auction.entity.SendEvent;
+import com.happy.auction.entity.RequestEvent;
 import com.happy.auction.entity.param.LoginParam;
+import com.happy.auction.entity.response.LoginResponse;
+import com.happy.auction.net.ResponseHandler;
+import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.Validation;
+
+import java.lang.reflect.Type;
 
 /**
  * 密码登录
@@ -76,7 +83,15 @@ public class PasswordLoginFragment extends BaseFragment {
         param.login_type = LoginParam.TYPE_PASSWORD;
 
         BaseRequest<LoginParam> request = new BaseRequest<>(param);
-        RxBus.getDefault().post(new SendEvent(request.toString()));
+        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<LoginResponse>>() {}.getType();
+                DataResponse<LoginResponse> obj = GsonSingleton.get().fromJson(response, type);
+                RxBus.getDefault().post(obj.data);
+            }
+        });
+        RxBus.getDefault().post(event);
     }
 
     public void onClickForget(View view) {

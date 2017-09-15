@@ -10,6 +10,12 @@
     <string name="tab_category">全部商品</string>
     <string name="tab_me">个人中心</string>
 
+    <!-- tab home -->
+    <string name="type_hot">正在热拍</string>
+    <string name="type_newbie">新手推荐</string>
+    <string name="join_auction">参与竞拍</string>
+    <string name="auction_finish">竞拍已结束</string>
+
     <!-- tab me -->
     <string name="login_register">登录/注册</string>
     <string name="auction_coin_formatter">%1$d\n拍币</string>

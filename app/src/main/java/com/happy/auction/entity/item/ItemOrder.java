@@ -5,36 +5,11 @@ package com.happy.auction.entity.item;
  * 订单item
  */
 
-public class ItemOrder {
-    /**
-     * 晒单编号id
-     */
-    public String sid;
-    /**
-     * 商品的编号id
-     */
-    public String gid;
-    /**
-     * 期号
-     */
-    public String period;
-    public String title;
+public class ItemOrder extends BaseGoods {
     /**
      * 订单号
      */
     public String ordernum;
-    /**
-     * 商品图片
-     */
-    public String icon;
-    /**
-     * 市场价格，单位：分
-     */
-    public String market_price;
-    /**
-     * 当前价格，单位：分
-     */
-    public String current_price;
     /**
      * 我已出价多少次
      */

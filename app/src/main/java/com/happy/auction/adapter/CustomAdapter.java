@@ -6,7 +6,7 @@ import com.happy.auction.R;
 
 /**
  * Created by LiuCongshan on 17-9-12.
- * 未adapter设置默认EmptyView,LoadMoreView,RefreshView.
+ * 为adapter设置默认EmptyView,LoadMoreView.
  */
 
 public class CustomAdapter<T extends RecyclerView.Adapter> extends AdapterWrapper<T> {
@@ -14,5 +14,10 @@ public class CustomAdapter<T extends RecyclerView.Adapter> extends AdapterWrappe
         super(adapter);
         setEmptyView(R.layout.empty_view);
         setLoadMoreView(R.layout.item_load_more);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 }
