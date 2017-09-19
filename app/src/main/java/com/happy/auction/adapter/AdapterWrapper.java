@@ -12,14 +12,14 @@ import android.view.ViewGroup;
  * Display empty view while the data is empty;<br/>
  */
 
-public class AdapterWrapper<T extends RecyclerView.Adapter>
+public class AdapterWrapper<A extends RecyclerView.Adapter>
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     static final int ITEM_TYPE_HEADER_BASE = 0XFA000;
     static final int ITEM_TYPE_FOOTER_BASE = 0XFF000;
     private static final int ITEM_TYPE_EMPTY = Integer.MAX_VALUE - 1;
     private static final int ITEM_TYPE_LOAD_MORE = Integer.MAX_VALUE - 2;
 
-    private T mInnerAdapter;
+    private A mInnerAdapter;
 
     private View mEmptyView;
     private int mEmptyLayoutId;
@@ -29,11 +29,11 @@ public class AdapterWrapper<T extends RecyclerView.Adapter>
     private LoadMoreListener mLoadMoreListener;
     private boolean hasMore = false;
 
-    public AdapterWrapper(T adapter) {
+    public AdapterWrapper(A adapter) {
         mInnerAdapter = adapter;
     }
 
-    public T getInnerAdapter() {
+    public A getInnerAdapter() {
         return mInnerAdapter;
     }
 

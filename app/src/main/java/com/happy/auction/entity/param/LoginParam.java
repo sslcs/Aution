@@ -25,6 +25,6 @@ public class LoginParam extends BaseParam {
     public String login_type;
 
     public LoginParam() {
-        action = BaseEvent.RESPONSE_LOGIN;
+        action = "user_login";
     }
 }

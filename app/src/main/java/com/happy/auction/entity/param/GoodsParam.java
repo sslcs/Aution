@@ -24,6 +24,6 @@ public class GoodsParam extends BaseParam {
     public int limit = DEFAULT_LIMIT;
 
     public GoodsParam() {
-        action = BaseEvent.RESPONSE_GOODS;
+        action = "goods_bid";
     }
 }

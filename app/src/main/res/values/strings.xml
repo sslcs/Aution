@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">王者竞拍</string>
-    <string name="detail_btn_bid">出价（1夺宝币/次）</string>
+    <string name="detail_btn_bid">出价\n（1拍币/次）</string>
     <string name="detail_btn_go_latest">前往最新一期</string>
     <string name="tip_exit">别按了，再按就退出了呀！</string>
 
@@ -65,4 +65,17 @@
     <string name="charge">充值</string>
     <string name="balance_formatter">拍币余额：%1$d</string>
     <string name="free_balance_formatter">赠币余额：%1$d</string>
+
+    <!-- detail -->
+    <string name="auction_detail">竞拍详情</string>
+    <string name="no_person">暂无出价人</string>
+    <string name="price_start">起拍价</string>
+    <string name="price_step">加价幅度</string>
+    <string name="auction_rules"><![CDATA[竞拍规则 >]]></string>
+    <string name="fee">手续费</string>
+    <string name="countdown_time">竞拍倒计时</string>
+    <string name="return_percent">返币比例额</string>
+    <string name="previous_deal">往期成交</string>
+    <string name="publish_share">晒单分享</string>
+    <string name="my_bid_times">我已出价：10拍币，0赠币</string>
 </resources>

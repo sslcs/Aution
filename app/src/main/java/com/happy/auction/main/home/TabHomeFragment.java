@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.adapter.AdapterWrapper;
 import com.happy.auction.adapter.CustomAdapter;
+import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.databinding.FragmentTabHomeBinding;
 import com.happy.auction.entity.DataResponse;
 import com.happy.auction.entity.RequestEvent;
@@ -24,6 +25,7 @@ import com.happy.auction.entity.param.GoodsParam;
 import com.happy.auction.entity.param.MenuParam;
 import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.net.ResponseHandler;
+import com.happy.auction.detail.AuctionDetailActivity;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
@@ -71,6 +73,13 @@ public class TabHomeFragment extends Fragment {
                 binding.vList.stopScroll();
             }
         });
+        adapter.getInnerAdapter().setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, Object item) {
+                ItemGoods goods = (ItemGoods) item;
+                startActivity(AuctionDetailActivity.newIntent(goods));
+            }
+        });
         binding.vList.setAdapter(adapter);
         binding.tvAnnounce.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,15 +88,18 @@ public class TabHomeFragment extends Fragment {
             }
         });
 
-        Observable.timer(3, TimeUnit.SECONDS)
+        Observable.interval(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        ItemGoods goods = new ItemGoods();
-                        goods.gid = "5";
-                        goods.title = "xxx";
-                        adapter.getInnerAdapter().refresh(goods);
+                        ItemGoods goods = adapter.getInnerAdapter().getItem(5);
+                        goods.current_price += 10;
+                        int position = adapter.getInnerAdapter().getPosition(goods);
+                        if (position == -1) return;
+                        adapter.getInnerAdapter().setAnimatePosition(position);
+                        adapter.getInnerAdapter().refresh(position, goods);
+                        adapter.notifyItemChanged(position);
                     }
                 });
     }
@@ -155,11 +167,11 @@ public class TabHomeFragment extends Fragment {
             @Override
             public void onSuccess(String response, String message) {
                 ArrayList<ItemGoods> data = new ArrayList<>(3);
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 30; i++) {
                     ItemGoods item = new ItemGoods();
                     item.title = i + "佳能Canon EOS 800D高配牛逼哄哄带闪电";
                     item.status = i;
-                    item.current_price = 100 + i;
+//                    item.current_price = 100 + i;
                     item.gid = String.valueOf(i);
                     item.bid_expire_time = System.currentTimeMillis() + i * 1000;
                     data.add(item);

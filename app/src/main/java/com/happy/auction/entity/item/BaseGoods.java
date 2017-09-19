@@ -1,5 +1,6 @@
 package com.happy.auction.entity.item;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Locale;
  * 商品item基类
  */
 
-public class BaseGoods {
+public class BaseGoods implements Serializable{
     /**
      * 晒单编号id
      */

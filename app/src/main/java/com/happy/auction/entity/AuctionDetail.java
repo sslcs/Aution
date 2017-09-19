@@ -1,6 +1,7 @@
 package com.happy.auction.entity;
 
-import com.happy.auction.entity.response.BaseEvent;
+import com.happy.auction.entity.item.BidRecord;
+import com.happy.auction.entity.item.ItemGoods;
 
 import java.util.ArrayList;
 
@@ -9,47 +10,46 @@ import java.util.ArrayList;
  * 竞拍详情
  */
 
-public class AuctionDetail extends BaseEvent {
+public class AuctionDetail extends ItemGoods {
     /**
-     * "original_price": "6699.00",
-     * "expire": 1503303896249,
-     * "img": ["https://img14.360buyimg.com/n0/jfs/t4276/257/2416766721/125228/ba72a107/58d1d078N20e18b62.jpg",
-     * "https://img14.360buyimg.com/n0/jfs/t4594/177/571351438/47428/6706aecc/58d1d012N38872961.jpg",
-     * "https://img14.360buyimg.com/n0/jfs/t4402/145/562043557/97164/a3ba70c5/58d1d011N2d519cb0.jpg",
-     * "https://img14.360buyimg.com/n0/jfs/t4330/60/2426524648/52871/f2746e57/58d1d011N47817be3.jpg"],
-     * "good_name": "iPhone7 Plus 128G",
-     * "out_bidders": [],
-     * "current_price": "100.00",
-     * "current_bidder": "",
-     * "bid_times": 0,
-     * "event": "good_detail"
+     * "start_time": 1504506671111, // 开始时间，单位：毫秒
      */
 
     /**
-     * 商品名称
+     * 开奖时间，单位：毫秒
      */
-    public String good_name;
-    public String goods_image;
-    public String current_bidder;
-    public ArrayList<String> img;
-    public long expire;
-
-    public ArrayList<JoinRecord> out_bidders;
+    public long prize_time;
 
     /**
-     * 市场价
+     * 最新出价人用户名
      */
-    public String original_price;
-    /**
-     * 当前竞拍价
-     */
-    public float current_price;
-    /**
-     * 0:正在进行中; 1:已结束
-     */
-    public int status;
+    public String username;
+
+    public ArrayList<BidRecord> bid_records;
+
     /**
      *
      */
     public int bid_times;
+
+    /**
+     * 起拍价，单位：分
+     */
+    public int bid_start_price;
+    /**
+     * 加价幅度，单位：分
+     */
+    public int bid_increment;
+    /**
+     * 手续费，虚拟币的数量
+     */
+    public int bid_fee;
+    /**
+     * 竞拍倒计时，单位：毫秒
+     */
+    public int bid_countdown;
+    /**
+     * 退币比例
+     */
+    public String bid_refund;
 }

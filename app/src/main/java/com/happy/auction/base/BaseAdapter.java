@@ -42,12 +42,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
         return data.indexOf(item);
     }
 
-    public void refresh(T item) {
-        int position = getPosition(item);
-        if (position == -1) return;
+    public void refresh(int position, T item) {
+        if (data == null || data.isEmpty() || position >= data.size()) return;
         data.remove(position);
         data.add(position, item);
-        notifyItemChanged(position);
     }
 
     @Override
@@ -56,7 +54,8 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onItemClickListener.onItemClick(view, holder.getAdapterPosition());
+                T item = getItem(holder.getAdapterPosition());
+                onItemClickListener.onItemClick(view, holder.getAdapterPosition(), item);
             }
         });
     }
@@ -70,8 +69,8 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
         this.onItemClickListener = listener;
     }
 
-    interface OnItemClickListener {
-        void onItemClick(View view, int position);
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position, Object item);
     }
 
     public class CustomViewHolder<B extends ViewDataBinding> extends RecyclerView.ViewHolder {

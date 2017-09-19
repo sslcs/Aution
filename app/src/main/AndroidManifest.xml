@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.AuctionDetailActivity">
+        <activity android:name=".detail.AuctionDetailActivity">
         </activity>
         <activity android:name=".main.me.SettingActivity">
         </activity>

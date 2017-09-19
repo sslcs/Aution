@@ -23,6 +23,16 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/pic_default"/>
+        <View
+            android:id="@+id/bg_price"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:background="@drawable/bg_circle"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_price"
+            app:layout_constraintEnd_toEndOf="@+id/tv_price"
+            app:layout_constraintStart_toStartOf="@+id/tv_price"
+            app:layout_constraintTop_toTopOf="@+id/tv_price"/>
         <TextView
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"
@@ -37,15 +47,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_pic"
             tools:text="￥8.88"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:alpha="0.2"
-            android:background="@drawable/bg_circle"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_price"
-            app:layout_constraintEnd_toEndOf="@+id/tv_price"
-            app:layout_constraintStart_toStartOf="@+id/tv_price"
-            app:layout_constraintTop_toTopOf="@+id/tv_price"/>
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
@@ -70,12 +71,12 @@
             android:layout_marginLeft="10dp"
             android:textColor="@{goods.status != 0 ? @color/main_red : @color/text_normal}"
             android:textSize="19sp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_join"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_bid"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_join"
+            app:layout_constraintTop_toTopOf="@+id/btn_bid"
             tools:text="00:00:10"/>
         <Button
-            android:id="@+id/btn_join"
+            android:id="@+id/btn_bid"
             style="@style/ButtonCorner"
             android:layout_width="65dp"
             android:layout_height="22dp"

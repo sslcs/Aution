@@ -103,4 +103,20 @@
         <item name="android:textColor">@color/text_dark</item>
         <item name="android:textSize">15sp</item>
     </style>
+
+    <style name="TextDetailRuleLabel">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:textColor">@color/text_dark</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextDetailRule">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/main_red</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
@@ -24,18 +23,12 @@ import com.happy.auction.main.home.TabHomeFragment;
 import com.happy.auction.main.latest.TabLatestFragment;
 import com.happy.auction.main.me.TabMeFragment;
 import com.happy.auction.net.ResponseHandler;
-import com.happy.auction.ui.AuctionDetailActivity;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -94,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initLayout() {
+        if (binding.viewPager.getAdapter() != null) return;
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.add(TabHomeFragment.newInstance());
         adapter.add(TabLatestFragment.newInstance());
@@ -110,10 +104,6 @@ public class MainActivity extends AppCompatActivity {
         if (tab != null) tab.setCustomView(R.layout.tab_category);
         tab = binding.tabLayout.getTabAt(3);
         if (tab != null) tab.setCustomView(R.layout.tab_me);
-    }
-
-    public void onClickJoin(View view) {
-        startActivity(AuctionDetailActivity.newIntent());
     }
 
     private void initWebSocket() {

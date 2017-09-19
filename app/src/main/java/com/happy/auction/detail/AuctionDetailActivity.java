@@ -1,4 +1,4 @@
-package com.happy.auction.ui;
+package com.happy.auction.detail;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -6,18 +6,21 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.adapter.AuctionDetailJoinAdapter;
+import com.happy.auction.adapter.AuctionDetailBidAdapter;
+import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityAuctionDetailBinding;
 import com.happy.auction.entity.AuctionDetail;
-import com.happy.auction.entity.AuctionDetailParam;
 import com.happy.auction.entity.CountdownEvent;
-import com.happy.auction.entity.JoinRecord;
+import com.happy.auction.entity.item.BaseGoods;
+import com.happy.auction.entity.item.BidRecord;
+import com.happy.auction.entity.param.AuctionDetailParam;
 import com.happy.auction.glide.ImageLoader;
 
 import java.util.Locale;
@@ -27,20 +30,15 @@ import java.util.Locale;
  */
 public class AuctionDetailActivity extends BaseActivity {
     private ActivityAuctionDetailBinding binding;
-    private AuctionDetailJoinAdapter adapter;
+    private AuctionDetailBidAdapter adapter;
     private AuctionDetail auctionDetail;
 
     private CountDownTimer timer;
     private AnimatorSet animator;
 
-    public static Intent newIntent() {
+    public static Intent newIntent(BaseGoods goods) {
         Intent intent = new Intent(AppInstance.getInstance(), AuctionDetailActivity.class);
-        return intent;
-    }
-
-    public static Intent newIntent(String sid) {
-        Intent intent = newIntent();
-        intent.putExtra("sid", sid);
+        intent.putExtra("goods", goods);
         return intent;
     }
 
@@ -48,7 +46,6 @@ public class AuctionDetailActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_auction_detail);
-        new ToolbarBuilder(binding.toolbar).setTitle("竞拍详情");
 
         initLayout();
     }
@@ -58,28 +55,55 @@ public class AuctionDetailActivity extends BaseActivity {
         manager.setStackFromEnd(true);//列表再底部开始展示，反转后由上面开始展示
         manager.setReverseLayout(true);//列表翻转
         binding.recyclerView.setLayoutManager(manager);
-        adapter = new AuctionDetailJoinAdapter();
+        adapter = new AuctionDetailBidAdapter();
         binding.recyclerView.setAdapter(adapter);
+
+        binding.appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset < -binding.bgPrice.getTop()) {
+                    binding.tvToolbarPrice.setVisibility(View.VISIBLE);
+                    binding.tvToolbarTime.setVisibility(View.VISIBLE);
+                    int height = -binding.bgPrice.getTop() - verticalOffset;
+                    ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) binding.tvToolbarPrice.getLayoutParams();
+                    ConstraintLayout.LayoutParams params2 = (ConstraintLayout.LayoutParams) binding.tvToolbarTime.getLayoutParams();
+                    if (height < binding.tvToolbarTitle.getHeight()) {
+                        params.height = height;
+                        params2.height = height;
+                    } else {
+                        params.height = binding.tvToolbarTitle.getHeight();
+                        params2.height = binding.tvToolbarTitle.getHeight();
+                    }
+                    binding.tvToolbarPrice.setLayoutParams(params);
+                    binding.tvToolbarTime.setLayoutParams(params2);
+                } else {
+                    binding.tvToolbarPrice.setVisibility(View.GONE);
+                    binding.tvToolbarTime.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void initData() {
-        if (auctionDetail.img != null && !auctionDetail.img.isEmpty()) {
-            ImageLoader.displayOriginal(auctionDetail.img.get(0), binding.ivGoodsImage);
+        if (auctionDetail.icon != null) {
+            ImageLoader.displayOriginal(auctionDetail.icon, binding.ivGoodsImage);
         }
-        binding.tvGoodsName.setText(auctionDetail.good_name);
+        binding.tvGoodsName.setText(auctionDetail.title);
 
-        String originalPrice = String.format(Locale.CHINA, "市场价：%s", auctionDetail.original_price);
-        binding.tvOriginalPrice.setText(originalPrice);
+        float price = auctionDetail.market_price / 100.0f;
+        String marketPrice = String.format(Locale.CHINA, "市场价：%.2f", price);
+        binding.tvOriginalPrice.setText(marketPrice);
     }
 
     private void setCurrentPrice() {
-        String price = String.format(Locale.CHINA, "当前价：%.1f", auctionDetail.current_price);
-        binding.tvCurrentPrice.setText(price);
+        float price = auctionDetail.current_price / 100.0f;
+        String currentPrice = String.format(Locale.CHINA, "当前价：%.2f", price);
+        binding.tvCurrentPrice.setText(currentPrice);
 
-        if (TextUtils.isEmpty(auctionDetail.current_bidder)) {
-            binding.tvCurrentPerson.setText("");
+        if (auctionDetail.bid_records != null && !auctionDetail.bid_records.isEmpty()) {
+            binding.tvCurrentPerson.setText("当前出价人：" + auctionDetail.bid_records.get(0).username);
         } else {
-            binding.tvCurrentPerson.setText("当前出价人：" + auctionDetail.current_bidder);
+            binding.tvCurrentPerson.setText("");
         }
     }
 
@@ -129,15 +153,16 @@ public class AuctionDetailActivity extends BaseActivity {
     private void setNormalView() {
         setCurrentPrice();
         binding.btnBottom.setText(R.string.detail_btn_bid);
-        binding.tvJoinTimes.setText(auctionDetail.bid_times + "次");
+        binding.tvBidTimes.setText(auctionDetail.bid_times + "次");
     }
 
     private void setFinishView() {
         auctionDetail.status = 1;
         binding.tvAuctionStatus.setText("竞拍结束");
-        binding.tvCurrentPerson.setText("竞拍成功者：" + auctionDetail.current_bidder);
-        String price = String.format(Locale.CHINA, "成交价：%.1f", auctionDetail.current_price);
-        binding.tvCurrentPrice.setText(price);
+        binding.tvCurrentPerson.setText("竞拍成功者：" + auctionDetail.username);
+        float price = auctionDetail.current_price / 100.0f;
+        String currentPrice = String.format(Locale.CHINA, "当前价：%.2f", price);
+        binding.tvCurrentPrice.setText(currentPrice);
         binding.btnBottom.setText(R.string.detail_btn_go_latest);
     }
 
@@ -151,27 +176,25 @@ public class AuctionDetailActivity extends BaseActivity {
         auctionDetail.current_price = 0;
         auctionDetail.bid_times = 0;
         auctionDetail.status = 0;
-        auctionDetail.current_bidder = "";
+        auctionDetail.username = "";
         setNormalView();
         adapter.clear();
     }
 
-    public void onClickJoin(View view) {
+    public void onClickBid(View view) {
         if (auctionDetail.status == 1) {
 //            restart();
             return;
         }
 
-        JoinRecord item = new JoinRecord();
+        BidRecord item = new BidRecord();
         auctionDetail.current_price += 0.1;
 
         AuctionDetailParam data = new AuctionDetailParam();
-        data.uid = "不是本人";
         data.sid = "10086";
 
-        auctionDetail.current_bidder = data.uid;
         auctionDetail.bid_times += 1;
-        binding.tvJoinTimes.setText(auctionDetail.bid_times + "次");
+        binding.tvBidTimes.setText(auctionDetail.bid_times + "次");
         setCurrentPrice();
     }
 
@@ -186,9 +209,9 @@ public class AuctionDetailActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                JoinRecord record = new JoinRecord();
-                record.price = item.current_price;
-                record.name = item.current_bidder;
+                BidRecord record = new BidRecord();
+//                record.bid_price = item.current_price;
+//                record.name = item.username;
                 adapter.addItem(record);
                 startTimer(item.expire - System.currentTimeMillis());
             }
@@ -201,7 +224,7 @@ public class AuctionDetailActivity extends BaseActivity {
             @Override
             public void run() {
                 initData();
-                startTimer(auctionDetail.expire - System.currentTimeMillis());
+                startTimer(auctionDetail.bid_expire_time - System.currentTimeMillis());
             }
         });
     }

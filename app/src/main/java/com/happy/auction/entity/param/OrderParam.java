@@ -16,6 +16,6 @@ public class OrderParam extends BaseParam {
     public int limit = DEFAULT_LIMIT;
 
     public OrderParam() {
-        action = BaseEvent.RESPONSE_RECORD;
+        action = "purchase_my_records";
     }
 }
