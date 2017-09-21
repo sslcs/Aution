@@ -1,14 +1,19 @@
 package com.happy.auction.entity.item;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+import android.support.annotation.NonNull;
+
+import com.happy.auction.BR;
+
 import java.io.Serializable;
-import java.util.Locale;
 
 /**
  * Created by LiuCongshan on 17-9-12.
  * 商品item基类
  */
 
-public class BaseGoods implements Serializable{
+public class BaseGoods extends BaseObservable implements Serializable {
     /**
      * 晒单编号id
      */
@@ -20,7 +25,7 @@ public class BaseGoods implements Serializable{
     /**
      * 期号
      */
-    public String period;
+    public int period;
     /**
      * 商品标题
      */
@@ -42,8 +47,27 @@ public class BaseGoods implements Serializable{
      */
     public int current_price;
 
-    public String currentPrice() {
-        return "￥" + String.format(Locale.CHINA, "%.2f", current_price / 100f);
+    public BaseGoods() {}
+
+    public BaseGoods(@NonNull BaseGoods goods) {
+        this.sid = goods.sid;
+        this.gid = goods.gid;
+        this.period = goods.period;
+        this.title = goods.title;
+        this.description = goods.description;
+        this.icon = goods.icon;
+        this.market_price = goods.market_price;
+        setCurrentPrice(goods.current_price);
+    }
+
+    @Bindable
+    public int getCurrent_price() {
+        return current_price;
+    }
+
+    public void setCurrentPrice(int price) {
+        current_price = price;
+        notifyPropertyChanged(BR.current_price);
     }
 
     @Override

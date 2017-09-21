@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.happy.auction.utils.StringUtil"/>
+        <variable
+            name="data"
+            type="com.happy.auction.entity.item.ItemOrder"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/bg_img"
+            android:layout_width="118dp"
+            android:layout_height="120dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:image_url="@{data.icon}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bg_img"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/pic_default"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/format_title(data.period, data.title)}"
+            android:textColor="@color/text_normal"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_price"
+            app:layout_constraintStart_toEndOf="@+id/bg_img"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="(第123期)　名称名称名称"/>
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@{@string/format_deal_price(StringUtil.formatMoney(data.current_price))}"
+            android:textColor="@color/main_red"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_bid_times"
+            app:layout_constraintStart_toEndOf="@+id/bg_img"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            tools:text="成交价：￥10.00"/>
+
+        <TextView
+            android:id="@+id/tv_bid_times"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@{@string/format_bid_times(data.buy, data.refund_coin)}"
+            android:textColor="@color/text_light"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_deal_time"
+            app:layout_constraintStart_toEndOf="@+id/bg_img"
+            app:layout_constraintTop_toBottomOf="@+id/tv_price"
+            tools:text="我已出价：5次（退币0）"/>
+
+        <TextView
+            android:id="@+id/tv_deal_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@{@string/format_deal_time(StringUtil.formatDateTime(data.prize_time))}"
+            android:textColor="@color/text_light"
+            android:textSize="12sp"
+            android:visibility="@{data.status==1 ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@+id/tv_going"
+            app:layout_constraintStart_toEndOf="@+id/bg_img"
+            app:layout_constraintTop_toBottomOf="@+id/tv_bid_times"
+            tools:text="成交时间：2017-09-21 17:08:46"/>
+
+        <TextView
+            android:id="@+id/tv_going"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/hot_going"
+            android:textColor="@color/main_red"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="@{data.status==1 ? View.VISIBLE : View.GONE, default = gone}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bg_img"
+            app:layout_constraintTop_toBottomOf="@+id/tv_deal_time"/>
+
+        <TextView
+            android:id="@+id/btn_go"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_circle"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="@{data.status==1 ? @string/go_on : @string/go_check}"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_deal_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="@string/go_on"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

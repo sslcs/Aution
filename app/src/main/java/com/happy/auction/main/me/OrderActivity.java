@@ -40,6 +40,7 @@ public class OrderActivity extends BaseActivity {
                 getString(R.string.record_win),
                 getString(R.string.record_unpaid)});
         binding.viewPager.setAdapter(adapter);
+        binding.viewPager.setOffscreenPageLimit(adapter.getCount());
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 
         int selection = getIntent().getIntExtra(KEY_SELECTION, 0);

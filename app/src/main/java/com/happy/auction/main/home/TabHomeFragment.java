@@ -14,6 +14,7 @@ import com.happy.auction.adapter.AdapterWrapper;
 import com.happy.auction.adapter.CustomAdapter;
 import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.databinding.FragmentTabHomeBinding;
+import com.happy.auction.detail.AuctionDetailActivity;
 import com.happy.auction.entity.DataResponse;
 import com.happy.auction.entity.RequestEvent;
 import com.happy.auction.entity.item.ItemGoods;
@@ -25,7 +26,6 @@ import com.happy.auction.entity.param.GoodsParam;
 import com.happy.auction.entity.param.MenuParam;
 import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.net.ResponseHandler;
-import com.happy.auction.detail.AuctionDetailActivity;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
@@ -64,7 +64,7 @@ public class TabHomeFragment extends Fragment {
         loadData();
 
         binding.vList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        binding.vList.addItemDecoration(new Decoration());
+        binding.vList.addItemDecoration(new HomeDecoration());
         adapter = new CustomAdapter<>(new TabHomeAdapter());
         adapter.setLoadMoreListener(new AdapterWrapper.LoadMoreListener() {
             @Override
@@ -171,7 +171,7 @@ public class TabHomeFragment extends Fragment {
                     ItemGoods item = new ItemGoods();
                     item.title = i + "佳能Canon EOS 800D高配牛逼哄哄带闪电";
                     item.status = i;
-//                    item.current_price = 100 + i;
+                    item.market_price = 100 + i;
                     item.gid = String.valueOf(i);
                     item.bid_expire_time = System.currentTimeMillis() + i * 1000;
                     data.add(item);

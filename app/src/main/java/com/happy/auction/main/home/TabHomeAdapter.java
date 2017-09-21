@@ -11,7 +11,6 @@ import com.happy.auction.R;
 import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.databinding.ItemGoodsBinding;
 import com.happy.auction.entity.item.ItemGoods;
-import com.happy.auction.utils.DebugLog;
 
 import java.util.Locale;
 
@@ -35,7 +34,6 @@ public class TabHomeAdapter extends BaseAdapter<ItemGoods> {
     @Override
     public void onBindViewHolder(BaseAdapter.CustomViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        ItemGoods goods = getItem(position);
         final ItemGoodsBinding binding = (ItemGoodsBinding) holder.getBinding();
 
         if (binding.getRoot().getTag() != null) {
@@ -43,13 +41,14 @@ public class TabHomeAdapter extends BaseAdapter<ItemGoods> {
             timer.cancel();
         }
 
+        ItemGoods goods = getItem(position);
         binding.setGoods(goods);
         if (goods.status == 0) {
             binding.tvTime.setText(R.string.auction_finish);
         } else {
             long left = goods.bid_expire_time - System.currentTimeMillis();
-            if (left > 0 && holder.getAdapterPosition() == 1) {
-                binding.getRoot().setTag(new CustomTimer(left, binding).start());
+            if (left > 0) {
+//                binding.getRoot().setTag(new CustomTimer(left, binding).start());
                 setTimeLeft(binding, left / 1000);
             } else {
                 binding.tvTime.setText("00:00:00");

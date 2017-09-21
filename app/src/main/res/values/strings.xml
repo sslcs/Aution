@@ -65,6 +65,12 @@
     <string name="charge">充值</string>
     <string name="balance_formatter">拍币余额：%1$d</string>
     <string name="free_balance_formatter">赠币余额：%1$d</string>
+    <string name="go_check">去查看</string>
+    <string name="go_on">继续竞拍</string>
+    <string name="format_deal_price">成交价：￥%1$s</string>
+    <string name="format_deal_time">成交时间：%1$s</string>
+    <string name="format_bid_times">我已出价：%1$d次（退币%2$d）</string>
+    <string name="format_title">(第%1$d期)　%2$s</string>
 
     <!-- detail -->
     <string name="auction_detail">竞拍详情</string>
@@ -77,5 +83,12 @@
     <string name="return_percent">返币比例额</string>
     <string name="previous_deal">往期成交</string>
     <string name="publish_share">晒单分享</string>
-    <string name="my_bid_times">我已出价：10拍币，0赠币</string>
+    <string name="my_bid_times">我已出价：%1$d拍币，%2$d赠币</string>
+    <string name="money_sign">￥</string>
+    <string name="price_current">当前价</string>
+    <string name="price_deal">成交价</string>
+    <string name="format_market_price">(市场价: ￥%1$s)</string>
+    <string name="format_current_price">当前价: ￥%1$s</string>
+    <string name="bid_out">出局</string>
+    <string name="hot_going">火热竞拍中……</string>
 </resources>

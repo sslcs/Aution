@@ -17,7 +17,7 @@ public class BidRecord {
     /**
      * 用户头像
      */
-    public String headmimg;
+    public String headimg;
     /**
      * ip 地址
      */

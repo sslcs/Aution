@@ -69,6 +69,38 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
         this.onItemClickListener = listener;
     }
 
+    public void addItem(T item) {
+        if (data == null) {
+            data = new ArrayList<>();
+        }
+        data.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void addItem(int position, T item) {
+        if (data == null) {
+            data = new ArrayList<>();
+        }
+        data.add(position, item);
+        notifyDataSetChanged();
+    }
+
+    public T removeItem(int position) {
+        if (data == null || position < 0 || position >= data.size()) {
+            return null;
+        }
+        T item = data.remove(position);
+        notifyDataSetChanged();
+        return item;
+    }
+
+    public boolean removeItem(T item) {
+        if (data == null) return false;
+        boolean success = data.remove(item);
+        notifyDataSetChanged();
+        return success;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(View view, int position, Object item);
     }
@@ -85,5 +117,4 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
             return binding;
         }
     }
-
 }

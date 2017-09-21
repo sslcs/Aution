@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View"/>
+        <import type="com.happy.auction.utils.StringUtil"/>
         <variable
             name="goods"
             type="com.happy.auction.entity.item.ItemGoods"/>
@@ -40,7 +41,7 @@
             android:layout_marginTop="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="10dp"
-            android:text='@{goods.currentPrice}'
+            android:text='@{@string/money_sign + StringUtil.formatMoney(goods.current_price)}'
             android:textColor="@color/main_red"
             android:textSize="14sp"
             app:layout_constraintLeft_toLeftOf="parent"
