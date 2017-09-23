@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">王者竞拍</string>
-    <string name="detail_btn_bid">出价\n（1拍币/次）</string>
-    <string name="detail_btn_go_latest">前往最新一期</string>
     <string name="tip_exit">别按了，再按就退出了呀！</string>
 
     <!-- tab -->
@@ -71,6 +69,7 @@
     <string name="format_deal_time">成交时间：%1$s</string>
     <string name="format_bid_times">我已出价：%1$d次（退币%2$d）</string>
     <string name="format_title">(第%1$d期)　%2$s</string>
+    <string name="hot_going">火热竞拍中……</string>
 
     <!-- detail -->
     <string name="auction_detail">竞拍详情</string>
@@ -90,5 +89,6 @@
     <string name="format_market_price">(市场价: ￥%1$s)</string>
     <string name="format_current_price">当前价: ￥%1$s</string>
     <string name="bid_out">出局</string>
-    <string name="hot_going">火热竞拍中……</string>
+    <string name="detail_btn_bid">出价\n（1拍币/次）</string>
+    <string name="detail_btn_go_latest">前往最新一期</string>
 </resources>

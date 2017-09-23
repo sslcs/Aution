@@ -22,7 +22,8 @@ import com.happy.auction.main.category.TabCategoryFragment;
 import com.happy.auction.main.home.TabHomeFragment;
 import com.happy.auction.main.latest.TabLatestFragment;
 import com.happy.auction.main.me.TabMeFragment;
-import com.happy.auction.net.ResponseHandler;
+import com.happy.auction.net.NetCallback;
+import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         RxBus.getDefault().subscribe(this, UserInfo.class, new Consumer<UserInfo>() {
             @Override
             public void accept(UserInfo user) throws Exception {
+                user.avatar = "http://mobile-pic.cache.iciba.com/1486980953-8616_218-135-%E9%95%BF%E5%8F%91%E5%A4%96%E5%9B%BD%E5%A5%B3.jpg";
                 AppInstance.getInstance().setUser(user);
             }
         });
@@ -110,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
         OkHttpClient httpClient = new OkHttpClient.Builder().build();
         Request request = new Request.Builder()
 //                .url("ws://192.168.1.64:9999/v1/ws")
-                .url("ws://192.168.1.225:8888/v1/ws")
+//                .url("ws://192.168.1.225:8888/v1/ws")
+                .url("ws://192.168.1.250:80/v1/ws")
                 .build();
         httpClient.newWebSocket(request, new WebSocketListener() {
             @Override
@@ -168,14 +171,14 @@ public class MainActivity extends AppCompatActivity {
     private void sendMessage(RequestEvent event) {
         if (client == null) return;
         DebugLog.e("sendMessage: " + event.message);
-        messagePresenter.addHandler(event.handler);
+        messagePresenter.addHandler(event.callback);
         client.send(event.message);
     }
 
     private void syncClient() {
         SyncParam data = new SyncParam();
         BaseRequest<SyncParam> request = new BaseRequest<>(data);
-        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
                 initLayout();
@@ -183,8 +186,17 @@ public class MainActivity extends AppCompatActivity {
                     getUserInfo();
                 }
             }
+
+            @Override
+            public void onError(int code, String message) {
+                super.onError(code, message);
+                // token invalid
+                if (code == -1005) {
+                    AppInstance.getInstance().logout();
+                    syncClient();
+                }
+            }
         });
-        RxBus.getDefault().post(event);
     }
 
     @Override
@@ -207,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
     private void getUserInfo() {
         UserInfoParam data = new UserInfoParam();
         BaseRequest<UserInfoParam> request = new BaseRequest<>(data);
-        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<UserInfo>>() {}.getType();
@@ -215,6 +227,5 @@ public class MainActivity extends AppCompatActivity {
                 RxBus.getDefault().post(obj.data);
             }
         });
-        RxBus.getDefault().post(event);
     }
 }

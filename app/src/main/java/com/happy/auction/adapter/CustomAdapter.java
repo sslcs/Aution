@@ -14,6 +14,7 @@ public class CustomAdapter<T extends RecyclerView.Adapter> extends AdapterWrappe
         super(adapter);
         setEmptyView(R.layout.empty_view);
         setLoadMoreView(R.layout.item_load_more);
+        setLoadingView(R.layout.item_load_more);
     }
 
     @Override

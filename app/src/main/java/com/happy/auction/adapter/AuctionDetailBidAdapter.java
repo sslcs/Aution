@@ -7,8 +7,6 @@ import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.databinding.ItemBidRecordBinding;
 import com.happy.auction.entity.item.BidRecord;
 
-import java.util.Locale;
-
 /**
  * Created by LiuCongshan on 17-8-18.
  * 竞拍详情参与记录
@@ -26,10 +24,7 @@ public class AuctionDetailBidAdapter extends BaseAdapter<BidRecord> {
         super.onBindViewHolder(holder, position);
         BidRecord item = getItem(position + 1);
         ItemBidRecordBinding binding = (ItemBidRecordBinding) holder.binding;
-        binding.tvUsername.setText(item.username);
-        float price = item.bid_price / 100.0f;
-        String bidPrice = String.format(Locale.CHINA, "￥%.2f", price);
-        binding.tvPrice.setText(bidPrice);
+        binding.setRecord(item);
     }
 
     @Override

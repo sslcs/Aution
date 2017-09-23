@@ -17,7 +17,8 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
     static final int ITEM_TYPE_HEADER_BASE = 0XFA000;
     static final int ITEM_TYPE_FOOTER_BASE = 0XFF000;
     private static final int ITEM_TYPE_EMPTY = Integer.MAX_VALUE - 1;
-    private static final int ITEM_TYPE_LOAD_MORE = Integer.MAX_VALUE - 2;
+    private static final int ITEM_TYPE_LOADING = Integer.MAX_VALUE - 2;
+    private static final int ITEM_TYPE_LOAD_MORE = Integer.MAX_VALUE - 3;
 
     private A mInnerAdapter;
 
@@ -26,6 +27,11 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
 
     private View mLoadMoreView;
     private int mLoadMoreLayoutId;
+
+    private View mLoadingView;
+    private int mLoadingLayoutId;
+    private boolean isLoaded = false;
+
     private LoadMoreListener mLoadMoreListener;
     private boolean hasMore = false;
 
@@ -43,9 +49,14 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
 
     @Override
     public int getItemViewType(int position) {
-        if (isEmpty()) {
+        if (!isLoaded && isShowLoading()) {
+            return ITEM_TYPE_LOADING;
+        }
+
+        if (isShowEmpty()) {
             return ITEM_TYPE_EMPTY;
         }
+
         if (isShowLoadMore(position)) {
             return ITEM_TYPE_LOAD_MORE;
         }
@@ -62,6 +73,14 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
             return ViewHolder.createViewHolder(parent.getContext(), mEmptyView);
         }
 
+        if (viewType == ITEM_TYPE_LOADING) {
+            if (mLoadingView == null) {
+                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+                mLoadingView = inflater.inflate(mLoadingLayoutId, parent, false);
+            }
+            return ViewHolder.createViewHolder(parent.getContext(), mLoadingView);
+        }
+
         if (viewType == ITEM_TYPE_LOAD_MORE) {
             if (mLoadMoreView == null) {
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -75,7 +94,7 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (isEmpty()) {
+        if (isShowEmpty()) {
             return;
         }
 
@@ -93,7 +112,8 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
         WrapperUtils.onAttachedToRecyclerView(mInnerAdapter, recyclerView, new WrapperUtils.SpanSizeCallback() {
             @Override
             public int getSpanSize(GridLayoutManager layoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position) {
-                if (isEmpty() || isShowLoadMore(position)) {
+                layoutManager.setAutoMeasureEnabled(false);
+                if (isShowEmpty() || isShowLoadMore(position)) {
                     return layoutManager.getSpanCount();
                 }
 
@@ -108,7 +128,7 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);
-        if (isEmpty()) {
+        if (isShowEmpty()) {
             WrapperUtils.setFullSpan(holder);
         } else if (isShowLoadMore(holder.getLayoutPosition())) {
             setFullSpan(holder);
@@ -125,23 +145,23 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
 
     @Override
     public int getItemCount() {
-        if (isEmpty()) return 1;
+        if (isShowEmpty() || isShowLoading()) return 1;
         return mInnerAdapter.getItemCount() + (hasLoadMore() ? 1 : 0);
     }
 
     // Empty adapter begin-----------------------------------------
-    private boolean isEmpty() {
+    private boolean isShowEmpty() {
         return (mEmptyView != null || mEmptyLayoutId != 0) && getRealItemCount() == 0;
     }
 
     public void setEmptyView(View emptyView) {
         mEmptyView = emptyView;
     }
-    //Empty adapter end-----------------------------------------
 
     public void setEmptyView(int layoutId) {
         mEmptyLayoutId = layoutId;
     }
+    // Empty adapter end-----------------------------------------
 
     // LoadMore adapter begin-----------------------------------------
     public void setHasMore(boolean hasMore) {
@@ -170,9 +190,27 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
     public void setLoadMoreView(int layoutId) {
         mLoadMoreLayoutId = layoutId;
     }
+    // LoadMore adapter end-----------------------------------------
+
+    // Loading adapter begin-----------------------------------------
+    private boolean isShowLoading() {
+        return (mLoadingView != null || mLoadingLayoutId != 0) && getRealItemCount() == 0;
+    }
+
+    public void setLoadingView(View emptyView) {
+        mLoadingView = emptyView;
+    }
+
+    public void setLoadingView(int layoutId) {
+        mLoadingLayoutId = layoutId;
+    }
+
+    public void setLoaded() {
+        isLoaded = true;
+    }
+    // Loading adapter end-----------------------------------------
 
     public interface LoadMoreListener {
         void loadMore();
     }
-    // LoadMore adapter end-----------------------------------------
 }

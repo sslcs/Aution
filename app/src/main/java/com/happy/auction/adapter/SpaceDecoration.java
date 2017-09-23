@@ -14,6 +14,7 @@ import com.happy.auction.AppInstance;
 public class SpaceDecoration extends RecyclerView.ItemDecoration {
     private int dividerHeight;
     private boolean enableHeader = false;
+    private boolean enableFooter = true;
 
     public SpaceDecoration() {
         dividerHeight = (int) AppInstance.getInstance().getResources().getDisplayMetrics().density;
@@ -27,12 +28,19 @@ public class SpaceDecoration extends RecyclerView.ItemDecoration {
         enableHeader = true;
     }
 
+    public void disableFooter() {
+        enableFooter = false;
+    }
+
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
-        outRect.bottom = dividerHeight;//类似加了一个bottom padding
+        final int position = parent.getChildAdapterPosition(view);
+        if (position != parent.getChildCount() - 1 || enableFooter) {
+            outRect.bottom = dividerHeight;
+        }
 
-        if (enableHeader && parent.getChildAdapterPosition(view) == 0) {
+        if (position == 0 && enableHeader) {
             outRect.top = dividerHeight;
         }
     }

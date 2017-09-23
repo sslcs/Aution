@@ -27,6 +27,7 @@ public class CountDownTextView extends android.support.v7.widget.AppCompatTextVi
 
     private int widthNormal;
     private boolean reset = false;
+    private boolean disableAnimator = false;
 
     public CountDownTextView(Context context) {
         super(context);
@@ -78,6 +79,7 @@ public class CountDownTextView extends android.support.v7.widget.AppCompatTextVi
                 long millis = mod1000 / 10;
                 setTime(String.format(Locale.CHINA, FORMATTER, minutes, seconds, millis));
 
+                if (disableAnimator) return;
                 if (l < 3300 && l > 1200 && mod1000 < 300 && mod1000 > 200) {
                     startAnimator();
                 }
@@ -118,5 +120,9 @@ public class CountDownTextView extends android.support.v7.widget.AppCompatTextVi
         if (!animator.isRunning()) {
             animator.start();
         }
+    }
+
+    public void setDisableAnimator() {
+        disableAnimator = true;
     }
 }

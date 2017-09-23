@@ -11,7 +11,7 @@ public class OrderParam extends BaseParam {
     /**
      * 记录类型，0：全部，1：正在拍，2：已拍中，3：待付款
      */
-    public int records_status;
+    public int record_type;
     public int start;
     public int limit = DEFAULT_LIMIT;
 

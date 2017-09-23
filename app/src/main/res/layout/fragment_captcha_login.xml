@@ -32,7 +32,6 @@
             android:enabled="false"
             android:onClick="@{fragment.onClickCaptcha}"
             android:text="@string/get_captcha"
-            android:textAllCaps="false"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/et_phone"
             app:layout_constraintRight_toRightOf="parent"

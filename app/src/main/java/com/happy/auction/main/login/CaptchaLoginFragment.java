@@ -13,12 +13,13 @@ import com.happy.auction.R;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentCaptchaLoginBinding;
 import com.happy.auction.entity.DataResponse;
-import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.RequestEvent;
+import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.CaptchaParam;
 import com.happy.auction.entity.param.LoginParam;
 import com.happy.auction.entity.response.LoginResponse;
-import com.happy.auction.net.ResponseHandler;
+import com.happy.auction.net.NetCallback;
+import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
@@ -43,7 +44,8 @@ public class CaptchaLoginFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        binding = FragmentCaptchaLoginBinding.inflate(inflater);
+        binding = FragmentCaptchaLoginBinding.inflate(inflater, container, false);
+        binding.btnCaptcha.setTransformationMethod(null);
         binding.setFragment(this);
         return binding.getRoot();
     }
@@ -99,20 +101,13 @@ public class CaptchaLoginFragment extends BaseFragment {
         CaptchaParam param = new CaptchaParam();
         param.forgetPwd = 3;
         param.phone = binding.etPhone.getText().toString();
-
         BaseRequest<CaptchaParam> request = new BaseRequest<>(param);
-        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
-            @Override
-            public void onError(int code, String message) {
-                super.onError(code, message);
-            }
-
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
                 ToastUtil.show(message);
             }
         });
-        RxBus.getDefault().post(event);
     }
 
     public void onClickLogin(View view) {
@@ -122,7 +117,7 @@ public class CaptchaLoginFragment extends BaseFragment {
         param.login_type = LoginParam.TYPE_CAPTCHA;
 
         BaseRequest<LoginParam> request = new BaseRequest<>(param);
-        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<LoginResponse>>() {}.getType();
@@ -130,7 +125,6 @@ public class CaptchaLoginFragment extends BaseFragment {
                 RxBus.getDefault().post(obj.data);
             }
         });
-        RxBus.getDefault().post(event);
     }
 
     @Override

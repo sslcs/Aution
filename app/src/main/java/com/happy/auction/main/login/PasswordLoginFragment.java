@@ -19,7 +19,8 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.RequestEvent;
 import com.happy.auction.entity.param.LoginParam;
 import com.happy.auction.entity.response.LoginResponse;
-import com.happy.auction.net.ResponseHandler;
+import com.happy.auction.net.NetCallback;
+import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.Validation;
@@ -83,7 +84,7 @@ public class PasswordLoginFragment extends BaseFragment {
         param.login_type = LoginParam.TYPE_PASSWORD;
 
         BaseRequest<LoginParam> request = new BaseRequest<>(param);
-        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<LoginResponse>>() {}.getType();
@@ -91,7 +92,6 @@ public class PasswordLoginFragment extends BaseFragment {
                 RxBus.getDefault().post(obj.data);
             }
         });
-        RxBus.getDefault().post(event);
     }
 
     public void onClickForget(View view) {

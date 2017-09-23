@@ -4,6 +4,8 @@ import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.happy.auction.utils.DebugLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +56,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                T item = getItem(holder.getAdapterPosition());
-                onItemClickListener.onItemClick(view, holder.getAdapterPosition(), item);
+                onItemClickListener.onItemClick(view, holder.getAdapterPosition());
             }
         });
     }
@@ -102,7 +103,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position, Object item);
+        void onItemClick(View view, int position);
     }
 
     public class CustomViewHolder<B extends ViewDataBinding> extends RecyclerView.ViewHolder {

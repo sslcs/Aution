@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.entity.response.UserInfo;
-import com.happy.auction.utils.Preference;
+import com.happy.auction.utils.PreferenceUtil;
 
 /**
  * Created by LiuCongshan on 17-8-16.
@@ -26,8 +26,8 @@ public class AppInstance extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        uid = Preference.getUid();
-        token = Preference.getToken();
+        uid = PreferenceUtil.getUid();
+        token = PreferenceUtil.getToken();
     }
 
     public UserInfo getUser() {
@@ -42,10 +42,16 @@ public class AppInstance extends Application {
         return !TextUtils.isEmpty(uid);
     }
 
+    public void logout() {
+        PreferenceUtil.logout();
+        uid = "";
+        token = "";
+    }
+
     public void setLoginResponse(LoginResponse response) {
         uid = response.uid;
         token = response.token;
-        Preference.setUid(uid);
-        Preference.setToken(token);
+        PreferenceUtil.setUid(uid);
+        PreferenceUtil.setToken(token);
     }
 }

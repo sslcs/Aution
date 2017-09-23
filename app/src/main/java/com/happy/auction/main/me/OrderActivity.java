@@ -35,10 +35,7 @@ public class OrderActivity extends BaseActivity {
         adapter.add(OrderFragment.newInstance(OrderFragment.TYPE_GOING));
         adapter.add(OrderFragment.newInstance(OrderFragment.TYPE_WIN));
         adapter.add(OrderFragment.newInstance(OrderFragment.TYPE_UNPAID));
-        adapter.setTitles(new String[]{getString(R.string.record_all),
-                getString(R.string.record_going),
-                getString(R.string.record_win),
-                getString(R.string.record_unpaid)});
+        adapter.setTitles(new String[]{getString(R.string.record_all), getString(R.string.record_going), getString(R.string.record_win), getString(R.string.record_unpaid)});
         binding.viewPager.setAdapter(adapter);
         binding.viewPager.setOffscreenPageLimit(adapter.getCount());
         binding.tabLayout.setupWithViewPager(binding.viewPager);

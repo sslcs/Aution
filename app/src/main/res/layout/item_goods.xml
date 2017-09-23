@@ -17,13 +17,10 @@
         <ImageView
             android:id="@+id/iv_pic"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:image_url="@{goods.icon}"
+            android:layout_height="150dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/pic_default"/>
+            app:layout_constraintTop_toTopOf="parent"/>
         <View
             android:id="@+id/bg_price"
             android:layout_width="0dp"
@@ -38,7 +35,6 @@
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="10dp"
             android:text='@{@string/money_sign + StringUtil.formatMoney(goods.current_price)}'
@@ -50,9 +46,10 @@
             tools:text="￥8.88"/>
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:gravity="center_horizontal"
             android:maxLines="1"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
@@ -65,32 +62,35 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_price"
             tools:text="佳能Canon EOS 800D高配牛逼哄哄带闪电"/>
-        <TextView
+        <com.happy.auction.ui.CountDownHome
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginLeft="10dp"
             android:textColor="@{goods.status != 0 ? @color/main_red : @color/text_normal}"
             android:textSize="19sp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_bid"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_bid"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
             tools:text="00:00:10"/>
         <Button
             android:id="@+id/btn_bid"
             style="@style/ButtonCorner"
             android:layout_width="65dp"
             android:layout_height="22dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:enabled="@{goods.status != 0}"
             android:text="@string/join_auction"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_time"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+            app:layout_constraintStart_toEndOf="@+id/tv_time"
+            app:layout_constraintTop_toTopOf="@+id/tv_time"/>
         <View
+            android:id="@+id/view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/transparent"

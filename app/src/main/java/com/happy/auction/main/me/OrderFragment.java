@@ -10,23 +10,23 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.adapter.AdapterWrapper;
 import com.happy.auction.adapter.CustomAdapter;
 import com.happy.auction.adapter.SpaceDecoration;
+import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentListBinding;
+import com.happy.auction.detail.AuctionDetailActivity;
 import com.happy.auction.entity.DataResponse;
 import com.happy.auction.entity.RequestEvent;
 import com.happy.auction.entity.item.ItemOrder;
 import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.OrderParam;
-import com.happy.auction.entity.response.GoodsResponse;
-import com.happy.auction.net.ResponseHandler;
+import com.happy.auction.net.NetCallback;
+import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * 订单记录
@@ -36,6 +36,7 @@ public class OrderFragment extends BaseFragment {
     public final static int TYPE_GOING = 1;
     public final static int TYPE_WIN = 2;
     public final static int TYPE_UNPAID = 3;
+
     private static final String KEY_TYPE = "type";
     private FragmentListBinding binding;
 
@@ -67,6 +68,13 @@ public class OrderFragment extends BaseFragment {
         decoration.enableHeader();
         binding.vList.addItemDecoration(decoration);
         adapter = new CustomAdapter<>(new OrderAdapter());
+        adapter.getInnerAdapter().setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ItemOrder order = adapter.getInnerAdapter().getItem(position);
+                startActivity(AuctionDetailActivity.newIntent(order));
+            }
+        });
         adapter.setLoadMoreListener(new AdapterWrapper.LoadMoreListener() {
             @Override
             public void loadMore() {
@@ -83,11 +91,12 @@ public class OrderFragment extends BaseFragment {
     private void loadData(int start) {
         this.start = start;
         OrderParam param = new OrderParam();
-        param.records_status = getArguments().getInt(KEY_TYPE);
+        param.record_type = getArguments().getInt(KEY_TYPE);
         BaseRequest<OrderParam> request = new BaseRequest<>(param);
-        RequestEvent event = new RequestEvent<>(request, new ResponseHandler() {
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
+                adapter.setLoaded();
                 Type type = new TypeToken<DataResponse<ArrayList<ItemOrder>>>() {}.getType();
                 DataResponse<ArrayList<ItemOrder>> obj = GsonSingleton.get().fromJson(response, type);
                 ArrayList<ItemOrder> data = obj.data;
@@ -99,7 +108,6 @@ public class OrderFragment extends BaseFragment {
                 }
             }
         });
-        RxBus.getDefault().post(event);
     }
 
     @Override

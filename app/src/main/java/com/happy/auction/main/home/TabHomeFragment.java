@@ -1,6 +1,7 @@
 package com.happy.auction.main.home;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -15,27 +16,28 @@ import com.happy.auction.adapter.CustomAdapter;
 import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.databinding.FragmentTabHomeBinding;
 import com.happy.auction.detail.AuctionDetailActivity;
+import com.happy.auction.entity.BidEvent;
 import com.happy.auction.entity.DataResponse;
-import com.happy.auction.entity.RequestEvent;
+import com.happy.auction.entity.item.AuctionEndEvent;
 import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.entity.item.ItemMenu;
 import com.happy.auction.entity.param.AnnounceParam;
 import com.happy.auction.entity.param.BannerParam;
+import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.GoodsParam;
 import com.happy.auction.entity.param.MenuParam;
+import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.glide.ImageLoader;
-import com.happy.auction.net.ResponseHandler;
+import com.happy.auction.net.NetCallback;
+import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -45,6 +47,7 @@ public class TabHomeFragment extends Fragment {
     private FragmentTabHomeBinding binding;
     private CustomAdapter<TabHomeAdapter> adapter;
     private int start;
+    private String goods_type = GoodsParam.TYPE_HOT;
 
     public TabHomeFragment() {
     }
@@ -61,10 +64,9 @@ public class TabHomeFragment extends Fragment {
     }
 
     private void initLayout() {
-        loadData();
-
         binding.vList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         binding.vList.addItemDecoration(new HomeDecoration());
+        binding.vList.setItemAnimator(null);
         adapter = new CustomAdapter<>(new TabHomeAdapter());
         adapter.setLoadMoreListener(new AdapterWrapper.LoadMoreListener() {
             @Override
@@ -75,8 +77,8 @@ public class TabHomeFragment extends Fragment {
         });
         adapter.getInnerAdapter().setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position, Object item) {
-                ItemGoods goods = (ItemGoods) item;
+            public void onItemClick(View view, int position) {
+                ItemGoods goods = adapter.getInnerAdapter().getItem(position);
                 startActivity(AuctionDetailActivity.newIntent(goods));
             }
         });
@@ -88,20 +90,63 @@ public class TabHomeFragment extends Fragment {
             }
         });
 
-        Observable.interval(3, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        ItemGoods goods = adapter.getInnerAdapter().getItem(5);
-                        goods.current_price += 10;
-                        int position = adapter.getInnerAdapter().getPosition(goods);
-                        if (position == -1) return;
-                        adapter.getInnerAdapter().setAnimatePosition(position);
-                        adapter.getInnerAdapter().refresh(position, goods);
-                        adapter.notifyItemChanged(position);
+        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 1) {
+                    if (!GoodsParam.TYPE_NEWBIE.equals(goods_type)) {
+                        adapter.getInnerAdapter().clear();
+                        goods_type = GoodsParam.TYPE_NEWBIE;
+                        loadGoods(1);
                     }
-                });
+                } else {
+                    if (!GoodsParam.TYPE_HOT.equals(goods_type)) {
+                        adapter.getInnerAdapter().clear();
+                        goods_type = GoodsParam.TYPE_HOT;
+                        loadGoods(1);
+                    }
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) { }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) { }
+        });
+
+        loadData();
+        listenEvents();
+    }
+
+    private void listenEvents() {
+        RxBus.getDefault().subscribe(this, BidEvent.class, new Consumer<BidEvent>() {
+            @Override
+            public void accept(BidEvent event) throws Exception {
+                ItemGoods item = new ItemGoods();
+                item.sid = event.sid;
+                int position = adapter.getInnerAdapter().getPosition(item);
+                if (position == -1) return;
+                item = adapter.getInnerAdapter().getItem(position);
+                item.current_price = event.current_price;
+                item.bid_expire_time = event.bid_expire_time;
+                adapter.getInnerAdapter().addChangedPosition(position);
+                adapter.notifyItemChanged(position);
+            }
+        });
+
+        RxBus.getDefault().subscribe(this, AuctionEndEvent.class, new Consumer<AuctionEndEvent>() {
+            @Override
+            public void accept(AuctionEndEvent event) throws Exception {
+                ItemGoods item = new ItemGoods();
+                item.sid = event.sid;
+                int position = adapter.getInnerAdapter().getPosition(item);
+                if (position == -1) return;
+                item = adapter.getInnerAdapter().getItem(position);
+                item.setStatus(0);
+                adapter.notifyItemChanged(position);
+            }
+        });
     }
 
     private void loadData() {
@@ -117,18 +162,18 @@ public class TabHomeFragment extends Fragment {
     private void loadAnnounce() {
         AnnounceParam announce = new AnnounceParam();
         BaseRequest<AnnounceParam> request = new BaseRequest<>(announce);
-        RxBus.getDefault().post(new RequestEvent<>(request, new ResponseHandler() {
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
 
             }
-        }));
+        });
     }
 
     private void loadMenu() {
         MenuParam menu = new MenuParam();
         BaseRequest<MenuParam> request = new BaseRequest<>(menu);
-        RxBus.getDefault().post(new RequestEvent<>(request, new ResponseHandler() {
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemMenu>>>() {}.getType();
@@ -143,46 +188,34 @@ public class TabHomeFragment extends Fragment {
                     ImageLoader.displayImage(menu.icon, ivMenu[i]);
                 }
             }
-        }));
+        });
     }
 
     private void loadBanner() {
         BannerParam banner = new BannerParam();
         BaseRequest<BannerParam> request = new BaseRequest<>(banner);
-        RxBus.getDefault().post(new RequestEvent<>(request, new ResponseHandler() {
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
 
             }
-        }));
+        });
     }
 
     private void loadGoods(int start) {
         this.start = start;
         GoodsParam goods = new GoodsParam();
-        goods.type = GoodsParam.TYPE_HOT;
+        goods.type = goods_type;
         goods.start = start;
         BaseRequest<GoodsParam> request = new BaseRequest<>(goods);
-        RxBus.getDefault().post(new RequestEvent<>(request, new ResponseHandler() {
+        NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                ArrayList<ItemGoods> data = new ArrayList<>(3);
-                for (int i = 0; i < 30; i++) {
-                    ItemGoods item = new ItemGoods();
-                    item.title = i + "佳能Canon EOS 800D高配牛逼哄哄带闪电";
-                    item.status = i;
-                    item.market_price = 100 + i;
-                    item.gid = String.valueOf(i);
-                    item.bid_expire_time = System.currentTimeMillis() + i * 1000;
-                    data.add(item);
-                }
-                adapter.getInnerAdapter().addAll(data);
-                adapter.notifyDataSetChanged();
-
-//                Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
-//                DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
-//                adapter.getInnerAdapter().addAll(obj.data.goods);
-//                adapter.setHasMore(obj.data.goods != null && obj.data.goods.size() >= BaseParam.DEFAULT_LIMIT);
+                adapter.setLoaded();
+                Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
+                DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
+                adapter.getInnerAdapter().addAll(obj.data.goods);
+                adapter.setHasMore(obj.data.goods != null && obj.data.goods.size() >= BaseParam.DEFAULT_LIMIT);
             }
 
             @Override
@@ -190,7 +223,7 @@ public class TabHomeFragment extends Fragment {
                 super.onError(code, message);
                 ToastUtil.show(message);
             }
-        }));
+        });
     }
 
     @Override

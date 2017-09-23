@@ -2,7 +2,6 @@ package com.happy.auction.entity.item;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.support.annotation.NonNull;
 
 import com.happy.auction.BR;
 
@@ -17,7 +16,7 @@ public class BaseGoods extends BaseObservable implements Serializable {
     /**
      * 晒单编号id
      */
-    public String sid;
+    public int sid;
     /**
      * 商品的编号id
      */
@@ -45,25 +44,8 @@ public class BaseGoods extends BaseObservable implements Serializable {
     /**
      * 当前价格，单位：分
      */
-    public int current_price;
-
-    public BaseGoods() {}
-
-    public BaseGoods(@NonNull BaseGoods goods) {
-        this.sid = goods.sid;
-        this.gid = goods.gid;
-        this.period = goods.period;
-        this.title = goods.title;
-        this.description = goods.description;
-        this.icon = goods.icon;
-        this.market_price = goods.market_price;
-        setCurrentPrice(goods.current_price);
-    }
-
     @Bindable
-    public int getCurrent_price() {
-        return current_price;
-    }
+    public int current_price;
 
     public void setCurrentPrice(int price) {
         current_price = price;
@@ -74,7 +56,7 @@ public class BaseGoods extends BaseObservable implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof ItemGoods) {
             ItemGoods item = (ItemGoods) obj;
-            return item.gid != null && item.gid.equals(this.gid);
+            return item.sid == this.sid;
         }
         return super.equals(obj);
     }

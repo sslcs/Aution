@@ -64,7 +64,6 @@ public class ImageLoader {
         }
         GlideApp.with(imageView.getContext())
                 .load(url)
-                .placeholder(R.drawable.pic_default)
                 .error(R.drawable.pic_default)
                 .into(imageView);
     }

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="com.happy.auction.utils.StringUtil"/>
         <variable
             name="record"
             type="com.happy.auction.entity.item.BidRecord"/>
@@ -15,10 +16,13 @@
         android:background="@android:color/white">
         <ImageView
             android:id="@+id/avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:src="@drawable/pic_default"
-            app:avatar="@{record.headimg}"/>
+            app:avatar="@{record.avatar}"/>
 
         <TextView
             android:id="@+id/tv_username"
@@ -26,21 +30,29 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/avatar"
+            android:ellipsize="end"
+            android:paddingLeft="5dp"
+            android:singleLine="true"
+            android:text="@{record.username}"
             tools:text="用户名名名"/>
 
         <TextView
             android:id="@+id/tv_address"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/tv_username"
-            android:text="地址adf地址"/>
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@{record.ip_address}"/>
 
         <TextView
             android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/tv_address"
             android:text="@string/bid_out"/>
 
@@ -50,6 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@{StringUtil.formatSignMoney(record.bid_price)}"
             android:textColor="@color/main_red"
             tools:text="￥0.10"/>
     </RelativeLayout>

@@ -11,7 +11,7 @@ import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivitySettingBinding;
 import com.happy.auction.ui.CustomDialog;
 import com.happy.auction.utils.DebugLog;
-import com.happy.auction.utils.Preference;
+import com.happy.auction.utils.PreferenceUtil;
 import com.happy.auction.utils.RxBus;
 
 public class SettingActivity extends BaseActivity {
@@ -40,7 +40,7 @@ public class SettingActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogFragment dialog) {
                         dialog.dismiss();
-                        Preference.logout();
+                        AppInstance.getInstance().logout();
                         RxBus.getDefault().post(new LogoutEvent());
                         finish();
                     }

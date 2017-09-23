@@ -1,11 +1,15 @@
 package com.happy.auction.entity.item;
 
+import android.databinding.Bindable;
+
+import com.happy.auction.BR;
+
 /**
  * Created by LiuCongshan on 17-9-12.
  * 商品item
  */
 
-public class ItemGoods extends BaseGoods{
+public class ItemGoods extends BaseGoods {
     /**
      * 竞拍过期时间戳，单位：毫秒
      */
@@ -16,11 +20,13 @@ public class ItemGoods extends BaseGoods{
      */
     public int status;
 
-    public ItemGoods() {}
+    @Bindable
+    public int getStatus() {
+        return status;
+    }
 
-    public ItemGoods(ItemGoods goods) {
-        super(goods);
-        this.bid_expire_time = goods.bid_expire_time;
-        this.status = goods.status;
+    public void setStatus(int status) {
+        this.status = 0;
+        notifyPropertyChanged(BR.status);
     }
 }

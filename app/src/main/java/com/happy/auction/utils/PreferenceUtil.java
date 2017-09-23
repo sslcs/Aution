@@ -9,7 +9,7 @@ import com.happy.auction.AppInstance;
  * SharedPreferences存储数据
  */
 
-public class Preference {
+public class PreferenceUtil {
     private static final String KEY_UID = "uid";
     private static final String KEY_TOKEN = "token";
 

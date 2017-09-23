@@ -3,8 +3,8 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@android:color/white</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/main_red</item>
+        <item name="colorAccent">@color/main_red</item>
         <item name="android:windowBackground">@color/divider</item>
         <item name="android:typeface">monospace</item>
         <item name="android:fontFamily">monospace</item>

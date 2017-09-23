@@ -63,7 +63,6 @@ public class TabMeFragment extends Fragment {
         RxBus.getDefault().subscribe(this, LogoutEvent.class, new Consumer<LogoutEvent>() {
             @Override
             public void accept(LogoutEvent event) throws Exception {
-                AppInstance.getInstance().setUser(null);
                 binding.setUser(null);
             }
         });

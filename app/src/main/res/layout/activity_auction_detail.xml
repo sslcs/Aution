@@ -8,6 +8,9 @@
         <import type="android.text.TextUtils"/>
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
+            name="item"
+            type="com.happy.auction.entity.item.BidRecord"/>
+        <variable
             name="data"
             type="com.happy.auction.entity.AuctionDetail"/>
     </data>
@@ -33,7 +36,7 @@
             android:background="@android:color/black"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:text="@{@string/format_current_price(StringUtil.formatMoney(data.current_price))}"
+            android:text="@{data.getTitlePrice(data.status, data.current_price)}"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:visibility="gone"
@@ -80,14 +83,13 @@
                     app:layout_scrollFlags="scroll|enterAlways">
                     <ImageView
                         android:id="@+id/iv_goods_image"
+                        image_url="@{data.icon}"
                         android:layout_width="0dp"
                         android:layout_height="160dp"
                         android:background="@android:color/white"
-                        android:src="@drawable/pic_default"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:visibility="visible"/>
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <TextView
                         android:id="@+id/tv_goods_name"
@@ -215,7 +217,7 @@
                         android:padding="8dp"
                         android:text="@string/no_person"
                         android:textColor="@color/text_light"
-                        android:visibility="@{TextUtils.isEmpty(data.username) ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{item==null ? View.VISIBLE : View.GONE}"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/v_dummy"/>
@@ -226,8 +228,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="1dp"
                         android:background="@android:color/white"
-                        android:visibility="@{TextUtils.isEmpty(data.username) ? View.GONE : View.VISIBLE}"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_current_person"
+                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_current_address"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_nobody"/>
@@ -236,8 +238,21 @@
                         android:id="@+id/iv_current_person"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/pic_default"
-                        android:visibility="@{TextUtils.isEmpty(data.username) ? View.GONE : View.VISIBLE}"
+                        android:layout_marginTop="10dp"
+                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
+                        app:avatar="@{item.avatar}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/bg_current"
+                        tools:src="@drawable/pic_default"/>
+
+                    <ImageView
+                        android:id="@+id/iv_current_flag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:src="@drawable/flag_current_person"
+                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/bg_current"/>
@@ -246,24 +261,38 @@
                         android:id="@+id/tv_current_person"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:padding="8dp"
-                        android:text="@{data.username}"
+                        android:paddingTop="8dp"
+                        android:text="@{item.username}"
+                        android:textSize="13sp"
                         android:textStyle="bold"
-                        android:visibility="@{TextUtils.isEmpty(data.username) ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/iv_current_person"
                         tools:text="最新出价人姓名"/>
 
+                    <TextView
+                        android:id="@+id/tv_current_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="6dp"
+                        android:paddingTop="2dp"
+                        android:text='@{"("+item.ip_address+")"}'
+                        android:textSize="12sp"
+                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_current_person"
+                        tools:text="(广州 广州)"/>
+
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="@{TextUtils.isEmpty(data.username) ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_current_person"/>
+                        app:layout_constraintTop_toBottomOf="@+id/tv_current_address"/>
 
                     <TextView
                         android:id="@+id/tv_rules"
@@ -394,7 +423,9 @@
             android:layout_marginBottom="1dp"
             android:background="@android:color/white"
             android:fontFamily="monospace"
-            android:padding="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="10dp"
             android:text="@{data.getBidTimes(data.bid_times)}"
             android:textColor="@color/text_dark"
             app:layout_constraintBottom_toTopOf="@+id/btn_bottom"
@@ -475,5 +506,21 @@
             app:layout_constraintBottom_toBottomOf="@+id/et_times"
             app:layout_constraintStart_toEndOf="@+id/et_times"
             app:layout_constraintTop_toTopOf="@+id/et_times"/>
+
+        <TextView
+            android:id="@+id/btn_next"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/main_red"
+            android:gravity="center"
+            android:onClick="onClickNext"
+            android:text="@string/detail_btn_go_latest"
+            android:textColor="@color/btn_text_selector"
+            android:textSize="16sp"
+            android:visibility="@{data.status==0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_bottom"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

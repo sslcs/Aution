@@ -1,5 +1,6 @@
 package com.happy.auction.entity;
 
+import android.content.res.Resources;
 import android.databinding.Bindable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -7,8 +8,10 @@ import android.text.style.ForegroundColorSpan;
 import com.happy.auction.AppInstance;
 import com.happy.auction.BR;
 import com.happy.auction.R;
+import com.happy.auction.entity.item.BaseGoods;
 import com.happy.auction.entity.item.BidRecord;
 import com.happy.auction.entity.item.ItemGoods;
+import com.happy.auction.utils.StringUtil;
 
 import java.util.ArrayList;
 
@@ -19,13 +22,14 @@ import java.util.ArrayList;
 
 public class AuctionDetail extends ItemGoods {
     /**
-     * "start_time": 1504506671111, // 开始时间，单位：毫秒
-     */
-
-    /**
      * 最新出价人用户名
      */
     public String username;
+    /**
+     * 最新出价人头像
+     */
+    @Bindable
+    public String avatar;
     /**
      *
      */
@@ -59,8 +63,26 @@ public class AuctionDetail extends ItemGoods {
      */
     public String bid_refund;
 
+    transient Resources res;
+
     public AuctionDetail(ItemGoods goods) {
-        super(goods);
+        this((BaseGoods) goods);
+        if (goods == null) return;
+        this.bid_expire_time = goods.bid_expire_time;
+        this.status = goods.status;
+    }
+
+    public AuctionDetail(BaseGoods goods) {
+        if (goods == null) return;
+
+        this.sid = goods.sid;
+        this.gid = goods.gid;
+        this.period = goods.period;
+        this.title = goods.title;
+        this.description = goods.description;
+        this.icon = goods.icon;
+        this.market_price = goods.market_price;
+        this.current_price = goods.current_price;
     }
 
     @Bindable
@@ -83,15 +105,29 @@ public class AuctionDetail extends ItemGoods {
         notifyPropertyChanged(BR.username);
     }
 
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+        notifyPropertyChanged(BR.avatar);
+    }
+
     public SpannableString getBidTimes(int times) {
         String formatted = AppInstance.getInstance().getString(R.string.my_bid_times, times, times);
         SpannableString ss = new SpannableString(formatted);
         String strTimes = String.valueOf(times);
         int start = formatted.indexOf(strTimes);
-        int color = AppInstance.getInstance().getResources().getColor(R.color.main_red);
+        if (res == null) res = AppInstance.getInstance().getResources();
+        int color = res.getColor(R.color.main_red);
         ss.setSpan(new ForegroundColorSpan(color), start, start + strTimes.length(), SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
         start = formatted.lastIndexOf(strTimes);
         ss.setSpan(new ForegroundColorSpan(0xff179fe6), start, start + strTimes.length(), SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
         return ss;
+    }
+
+    public String getTitlePrice(int status, int price) {
+        StringBuilder sb = new StringBuilder();
+        if (res == null) res = AppInstance.getInstance().getResources();
+        sb.append(res.getString(status == 0 ? R.string.price_deal : R.string.price_current));
+        sb.append("：").append(StringUtil.formatSignMoney(price ));
+        return sb.toString();
     }
 }

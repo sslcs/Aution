@@ -6,9 +6,8 @@ package com.happy.auction.entity.response;
  */
 
 public class BaseEvent {
-    public final static String EVENT_UPDATE = "update_countdown";
-    public final static String EVENT_FINISH = "bid_complete";
-    public final static String EVENT_DETAIL = "good_detail";
+    public final static String EVENT_BID = "goods_new_bid";
+    public final static String EVENT_AUCTION_END = "goods_bid_end";
 
     /**
      * 事件代码

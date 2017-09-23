@@ -29,5 +29,9 @@ public class SyncParam extends BaseParam {
 
     public SyncParam() {
         action = "sync_client";
+        if (!AppInstance.getInstance().isLogin()) {
+            uid = null;
+            token = null;
+        }
     }
 }
