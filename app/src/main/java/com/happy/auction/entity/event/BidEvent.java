@@ -1,4 +1,4 @@
-package com.happy.auction.entity;
+package com.happy.auction.entity.event;
 
 import com.happy.auction.entity.response.BaseEvent;
 
@@ -9,6 +9,7 @@ import com.happy.auction.entity.response.BaseEvent;
 
 public class BidEvent extends BaseEvent {
     public int sid;
+    public int gid;
     public int current_price;
     public long bid_expire_time;
 

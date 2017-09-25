@@ -1,4 +1,4 @@
-package com.happy.auction.entity.item;
+package com.happy.auction.entity.event;
 
 import com.happy.auction.entity.response.BaseEvent;
 

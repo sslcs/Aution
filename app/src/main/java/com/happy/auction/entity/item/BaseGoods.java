@@ -20,7 +20,7 @@ public class BaseGoods extends BaseObservable implements Serializable {
     /**
      * 商品的编号id
      */
-    public String gid;
+    public int gid;
     /**
      * 期号
      */

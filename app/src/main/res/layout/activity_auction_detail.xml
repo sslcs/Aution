@@ -8,11 +8,20 @@
         <import type="android.text.TextUtils"/>
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
+            name="activity"
+            type="com.happy.auction.detail.AuctionDetailActivity"/>
+        <variable
             name="item"
             type="com.happy.auction.entity.item.BidRecord"/>
         <variable
             name="data"
-            type="com.happy.auction.entity.AuctionDetail"/>
+            type="com.happy.auction.entity.response.AuctionDetail"/>
+        <variable
+            name="times"
+            type="android.databinding.ObservableInt"/>
+        <variable
+            name="coin"
+            type="com.happy.auction.entity.response.AuctionCoin"/>
     </data>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -121,7 +130,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_goods_name"/>
 
-                    <com.happy.auction.ui.CountDownTextView
+                    <com.happy.auction.ui.CountDownDetail
                         android:id="@+id/tv_auction_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -426,7 +435,7 @@
             android:paddingBottom="10dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="10dp"
-            android:text="@{data.getBidTimes(data.bid_times)}"
+            android:text="@{coin.getBidTimes(coin.bid_coin,coin.bid_gift_coin)}"
             android:textColor="@color/text_dark"
             app:layout_constraintBottom_toTopOf="@+id/btn_bottom"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -443,7 +452,7 @@
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:paddingTop="10dp"
-            android:text="@string/detail_btn_bid"
+            android:text="@{@string/detail_btn_bid(data.bid_fee)}"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -463,9 +472,11 @@
             android:id="@+id/et_times"
             android:layout_width="80dp"
             android:layout_height="40dp"
+            android:afterTextChanged="@{activity.afterTextChanged}"
             android:background="@null"
             android:gravity="center"
-            android:text="1"
+            android:inputType="numberSigned"
+            android:text="@{String.valueOf(times.get())}"
             app:layout_constraintBottom_toBottomOf="@+id/btn_bottom"
             app:layout_constraintEnd_toStartOf="@+id/btn_bottom"
             app:layout_constraintStart_toStartOf="parent"
@@ -485,10 +496,12 @@
             app:layout_constraintStart_toStartOf="@+id/et_times"
             app:layout_constraintTop_toTopOf="@+id/et_times"/>
         <TextView
+            android:id="@+id/textView"
             android:layout_width="46dp"
             android:layout_height="0dp"
             android:background="@drawable/btn_times_minus"
             android:gravity="center"
+            android:onClick="onClickMinus"
             android:paddingLeft="5dp"
             android:text="－"
             android:textSize="20sp"
@@ -496,10 +509,12 @@
             app:layout_constraintEnd_toStartOf="@+id/et_times"
             app:layout_constraintTop_toTopOf="@+id/et_times"/>
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="46dp"
             android:layout_height="0dp"
             android:background="@drawable/btn_times_plus"
             android:gravity="center"
+            android:onClick="onClickPlus"
             android:paddingRight="5dp"
             android:text="＋"
             android:textSize="20sp"
@@ -517,10 +532,56 @@
             android:text="@string/detail_btn_go_latest"
             android:textColor="@color/btn_text_selector"
             android:textSize="16sp"
-            android:visibility="@{data.status==0 ? View.VISIBLE : View.GONE}"
+            android:visibility="@{data.status==0 ? View.VISIBLE : View.GONE,default=gone}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_bottom"
+            tools:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_auto_bid"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@android:color/white"
+            android:gravity="center_horizontal"
+            android:onClick="onClickAutoBid"
+            android:paddingTop="10dp"
+            android:text="@{coin.getProgress(coin.current_bidden_coins,coin.current_bid_coins)}"
+            android:textColor="@color/text_dark"
+            android:textSize="15sp"
+            android:visibility="@{coin.current_bid_coins==0?View.GONE:View.VISIBLE,default=gone}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_cancel"/>
+
+        <ProgressBar
+            android:id="@+id/progress_auto_bid"
+            style="@style/ProgressBar"
+            android:layout_width="0dp"
+            android:layout_height="7.5dp"
+            android:layout_margin="15dp"
+            android:max="100"
+            android:progress="10"
+            android:visibility="@{coin.current_bid_coins==0?View.GONE:View.VISIBLE,default=gone}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_cancel"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="160dp"
+            android:layout_height="0dp"
+            android:background="@color/btn_disable"
+            android:gravity="center"
+            android:onClick="onClickCancel"
+            android:text="@string/detail_btn_cancel"
+            android:textColor="@color/btn_text_selector"
+            android:textSize="17sp"
+            android:visibility="@{coin.current_bid_coins==0?View.GONE:View.VISIBLE,default=gone}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_bottom"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

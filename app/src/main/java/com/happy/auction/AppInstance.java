@@ -30,6 +30,10 @@ public class AppInstance extends Application {
         token = PreferenceUtil.getToken();
     }
 
+    public int dp2px(int dp) {
+        return (int) (getResources().getDisplayMetrics().density * dp);
+    }
+
     public UserInfo getUser() {
         return user;
     }

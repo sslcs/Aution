@@ -1,4 +1,4 @@
-package com.happy.auction.adapter;
+package com.happy.auction.detail;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

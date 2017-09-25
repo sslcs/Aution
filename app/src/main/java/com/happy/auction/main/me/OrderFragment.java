@@ -14,8 +14,7 @@ import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentListBinding;
 import com.happy.auction.detail.AuctionDetailActivity;
-import com.happy.auction.entity.DataResponse;
-import com.happy.auction.entity.RequestEvent;
+import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.item.ItemOrder;
 import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
@@ -23,7 +22,6 @@ import com.happy.auction.entity.param.OrderParam;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
-import com.happy.auction.utils.RxBus;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,8 +39,6 @@ public class OrderFragment extends BaseFragment {
     private FragmentListBinding binding;
 
     private CustomAdapter<OrderAdapter> adapter;
-
-    private int start;
 
     public OrderFragment() {
     }
@@ -78,19 +74,21 @@ public class OrderFragment extends BaseFragment {
         adapter.setLoadMoreListener(new AdapterWrapper.LoadMoreListener() {
             @Override
             public void loadMore() {
-                loadData(start);
+                int count = adapter.getInnerAdapter().getItemCount();
+                ItemOrder item = adapter.getInnerAdapter().getItem(count-1);
+                loadData(item.pid);
             }
         });
         binding.vList.setAdapter(adapter);
 
         if (getUserVisibleHint()) {
-            loadData(1);
+            loadData(0);
         }
     }
 
     private void loadData(int start) {
-        this.start = start;
         OrderParam param = new OrderParam();
+        param.start = start;
         param.record_type = getArguments().getInt(KEY_TYPE);
         BaseRequest<OrderParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
@@ -114,7 +112,7 @@ public class OrderFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (hasCreatedView && isVisibleToUser && adapter.getRealItemCount() == 0) {
-            loadData(1);
+            loadData(0);
         }
     }
 }

@@ -1,9 +1,9 @@
 package com.happy.auction.main;
 
 import com.google.gson.reflect.TypeToken;
-import com.happy.auction.entity.BidEvent;
-import com.happy.auction.entity.DataResponse;
-import com.happy.auction.entity.item.AuctionEndEvent;
+import com.happy.auction.entity.event.BidEvent;
+import com.happy.auction.entity.response.DataResponse;
+import com.happy.auction.entity.event.AuctionEndEvent;
 import com.happy.auction.entity.response.BaseEvent;
 import com.happy.auction.entity.response.BaseResponse;
 import com.happy.auction.net.NetCallback;
@@ -30,6 +30,7 @@ public class MessagePresenter {
     }
 
     public void handle(String message) {
+        DebugLog.e("onMessage : " + message);
         Type type = new TypeToken<BaseResponse>() {}.getType();
         BaseResponse base = GsonSingleton.get().fromJson(message, type);
 
@@ -42,7 +43,6 @@ public class MessagePresenter {
             DataResponse<AuctionEndEvent> response = GsonSingleton.get().fromJson(message, type);
             onEvent(response.data);
         } else {
-            DebugLog.e("onMessage : " + message);
             handleResponse(base, message);
         }
     }

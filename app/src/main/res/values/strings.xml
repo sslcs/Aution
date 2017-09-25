@@ -89,6 +89,8 @@
     <string name="format_market_price">(市场价: ￥%1$s)</string>
     <string name="format_current_price">当前价: ￥%1$s</string>
     <string name="bid_out">出局</string>
-    <string name="detail_btn_bid">出价\n（1拍币/次）</string>
+    <string name="detail_btn_bid">出价\n（%1$d拍币/次）</string>
     <string name="detail_btn_go_latest">前往最新一期</string>
+    <string name="detail_btn_cancel">取消剩余出价</string>
+    <string name="auto_bid_progress">已出价 %1$d/%2$d</string>
 </resources>

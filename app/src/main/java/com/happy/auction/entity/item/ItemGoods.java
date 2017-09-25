@@ -26,7 +26,18 @@ public class ItemGoods extends BaseGoods {
     }
 
     public void setStatus(int status) {
-        this.status = 0;
+        this.status = status;
         notifyPropertyChanged(BR.status);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ItemGoods) {
+            ItemGoods item = (ItemGoods) obj;
+            if (gid != 0 && item.gid != 0) {
+                return item.gid == this.gid;
+            }
+        }
+        return super.equals(obj);
     }
 }

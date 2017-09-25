@@ -1,9 +1,7 @@
-package com.happy.auction.entity;
+package com.happy.auction.entity.response;
 
 import android.content.res.Resources;
 import android.databinding.Bindable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 
 import com.happy.auction.AppInstance;
 import com.happy.auction.BR;
@@ -30,10 +28,6 @@ public class AuctionDetail extends ItemGoods {
      */
     @Bindable
     public String avatar;
-    /**
-     *
-     */
-    public int bid_times;
     /**
      * 开奖时间，单位：毫秒
      */
@@ -63,8 +57,6 @@ public class AuctionDetail extends ItemGoods {
      */
     public String bid_refund;
 
-    transient Resources res;
-
     public AuctionDetail(ItemGoods goods) {
         this((BaseGoods) goods);
         if (goods == null) return;
@@ -86,16 +78,6 @@ public class AuctionDetail extends ItemGoods {
     }
 
     @Bindable
-    public int getBid_times() {
-        return bid_times;
-    }
-
-    public void setBidTimes(int times) {
-        this.bid_times = times;
-        notifyPropertyChanged(BR.bid_times);
-    }
-
-    @Bindable
     public String getUsername() {
         return username;
     }
@@ -110,24 +92,11 @@ public class AuctionDetail extends ItemGoods {
         notifyPropertyChanged(BR.avatar);
     }
 
-    public SpannableString getBidTimes(int times) {
-        String formatted = AppInstance.getInstance().getString(R.string.my_bid_times, times, times);
-        SpannableString ss = new SpannableString(formatted);
-        String strTimes = String.valueOf(times);
-        int start = formatted.indexOf(strTimes);
-        if (res == null) res = AppInstance.getInstance().getResources();
-        int color = res.getColor(R.color.main_red);
-        ss.setSpan(new ForegroundColorSpan(color), start, start + strTimes.length(), SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
-        start = formatted.lastIndexOf(strTimes);
-        ss.setSpan(new ForegroundColorSpan(0xff179fe6), start, start + strTimes.length(), SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
-        return ss;
-    }
-
     public String getTitlePrice(int status, int price) {
         StringBuilder sb = new StringBuilder();
-        if (res == null) res = AppInstance.getInstance().getResources();
+        Resources res = AppInstance.getInstance().getResources();
         sb.append(res.getString(status == 0 ? R.string.price_deal : R.string.price_current));
-        sb.append("：").append(StringUtil.formatSignMoney(price ));
+        sb.append("：").append(StringUtil.formatSignMoney(price));
         return sb.toString();
     }
 }

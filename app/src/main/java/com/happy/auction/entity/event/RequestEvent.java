@@ -1,4 +1,4 @@
-package com.happy.auction.entity;
+package com.happy.auction.entity.event;
 
 import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;

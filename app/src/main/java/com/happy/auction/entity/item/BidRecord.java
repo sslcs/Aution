@@ -1,7 +1,7 @@
 package com.happy.auction.entity.item;
 
 import com.google.gson.annotations.SerializedName;
-import com.happy.auction.entity.BidEvent;
+import com.happy.auction.entity.event.BidEvent;
 
 /**
  * Created by LiuCongshan on 17-9-19.

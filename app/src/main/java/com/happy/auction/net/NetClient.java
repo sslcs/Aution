@@ -1,6 +1,6 @@
 package com.happy.auction.net;
 
-import com.happy.auction.entity.RequestEvent;
+import com.happy.auction.entity.event.RequestEvent;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.utils.RxBus;
 

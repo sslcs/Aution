@@ -18,7 +18,7 @@ import java.util.Locale;
  * 自定义倒计时TextView
  */
 
-public class CountDownTextView extends android.support.v7.widget.AppCompatTextView {
+public class CountDownDetail extends android.support.v7.widget.AppCompatTextView {
     private final static String FORMATTER = "%02d:%02d:%02d";
     private ObjectAnimator animator;
     private CountDownTimer timer;
@@ -29,17 +29,17 @@ public class CountDownTextView extends android.support.v7.widget.AppCompatTextVi
     private boolean reset = false;
     private boolean disableAnimator = false;
 
-    public CountDownTextView(Context context) {
+    public CountDownDetail(Context context) {
         super(context);
         init();
     }
 
-    public CountDownTextView(Context context, @Nullable AttributeSet attrs) {
+    public CountDownDetail(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CountDownTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CountDownDetail(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }

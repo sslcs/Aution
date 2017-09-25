@@ -121,4 +121,8 @@
         <item name="android:textColor">@color/main_red</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="ProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_bar</item>
+    </style>
 </resources>

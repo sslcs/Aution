@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 
 import com.happy.auction.R;
 
@@ -52,7 +51,7 @@ public class CountDownHome extends android.support.v7.widget.AppCompatTextView {
     public void setExpireTime(long expireTime) {
         cancel();
         long left = expireTime - System.currentTimeMillis();
-        timer = new CountDownTimer(left, 100) {
+        timer = new CountDownTimer(left, 1000) {
             @Override
             public void onTick(long l) {
                 long mod1000 = l % 1000;
@@ -60,7 +59,7 @@ public class CountDownHome extends android.support.v7.widget.AppCompatTextView {
                 long minutes = divide1000 / 60;
                 long seconds = divide1000 % 60;
                 long millis = mod1000 / 10;
-                setTime(String.format(Locale.CHINA, FORMATTER, minutes, seconds, millis));
+                setTime(String.format(Locale.CHINA, FORMATTER, 0, minutes, seconds));
             }
 
             @Override

@@ -7,6 +7,7 @@ package com.happy.auction.entity.param;
 
 public class AuctionDetailParam extends BaseParam {
     public int sid;
+    public int gid;
 
     public AuctionDetailParam() {
         action = "goods_detail";

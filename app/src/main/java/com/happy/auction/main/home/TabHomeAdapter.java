@@ -47,12 +47,12 @@ public class TabHomeAdapter extends BaseAdapter<ItemGoods> {
 
         binding.tvTime.cancel();
         if (item.status == 0) {
-            binding.tvTime.setText(R.string.auction_finish);
-        } else {
-            binding.tvTime.setExpireTime(item.bid_expire_time);
-            binding.tvTime.setRepeat(item.current_price == 0);
+            binding.tvTime.finish();
+            return;
         }
 
+        binding.tvTime.setExpireTime(item.bid_expire_time);
+        binding.tvTime.setRepeat(item.current_price == 0);
         if (arrayChangedPosition.contains(position)) {
             arrayChangedPosition.remove(Integer.valueOf(position));
             ValueAnimator animator = ObjectAnimator.ofFloat(binding.bgPrice, "alpha", 0, 1, 0);

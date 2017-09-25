@@ -11,6 +11,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
+import com.happy.auction.utils.DebugLog;
 
 /**
  * Created by LiuCongshan on 17-8-16.
@@ -33,10 +34,11 @@ public class ImageLoader {
         GlideApp.with(AppInstance.getInstance())
                 .asBitmap()
                 .load(url)
-                .placeholder(R.drawable.pic_default)
+//                .placeholder(R.drawable.pic_default)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        DebugLog.e("width: " + resource.getWidth() + " height: " + resource.getHeight());
                         view.setImageBitmap(resource);
                     }
                 });
@@ -64,6 +66,22 @@ public class ImageLoader {
         }
         GlideApp.with(imageView.getContext())
                 .load(url)
+                .error(R.drawable.pic_default)
+                .into(imageView);
+    }
+
+    @BindingAdapter(value = {"image_url", "image_width", "image_height"})
+    public static void loadImage2(final ImageView imageView, String url, int width, int height) {
+        if (TextUtils.isEmpty(url)) {
+            imageView.setImageResource(R.drawable.pic_default);
+            return;
+        }
+        final int viewWidth = AppInstance.getInstance().dp2px(width);
+        final int viewHeight = AppInstance.getInstance().dp2px(height);
+        GlideApp.with(imageView.getContext())
+                .asBitmap()
+                .load(url)
+                .transform(new OriginalTransform(viewWidth, viewHeight))
                 .error(R.drawable.pic_default)
                 .into(imageView);
     }

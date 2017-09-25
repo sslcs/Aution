@@ -1,10 +1,8 @@
-package com.happy.auction.entity;
-
-import com.happy.auction.entity.response.BaseResponse;
+package com.happy.auction.entity.response;
 
 /**
  * Created by LiuCongshan on 17-8-21.
- *
+ * 返回数据泛型基类
  */
 
 public class DataResponse<T> extends BaseResponse {

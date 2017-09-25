@@ -7,6 +7,10 @@ package com.happy.auction.entity.item;
 
 public class ItemOrder extends BaseGoods {
     /**
+     * 订单 id
+     */
+    public int pid;
+    /**
      * 订单号
      */
     public String ordernum;
