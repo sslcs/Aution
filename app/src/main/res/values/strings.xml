@@ -13,6 +13,13 @@
     <string name="type_newbie">新手推荐</string>
     <string name="join_auction">参与竞拍</string>
     <string name="auction_finish">竞拍已结束</string>
+    <string name="format_announce">%1$s以%2$s拍得%3$s</string>
+
+    <!-- tab latest -->
+    <string name="format_deal_person">成交人： %1$s</string>
+    <string name="latest_market_price">市场价： ￥%1$s</string>
+    <string name="latest_deal_price">成交价： ￥%1$s</string>
+    <string name="category_market_price">市场价：%1$s</string>
 
     <!-- tab me -->
     <string name="login_register">登录/注册</string>
@@ -78,12 +85,12 @@
     <string name="price_step">加价幅度</string>
     <string name="auction_rules"><![CDATA[竞拍规则 >]]></string>
     <string name="fee">手续费</string>
+    <string name="format_fee">%1$d币/次</string>
     <string name="countdown_time">竞拍倒计时</string>
     <string name="return_percent">返币比例额</string>
     <string name="previous_deal">往期成交</string>
     <string name="publish_share">晒单分享</string>
     <string name="my_bid_times">我已出价：%1$d拍币，%2$d赠币</string>
-    <string name="money_sign">￥</string>
     <string name="price_current">当前价</string>
     <string name="price_deal">成交价</string>
     <string name="format_market_price">(市场价: ￥%1$s)</string>
@@ -93,4 +100,5 @@
     <string name="detail_btn_go_latest">前往最新一期</string>
     <string name="detail_btn_cancel">取消剩余出价</string>
     <string name="auto_bid_progress">已出价 %1$d/%2$d</string>
+    <string name="save">节省</string>
 </resources>

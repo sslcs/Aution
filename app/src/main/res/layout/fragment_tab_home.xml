@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.happy.auction.main.latest.TabLatestFragment">
+    tools:context="com.happy.auction.module.latest.TabLatestFragment">
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -50,6 +50,7 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
                     android:singleLine="true"
+                    android:textColor="@color/text_title"
                     app:layout_scrollFlags="scroll|enterAlways"/>
                 <android.support.design.widget.TabLayout
                     android:id="@+id/tabLayout"
@@ -69,11 +70,11 @@
             </android.support.design.widget.AppBarLayout>
 
             <android.support.v7.widget.RecyclerView
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:id="@+id/v_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layoutManager="GridLayoutManager"/>
+                app:layoutManager="GridLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
         </android.support.design.widget.CoordinatorLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>

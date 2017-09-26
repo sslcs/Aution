@@ -9,15 +9,15 @@
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
             name="activity"
-            type="com.happy.auction.detail.AuctionDetailActivity"/>
+            type="com.happy.auction.module.detail.AuctionDetailActivity"/>
         <variable
-            name="item"
+            name="newBid"
             type="com.happy.auction.entity.item.BidRecord"/>
         <variable
             name="data"
             type="com.happy.auction.entity.response.AuctionDetail"/>
         <variable
-            name="times"
+            name="bidTimes"
             type="android.databinding.ObservableInt"/>
         <variable
             name="coin"
@@ -26,7 +26,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.happy.auction.detail.AuctionDetailActivity">
+        tools:context=".module.detail.AuctionDetailActivity">
         <TextView
             android:id="@+id/tv_toolbar_title"
             style="@style/TextTitle"
@@ -89,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="1dp"
-                    app:layout_scrollFlags="scroll|enterAlways">
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
                     <ImageView
                         android:id="@+id/iv_goods_image"
                         image_url="@{data.icon}"
@@ -136,6 +136,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:textColor="@color/main_red"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:textSize="34sp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -161,7 +163,7 @@
                         android:paddingBottom="10dp"
                         android:paddingLeft="25dp"
                         android:paddingTop="10dp"
-                        android:text="@{@string/money_sign + StringUtil.formatMoney(data.current_price)}"
+                        android:text="@{StringUtil.formatSignMoney(data.current_price)}"
                         android:textColor="@android:color/white"
                         android:textSize="19sp"
                         android:typeface="monospace"
@@ -226,7 +228,7 @@
                         android:padding="8dp"
                         android:text="@string/no_person"
                         android:textColor="@color/text_light"
-                        android:visibility="@{item==null ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{newBid==null ? View.VISIBLE : View.GONE}"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/v_dummy"/>
@@ -237,7 +239,7 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="1dp"
                         android:background="@android:color/white"
-                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{newBid==null ? View.GONE : View.VISIBLE}"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_current_address"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -248,8 +250,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
-                        app:avatar="@{item.avatar}"
+                        android:visibility="@{newBid==null ? View.GONE : View.VISIBLE}"
+                        app:avatar="@{newBid.avatar}"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/bg_current"
@@ -261,7 +263,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="1dp"
                         android:src="@drawable/flag_current_person"
-                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{newBid==null ? View.GONE : View.VISIBLE}"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/bg_current"/>
@@ -271,10 +273,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
-                        android:text="@{item.username}"
+                        android:text="@{newBid.username}"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{newBid==null ? View.GONE : View.VISIBLE}"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/iv_current_person"
@@ -286,19 +288,19 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="6dp"
                         android:paddingTop="2dp"
-                        android:text='@{"("+item.ip_address+")"}'
+                        android:text='@{"("+newBid.ip_address+")"}'
                         android:textSize="12sp"
-                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{newBid==null ? View.GONE : View.VISIBLE}"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_current_person"
                         tools:text="(广州 广州)"/>
 
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycler_view"
+                        android:id="@+id/list_record"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="@{item==null ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{newBid==null ? View.GONE : View.VISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_current_address"/>
@@ -320,7 +322,7 @@
                         android:textSize="16sp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/recycler_view"/>
+                        app:layout_constraintTop_toBottomOf="@+id/list_record"/>
 
                     <View
                         android:id="@+id/bg_rules"
@@ -342,7 +344,7 @@
                     <TextView
                         android:id="@+id/tv_price_start"
                         style="@style/TextDetailRule"
-                        android:text="￥0.00"
+                        android:text="@{StringUtil.formatSignMoney(data.bid_start_price)}"
                         app:layout_constraintStart_toEndOf="@+id/tv_start_label"
                         app:layout_constraintTop_toTopOf="@+id/tv_start_label"/>
                     <TextView
@@ -354,7 +356,7 @@
                     <TextView
                         android:id="@+id/tv_price_step"
                         style="@style/TextDetailRule"
-                        android:text="￥1.00"
+                        android:text="@{StringUtil.formatSignMoney(data.bid_increment)}"
                         app:layout_constraintStart_toEndOf="@+id/tv_step_label"
                         app:layout_constraintTop_toTopOf="@+id/tv_step_label"/>
 
@@ -367,7 +369,7 @@
                     <TextView
                         android:id="@+id/tv_fee"
                         style="@style/TextDetailRule"
-                        android:text="1币/次"
+                        android:text="@{@string/format_fee(data.bid_fee)}"
                         app:layout_constraintStart_toEndOf="@+id/tv_fee_label"
                         app:layout_constraintTop_toTopOf="@+id/tv_fee_label"/>
                     <TextView
@@ -379,7 +381,7 @@
                     <TextView
                         android:id="@+id/tv_time"
                         style="@style/TextDetailRule"
-                        android:text="10s"
+                        android:text='@{data.bid_countdown/1000 + "s"}'
                         app:layout_constraintStart_toEndOf="@+id/tv_time_label"
                         app:layout_constraintTop_toTopOf="@+id/tv_time_label"/>
 
@@ -393,7 +395,7 @@
                     <TextView
                         android:id="@+id/tv_return"
                         style="@style/TextDetailRule"
-                        android:text="30%"
+                        android:text='@{data.bid_refund+"%"}'
                         app:layout_constraintStart_toEndOf="@+id/tv_return_label"
                         app:layout_constraintTop_toTopOf="@+id/tv_return_label"/>
                 </android.support.constraint.ConstraintLayout>
@@ -416,13 +418,17 @@
                 </android.support.design.widget.TabLayout>
             </android.support.design.widget.AppBarLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/v_list"
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layoutManager="LinearLayoutManager"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:listitem="@layout/item_latest"/>
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/v_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="LinearLayoutManager"
+                    tools:listitem="@layout/item_previous"/>
+            </android.support.v4.widget.NestedScrollView>
         </android.support.design.widget.CoordinatorLayout>
 
         <TextView
@@ -431,7 +437,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
             android:background="@android:color/white"
-            android:fontFamily="monospace"
             android:paddingBottom="10dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="10dp"
@@ -476,7 +481,7 @@
             android:background="@null"
             android:gravity="center"
             android:inputType="numberSigned"
-            android:text="@{String.valueOf(times.get())}"
+            android:text="@{String.valueOf(bidTimes.get())}"
             app:layout_constraintBottom_toBottomOf="@+id/btn_bottom"
             app:layout_constraintEnd_toStartOf="@+id/btn_bottom"
             app:layout_constraintStart_toStartOf="parent"

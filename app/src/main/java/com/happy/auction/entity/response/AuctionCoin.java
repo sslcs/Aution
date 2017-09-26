@@ -59,12 +59,13 @@ public class AuctionCoin extends BaseObservable {
     public SpannableString getBidTimes(int coins, int freeCoins) {
         String formatted = AppInstance.getInstance().getString(R.string.my_bid_times, coins, freeCoins);
         SpannableString ss = new SpannableString(formatted);
-        String strTimes = String.valueOf(coins);
-        int start = formatted.indexOf(strTimes);
+        String strCoin = String.valueOf(coins);
+        int start = formatted.indexOf(strCoin);
         int color = AppInstance.getInstance().getResources().getColor(R.color.main_red);
-        ss.setSpan(new ForegroundColorSpan(color), start, start + strTimes.length(), SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
-        start = formatted.lastIndexOf(strTimes);
-        ss.setSpan(new ForegroundColorSpan(0xff179fe6), start, start + strTimes.length(), SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(color), start, start + strCoin.length(), SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+        String strFree = String.valueOf(freeCoins);
+        start = formatted.lastIndexOf(strFree);
+        ss.setSpan(new ForegroundColorSpan(0xff179fe6), start, start + strFree.length(), SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
         return ss;
     }
 

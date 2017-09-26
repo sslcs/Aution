@@ -6,12 +6,12 @@
     <data>
         <variable
             name="activity"
-            type="com.happy.auction.main.login.ForgetActivity"/>
+            type="com.happy.auction.module.login.ForgetActivity"/>
     </data>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.happy.auction.main.login.ForgetActivity">
+        tools:context="com.happy.auction.module.login.ForgetActivity">
         <TextView
             android:id="@+id/tv_toolbar_title"
             style="@style/TextTitle"

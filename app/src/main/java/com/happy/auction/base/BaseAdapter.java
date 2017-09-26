@@ -23,6 +23,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
     }
 
     public void clear() {
+        if(data==null) return;
         data.clear();
     }
 

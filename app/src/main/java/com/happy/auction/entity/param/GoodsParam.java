@@ -1,7 +1,5 @@
 package com.happy.auction.entity.param;
 
-import com.happy.auction.entity.response.BaseEvent;
-
 /**
  * Created by LiuCongshan on 17-9-11.
  * 获取首页banner下面的四个按钮模块配置参数
@@ -19,7 +17,7 @@ public class GoodsParam extends BaseParam {
      * 分类<br/>
      * 1电脑数码， 2卡券充值 3家用电器 4美食天地 5 日用百搭 6其他
      */
-    public String tid;
+    public int tid;
     public int start;
     public int limit = DEFAULT_LIMIT;
 

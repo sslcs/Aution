@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.happy.auction.utils.StringUtil"/>
+        <variable
+            name="data"
+            type="com.happy.auction.entity.item.ItemPrevious"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="8dp"
+            android:text="@{StringUtil.formatDateTime(data.prize_time)}"
+            android:textColor="@color/text_light"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2017-09-22 18:38:34"/>
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="18dp"
+            app:avatar="@{data.avatar}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time"
+            tools:src="@drawable/pic_default"/>
+
+        <TextView
+            android:id="@+id/tv_deal_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:text='@{@string/latest_deal_price(StringUtil.formatMoney(data.bid_price))}'
+            android:textColor="@color/main_red"
+            android:textSize="13sp"
+            app:layout_constraintLeft_toRightOf="@+id/iv_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon"
+            tools:text="@string/latest_deal_price"/>
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="10dp"
+            android:text='@{@string/format_deal_person(data.username)}'
+            android:textColor="@color/text_normal"
+            android:textSize="13sp"
+            app:layout_constraintLeft_toRightOf="@+id/iv_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_deal_price"
+            tools:text="成交者：9爱吃芒果"/>
+
+        <TextView
+            android:id="@+id/tv_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="23dp"
+            android:text='@{StringUtil.formatPercent(data.save)}'
+            android:textColor="@color/main_red"
+            android:textSize="19sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_deal_price"
+            tools:text="88.88%"/>
+
+        <TextView
+            android:id="@+id/tv_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/save"
+            android:textColor="@color/text_normal"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_percent"
+            app:layout_constraintStart_toStartOf="@+id/tv_percent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_percent"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

@@ -9,7 +9,7 @@
             type="com.happy.auction.entity.response.UserInfo"/>
         <variable
             name="fragment"
-            type="com.happy.auction.main.me.TabMeFragment"/>
+            type="com.happy.auction.module.me.TabMeFragment"/>
         <import type="com.happy.auction.R"/>
     </data>
 
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/divider"
-        tools:context="com.happy.auction.main.me.TabMeFragment">
+        tools:context="com.happy.auction.module.me.TabMeFragment">
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

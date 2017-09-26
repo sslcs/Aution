@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:paddingRight="10dp"
-            android:text='@{@string/money_sign + StringUtil.formatMoney(goods.current_price)}'
+            android:text='@{StringUtil.formatSignMoney(goods.current_price)}'
             android:textColor="@color/main_red"
             android:textSize="14sp"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -25,4 +25,9 @@ public class StringUtil {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         return format.format(date);
     }
+
+    public static String formatPercent(int percent) {
+        float fPercent = percent / 100f;
+        return String.format(Locale.CHINA, "%.2f%%", fPercent);
+    }
 }
