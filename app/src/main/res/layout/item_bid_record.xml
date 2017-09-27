@@ -6,7 +6,7 @@
     <data>
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
-            name="record"
+            name="data"
             type="com.happy.auction.entity.item.BidRecord"/>
     </data>
 
@@ -22,7 +22,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:src="@drawable/pic_default"
-            app:avatar="@{record.avatar}"/>
+            app:avatar="@{data.avatar}"/>
 
         <TextView
             android:id="@+id/tv_username"
@@ -33,7 +33,7 @@
             android:ellipsize="end"
             android:paddingLeft="5dp"
             android:singleLine="true"
-            android:text="@{record.username}"
+            android:text="@{data.username}"
             tools:text="用户名名名"/>
 
         <TextView
@@ -45,7 +45,7 @@
             android:layout_toRightOf="@+id/tv_username"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="@{record.ip_address}"/>
+            android:text="@{data.ip_address}"/>
 
         <TextView
             android:id="@+id/tv_status"
@@ -63,7 +63,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:text="@{StringUtil.formatSignMoney(record.bid_price)}"
+            android:text="@{StringUtil.formatSignMoney(data.bid_price)}"
             android:textColor="@color/main_red"
             tools:text="￥0.10"/>
     </RelativeLayout>

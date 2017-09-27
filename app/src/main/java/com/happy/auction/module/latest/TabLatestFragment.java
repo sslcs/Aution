@@ -8,16 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
-import com.happy.auction.adapter.AdapterWrapper;
+import com.happy.auction.adapter.LoadMoreListener;
+import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.adapter.SpaceDecoration;
-import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.databinding.FragmentTabLatestBinding;
-import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.entity.item.ItemLatest;
 import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.LatestParam;
 import com.happy.auction.entity.response.DataResponse;
+import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
  */
 public class TabLatestFragment extends Fragment {
     private FragmentTabLatestBinding binding;
-    private AdapterWrapper<TabLatestAdapter> adapter;
+    private TabLatestAdapter adapter;
     private int start;
 
     public TabLatestFragment() {
@@ -50,22 +50,21 @@ public class TabLatestFragment extends Fragment {
     private void initLayout() {
         binding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.vList.addItemDecoration(new SpaceDecoration());
-        final TabLatestAdapter inner = new TabLatestAdapter();
-        inner.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+        adapter = new TabLatestAdapter();
+        adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ItemLatest item = inner.getItem(position);
+                ItemLatest item = adapter.getItem(position);
                 startActivity(AuctionDetailActivity.newIntent(item));
             }
         });
-        adapter = new AdapterWrapper<>(inner);
-        adapter.setLoadMoreListener(new AdapterWrapper.LoadMoreListener() {
+        adapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 loadData(start);
             }
         });
-        binding.vList.setAdapter(adapter);
+        binding.vList.setAdapter(this.adapter);
 
         loadData(0);
     }
@@ -81,7 +80,7 @@ public class TabLatestFragment extends Fragment {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemLatest>>>() {}.getType();
                 DataResponse<ArrayList<ItemLatest>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data == null || obj.data.isEmpty()) return;
-                adapter.getInnerAdapter().addAll(obj.data);
+                adapter.addAll(obj.data);
                 int size = obj.data.size();
                 adapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
                 TabLatestFragment.this.start += size;

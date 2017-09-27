@@ -3,28 +3,23 @@ package com.happy.auction.module.category;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.happy.auction.base.BaseAdapter;
+import com.happy.auction.adapter.BaseAdapter;
 import com.happy.auction.databinding.ItemCategoryBinding;
 import com.happy.auction.entity.item.ItemCategory;
 
 /**
  * 分类Adapter
  */
-public class CategoryAdapter extends BaseAdapter<ItemCategory> {
+public class CategoryAdapter extends BaseAdapter<ItemCategory, ItemCategoryBinding> {
     private int selectedPosition = 0;
 
     @Override
-    public CustomViewHolder<ItemCategoryBinding> onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ItemCategoryBinding binding = ItemCategoryBinding.inflate(inflater);
-        return new CustomViewHolder<>(binding);
+    public ItemCategoryBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
+        return ItemCategoryBinding.inflate(inflater, parent, false);
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        ItemCategory item = getItem(position);
-        ItemCategoryBinding binding = (ItemCategoryBinding) holder.binding;
+    public void bindItem(ItemCategoryBinding binding, ItemCategory item, int position) {
         binding.setData(item);
         binding.tvTitle.setSelected(position == selectedPosition);
     }

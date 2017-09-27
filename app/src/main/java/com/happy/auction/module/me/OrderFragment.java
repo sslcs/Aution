@@ -7,18 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
-import com.happy.auction.adapter.AdapterWrapper;
-import com.happy.auction.adapter.CustomAdapter;
+import com.happy.auction.adapter.LoadMoreListener;
+import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.adapter.SpaceDecoration;
-import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentListBinding;
-import com.happy.auction.module.detail.AuctionDetailActivity;
-import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.item.ItemOrder;
 import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.OrderParam;
+import com.happy.auction.entity.response.DataResponse;
+import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
@@ -38,7 +37,7 @@ public class OrderFragment extends BaseFragment {
     private static final String KEY_TYPE = "type";
     private FragmentListBinding binding;
 
-    private CustomAdapter<OrderAdapter> adapter;
+    private OrderAdapter adapter;
 
     public OrderFragment() {
     }
@@ -63,19 +62,19 @@ public class OrderFragment extends BaseFragment {
         SpaceDecoration decoration = new SpaceDecoration(5);
         decoration.enableHeader();
         binding.vList.addItemDecoration(decoration);
-        adapter = new CustomAdapter<>(new OrderAdapter());
-        adapter.getInnerAdapter().setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+        adapter = new OrderAdapter();
+        adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ItemOrder order = adapter.getInnerAdapter().getItem(position);
+                ItemOrder order = adapter.getItem(position);
                 startActivity(AuctionDetailActivity.newIntent(order));
             }
         });
-        adapter.setLoadMoreListener(new AdapterWrapper.LoadMoreListener() {
+        adapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
-                int count = adapter.getInnerAdapter().getItemCount();
-                ItemOrder item = adapter.getInnerAdapter().getItem(count-1);
+                int count = adapter.getItemCount();
+                ItemOrder item = adapter.getItem(count - 1);
                 loadData(item.pid);
             }
         });
@@ -99,7 +98,7 @@ public class OrderFragment extends BaseFragment {
                 DataResponse<ArrayList<ItemOrder>> obj = GsonSingleton.get().fromJson(response, type);
                 ArrayList<ItemOrder> data = obj.data;
                 if (data != null) {
-                    adapter.getInnerAdapter().addAll(data);
+                    adapter.addAll(data);
                     adapter.setHasMore(data.size() >= BaseParam.DEFAULT_LIMIT);
                 } else {
                     adapter.setHasMore(false);
@@ -111,7 +110,7 @@ public class OrderFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (hasCreatedView && isVisibleToUser && adapter.getRealItemCount() == 0) {
+        if (hasCreatedView && isVisibleToUser && adapter.isEmpty()) {
             loadData(0);
         }
     }

@@ -3,28 +3,23 @@ package com.happy.auction.module.category;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.happy.auction.base.BaseAdapter;
+import com.happy.auction.adapter.BaseCustomAdapter;
+import com.happy.auction.adapter.CustomViewHolder;
 import com.happy.auction.databinding.ItemCategoryGoodsBinding;
-import com.happy.auction.databinding.ItemLatestBinding;
 import com.happy.auction.entity.item.ItemGoods;
-import com.happy.auction.entity.item.ItemLatest;
 
 /**
  * 分类商品Adapter
  */
-public class CategoryGoodsAdapter extends BaseAdapter<ItemGoods> {
+public class CategoryGoodsAdapter extends BaseCustomAdapter<ItemGoods, ItemCategoryGoodsBinding> {
+
     @Override
-    public CustomViewHolder<ItemCategoryGoodsBinding> onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ItemCategoryGoodsBinding binding = ItemCategoryGoodsBinding.inflate(inflater, parent, false);
-        return new CustomViewHolder<>(binding);
+    public ItemCategoryGoodsBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
+        return ItemCategoryGoodsBinding.inflate(inflater, parent, false);
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        ItemGoods item = getItem(position);
-        ItemCategoryGoodsBinding binding = (ItemCategoryGoodsBinding) holder.binding;
+    public void bindItem(ItemCategoryGoodsBinding binding, ItemGoods item, int position) {
         binding.setData(item);
     }
 }

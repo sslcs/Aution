@@ -1,10 +1,10 @@
-package com.happy.auction.base;
+package com.happy.auction.adapter;
 
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-
-import com.happy.auction.utils.DebugLog;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Adapter基类
  */
-public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.CustomViewHolder> {
+public abstract class BaseAdapter<T, B extends ViewDataBinding> extends RecyclerView.Adapter<CustomViewHolder<B>> {
     private List<T> data;
     private OnItemClickListener onItemClickListener;
 
@@ -23,7 +23,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
     }
 
     public void clear() {
-        if(data==null) return;
+        if (data == null) return;
         data.clear();
     }
 
@@ -52,15 +52,30 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
     }
 
     @Override
-    public void onBindViewHolder(final BaseAdapter.CustomViewHolder holder, int position) {
-        if (onItemClickListener == null) return;
+    public CustomViewHolder<B> onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        return new CustomViewHolder<>(getBinding(parent, inflater));
+    }
+
+    public abstract B getBinding(ViewGroup parent, LayoutInflater inflater);
+
+    @Override
+    public void onBindViewHolder(final CustomViewHolder<B> holder, int position) {
+        final T item = getItem(position);
+        if (item != null) {
+            bindItem(holder.getBinding(), item, position);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (item == null || onItemClickListener == null) return;
                 onItemClickListener.onItemClick(view, holder.getAdapterPosition());
             }
         });
     }
+
+    public abstract void bindItem(B binding, T item, int position);
 
     @Override
     public int getItemCount() {
@@ -103,20 +118,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter.Cu
         return success;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+    final public int getRealCount() {
+        return data == null ? 0 : data.size();
     }
 
-    public class CustomViewHolder<B extends ViewDataBinding> extends RecyclerView.ViewHolder {
-        public final B binding;
-
-        public CustomViewHolder(B binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
-        public B getBinding() {
-            return binding;
-        }
+    final public boolean isEmpty() {
+        return data == null || data.isEmpty();
     }
 }

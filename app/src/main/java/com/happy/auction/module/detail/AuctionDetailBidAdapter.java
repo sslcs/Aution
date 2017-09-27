@@ -3,7 +3,7 @@ package com.happy.auction.module.detail;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.happy.auction.base.BaseAdapter;
+import com.happy.auction.adapter.BaseAdapter;
 import com.happy.auction.databinding.ItemBidRecordBinding;
 import com.happy.auction.entity.item.BidRecord;
 
@@ -12,19 +12,15 @@ import com.happy.auction.entity.item.BidRecord;
  * 竞拍详情参与记录
  */
 
-public class AuctionDetailBidAdapter extends BaseAdapter<BidRecord> {
+public class AuctionDetailBidAdapter extends BaseAdapter<BidRecord, ItemBidRecordBinding> {
     @Override
-    public CustomViewHolder<ItemBidRecordBinding> onCreateViewHolder(ViewGroup parent, int viewType) {
-        ItemBidRecordBinding binding = ItemBidRecordBinding.inflate(LayoutInflater.from(parent.getContext()));
-        return new CustomViewHolder<>(binding);
+    public ItemBidRecordBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
+        return ItemBidRecordBinding.inflate(inflater, parent, false);
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        BidRecord item = getItem(position + 1);
-        ItemBidRecordBinding binding = (ItemBidRecordBinding) holder.binding;
-        binding.setRecord(item);
+    public void bindItem(ItemBidRecordBinding binding, BidRecord item, int position) {
+        binding.setData(item);
     }
 
     @Override

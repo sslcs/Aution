@@ -2,17 +2,13 @@ package com.happy.auction.adapter;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.ViewGroup;
 
 /**
  * Created by LiuCongshan on 17-9-4.
  */
 
 public class WrapperUtils {
-    public static void onAttachedToRecyclerView(RecyclerView.Adapter innerAdapter, RecyclerView recyclerView, final SpanSizeCallback callback) {
-        innerAdapter.onAttachedToRecyclerView(recyclerView);
-
+    public static void onAttachedToRecyclerView(RecyclerView recyclerView, final SpanSizeCallback callback) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
@@ -25,18 +21,6 @@ public class WrapperUtils {
                 }
             });
             gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
-        }
-    }
-
-    public static void setFullSpan(RecyclerView.ViewHolder holder) {
-        ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-
-        if (lp != null
-                && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
-
-            StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
-
-            p.setFullSpan(true);
         }
     }
 

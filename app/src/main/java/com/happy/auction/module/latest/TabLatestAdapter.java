@@ -3,26 +3,22 @@ package com.happy.auction.module.latest;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.happy.auction.base.BaseAdapter;
+import com.happy.auction.adapter.BaseCustomAdapter;
+import com.happy.auction.adapter.CustomViewHolder;
 import com.happy.auction.databinding.ItemLatestBinding;
 import com.happy.auction.entity.item.ItemLatest;
 
 /**
  * 最新成交Adapter
  */
-public class TabLatestAdapter extends BaseAdapter<ItemLatest> {
+public class TabLatestAdapter extends BaseCustomAdapter<ItemLatest, ItemLatestBinding> {
     @Override
-    public CustomViewHolder<ItemLatestBinding> onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ItemLatestBinding binding = ItemLatestBinding.inflate(inflater, parent, false);
-        return new CustomViewHolder<>(binding);
+    public ItemLatestBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
+        return ItemLatestBinding.inflate(inflater, parent, false);
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        ItemLatest item = getItem(position);
-        ItemLatestBinding binding = (ItemLatestBinding) holder.binding;
+    public void bindItem(ItemLatestBinding binding, ItemLatest item, int position) {
         binding.setData(item);
     }
 }

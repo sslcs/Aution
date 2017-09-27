@@ -15,7 +15,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.adapter.AdapterWrapper;
+import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.SpaceDecoration;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityAuctionDetailBinding;
@@ -60,7 +60,7 @@ public class AuctionDetailActivity extends BaseActivity {
     private AuctionCoin auctionCoin;
 
     private int indexPrevious = 0;
-    private AdapterWrapper<PreviousAdapter> adapterPrevious;
+    private PreviousAdapter adapterPrevious;
 
     public static Intent newIntent(BaseGoods goods) {
         Intent intent = new Intent(AppInstance.getInstance(), AuctionDetailActivity.class);
@@ -94,9 +94,8 @@ public class AuctionDetailActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         binding.listRecord.setLayoutManager(manager);
 
-        PreviousAdapter inner = new PreviousAdapter();
-        adapterPrevious = new AdapterWrapper<>(inner);
-        adapterPrevious.setLoadMoreListener(new AdapterWrapper.LoadMoreListener() {
+        adapterPrevious = new PreviousAdapter();
+        adapterPrevious.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 loadPrevious(indexPrevious);
@@ -338,7 +337,7 @@ public class AuctionDetailActivity extends BaseActivity {
                 int size = 0;
                 if (obj.data != null && !obj.data.isEmpty()) {
                     size = obj.data.size();
-                    adapterPrevious.getInnerAdapter().addAll(obj.data);
+                    adapterPrevious.addAll(obj.data);
                     indexPrevious += size;
                 }
                 adapterPrevious.setHasMore(size >= BaseParam.DEFAULT_LIMIT);

@@ -3,25 +3,21 @@ package com.happy.auction.module.me;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.happy.auction.base.BaseAdapter;
+import com.happy.auction.adapter.BaseCustomAdapter;
 import com.happy.auction.databinding.ItemOrderBinding;
 import com.happy.auction.entity.item.ItemOrder;
 
 /**
  * 订单记录Adapter
  */
-public class OrderAdapter extends BaseAdapter<ItemOrder> {
+public class OrderAdapter extends BaseCustomAdapter<ItemOrder, ItemOrderBinding> {
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ItemOrderBinding binding = ItemOrderBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new CustomViewHolder<>(binding);
+    public ItemOrderBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
+        return ItemOrderBinding.inflate(inflater, parent, false);
     }
 
     @Override
-    public void onBindViewHolder(BaseAdapter.CustomViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        ItemOrder item = getItem(position);
-        ItemOrderBinding binding = (ItemOrderBinding) holder.getBinding();
+    public void bindItem(ItemOrderBinding binding, ItemOrder item, int position) {
         binding.setData(item);
     }
 }

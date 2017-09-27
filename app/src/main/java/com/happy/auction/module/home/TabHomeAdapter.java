@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseAdapter;
+import com.happy.auction.adapter.BaseCustomAdapter;
 import com.happy.auction.databinding.ItemGoodsBinding;
 import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.glide.ImageLoader;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * 首页商品Adapter
  */
-public class TabHomeAdapter extends BaseAdapter<ItemGoods> {
+public class TabHomeAdapter extends BaseCustomAdapter<ItemGoods, ItemGoodsBinding> {
     private ArrayList<Integer> arrayChangedPosition;
     private int redColor;
 
@@ -27,17 +27,12 @@ public class TabHomeAdapter extends BaseAdapter<ItemGoods> {
     }
 
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ItemGoodsBinding binding = ItemGoodsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new CustomViewHolder<>(binding);
+    public ItemGoodsBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
+        return ItemGoodsBinding.inflate(inflater, parent, false);
     }
 
     @Override
-    public void onBindViewHolder(BaseAdapter.CustomViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        final ItemGoodsBinding binding = (ItemGoodsBinding) holder.getBinding();
-
-        ItemGoods item = getItem(position);
+    public void bindItem(ItemGoodsBinding binding, ItemGoods item, int position) {
         binding.setGoods(item);
         String tag = (String) binding.ivPic.getTag(binding.ivPic.getId());
         if (!item.icon.equals(tag)) {
@@ -45,6 +40,10 @@ public class TabHomeAdapter extends BaseAdapter<ItemGoods> {
             ImageLoader.loadImage(binding.ivPic, item.icon);
         }
 
+        setTime(binding, item, position);
+    }
+
+    private void setTime(final ItemGoodsBinding binding, ItemGoods item, int position) {
         binding.tvTime.cancel();
         if (item.status == 0) {
             binding.tvTime.finish();

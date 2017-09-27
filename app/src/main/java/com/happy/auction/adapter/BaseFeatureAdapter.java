@@ -1,10 +1,10 @@
 package com.happy.auction.adapter;
 
+import android.databinding.ViewDataBinding;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 /**
@@ -12,44 +12,38 @@ import android.view.ViewGroup;
  * Display empty view while the data is empty;<br/>
  */
 
-public class AdapterWrapper<A extends RecyclerView.Adapter>
-        extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends BaseAdapter<T, B> {
     static final int ITEM_TYPE_HEADER_BASE = 0XFA000;
     static final int ITEM_TYPE_FOOTER_BASE = 0XFF000;
     private static final int ITEM_TYPE_EMPTY = Integer.MAX_VALUE - 1;
     private static final int ITEM_TYPE_LOADING = Integer.MAX_VALUE - 2;
     private static final int ITEM_TYPE_LOAD_MORE = Integer.MAX_VALUE - 3;
 
-    private A mInnerAdapter;
-
-    private View mEmptyView;
-    private int mEmptyLayoutId;
-
-    private View mLoadMoreView;
-    private int mLoadMoreLayoutId;
-
-    private View mLoadingView;
-    private int mLoadingLayoutId;
+    private boolean showEmpty = true;
+    private boolean showLoading = true;
+    private boolean showMore = true;
     private boolean isLoaded = false;
-
-    private LoadMoreListener mLoadMoreListener;
     private boolean hasMore = false;
+    private LoadMoreListener mLoadMoreListener;
 
-    public AdapterWrapper(A adapter) {
-        mInnerAdapter = adapter;
+    public void disableEmpty() {
+        showEmpty = false;
+        notifyDataSetChanged();
     }
 
-    public A getInnerAdapter() {
-        return mInnerAdapter;
+    public void disableLoading() {
+        showLoading = false;
+        notifyDataSetChanged();
     }
 
-    public int getRealItemCount() {
-        return mInnerAdapter.getItemCount();
+    public void disableMore() {
+        showMore = false;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (!isLoaded && isShowLoading()) {
+        if (isShowLoading()) {
             return ITEM_TYPE_LOADING;
         }
 
@@ -60,40 +54,35 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
         if (isShowLoadMore(position)) {
             return ITEM_TYPE_LOAD_MORE;
         }
-        return mInnerAdapter.getItemViewType(position);
+        return super.getItemViewType(position);
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == ITEM_TYPE_EMPTY) {
-            if (mEmptyView == null) {
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                mEmptyView = inflater.inflate(mEmptyLayoutId, parent, false);
-            }
-            return ViewHolder.createViewHolder(parent.getContext(), mEmptyView);
+            return getBindingEmpty(parent, inflater);
         }
 
         if (viewType == ITEM_TYPE_LOADING) {
-            if (mLoadingView == null) {
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                mLoadingView = inflater.inflate(mLoadingLayoutId, parent, false);
-            }
-            return ViewHolder.createViewHolder(parent.getContext(), mLoadingView);
+            return getBindingLoading(parent, inflater);
         }
 
         if (viewType == ITEM_TYPE_LOAD_MORE) {
-            if (mLoadMoreView == null) {
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                mLoadMoreView = inflater.inflate(mLoadMoreLayoutId, parent, false);
-            }
-            return ViewHolder.createViewHolder(parent.getContext(), mLoadMoreView);
+            return getBindingMore(parent, inflater);
         }
 
-        return mInnerAdapter.onCreateViewHolder(parent, viewType);
+        return new CustomViewHolder<>(getBinding(parent, inflater));
     }
 
+    public abstract CustomViewHolder getBindingEmpty(ViewGroup parent, LayoutInflater inflater);
+
+    public abstract CustomViewHolder getBindingMore(ViewGroup parent, LayoutInflater inflater);
+
+    public abstract CustomViewHolder getBindingLoading(ViewGroup parent, LayoutInflater inflater);
+
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(CustomViewHolder<B> holder, int position) {
         if (isShowEmpty()) {
             return;
         }
@@ -104,16 +93,17 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
             }
             return;
         }
-        mInnerAdapter.onBindViewHolder(holder, position);
+        super.onBindViewHolder(holder, position);
     }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        WrapperUtils.onAttachedToRecyclerView(mInnerAdapter, recyclerView, new WrapperUtils.SpanSizeCallback() {
+        super.onAttachedToRecyclerView(recyclerView);
+        WrapperUtils.onAttachedToRecyclerView(recyclerView, new WrapperUtils.SpanSizeCallback() {
             @Override
             public int getSpanSize(GridLayoutManager layoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position) {
                 layoutManager.setAutoMeasureEnabled(false);
-                if (isShowEmpty() || isShowLoadMore(position)) {
+                if (isShowLoading() || isShowEmpty() || isShowLoadMore(position)) {
                     return layoutManager.getSpanCount();
                 }
 
@@ -126,18 +116,15 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
     }
 
     @Override
-    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
-        mInnerAdapter.onViewAttachedToWindow(holder);
-        if (isShowEmpty()) {
-            WrapperUtils.setFullSpan(holder);
-        } else if (isShowLoadMore(holder.getLayoutPosition())) {
+    public void onViewAttachedToWindow(CustomViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        if (isShowLoading() || isShowEmpty() || isShowLoadMore(holder.getLayoutPosition())) {
             setFullSpan(holder);
         }
     }
 
     private void setFullSpan(RecyclerView.ViewHolder holder) {
         ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-
         if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
             ((StaggeredGridLayoutManager.LayoutParams) lp).setFullSpan(true);
         }
@@ -146,21 +133,14 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
     @Override
     public int getItemCount() {
         if (isShowEmpty() || isShowLoading()) return 1;
-        return mInnerAdapter.getItemCount() + (hasLoadMore() ? 1 : 0);
+        return getRealCount() + (hasLoadMore() ? 1 : 0);
     }
 
     // Empty adapter begin-----------------------------------------
     private boolean isShowEmpty() {
-        return (mEmptyView != null || mEmptyLayoutId != 0) && getRealItemCount() == 0;
+        return isLoaded && showEmpty && isEmpty();
     }
 
-    public void setEmptyView(View emptyView) {
-        mEmptyView = emptyView;
-    }
-
-    public void setEmptyView(int layoutId) {
-        mEmptyLayoutId = layoutId;
-    }
     // Empty adapter end-----------------------------------------
 
     // LoadMore adapter begin-----------------------------------------
@@ -170,7 +150,7 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
     }
 
     private boolean hasLoadMore() {
-        return hasMore && (mLoadMoreView != null || mLoadMoreLayoutId != 0);
+        return hasMore && showMore;
     }
 
     private boolean isShowLoadMore(int position) {
@@ -183,34 +163,15 @@ public class AdapterWrapper<A extends RecyclerView.Adapter>
         }
     }
 
-    public void setLoadMoreView(View loadMoreView) {
-        mLoadMoreView = loadMoreView;
-    }
-
-    public void setLoadMoreView(int layoutId) {
-        mLoadMoreLayoutId = layoutId;
-    }
     // LoadMore adapter end-----------------------------------------
 
     // Loading adapter begin-----------------------------------------
     private boolean isShowLoading() {
-        return (mLoadingView != null || mLoadingLayoutId != 0) && getRealItemCount() == 0;
-    }
-
-    public void setLoadingView(View emptyView) {
-        mLoadingView = emptyView;
-    }
-
-    public void setLoadingView(int layoutId) {
-        mLoadingLayoutId = layoutId;
+        return !isLoaded && showLoading && isEmpty();
     }
 
     public void setLoaded() {
         isLoaded = true;
     }
     // Loading adapter end-----------------------------------------
-
-    public interface LoadMoreListener {
-        void loadMore();
-    }
 }

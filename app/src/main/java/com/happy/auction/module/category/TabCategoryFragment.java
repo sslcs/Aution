@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
-import com.happy.auction.adapter.AdapterWrapper;
+import com.happy.auction.adapter.LoadMoreListener;
+import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.adapter.SpaceDecoration;
-import com.happy.auction.base.BaseAdapter;
 import com.happy.auction.databinding.FragmentTabCategoryBinding;
 import com.happy.auction.entity.item.ItemCategory;
 import com.happy.auction.entity.item.ItemGoods;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 public class TabCategoryFragment extends Fragment {
     private FragmentTabCategoryBinding binding;
     private CategoryAdapter adapterCategory;
-    private AdapterWrapper<CategoryGoodsAdapter> adapter;
+    private CategoryGoodsAdapter adapterGoods;
     private int currentIndex;
     private ItemCategory currentCategory;
 
@@ -54,7 +54,7 @@ public class TabCategoryFragment extends Fragment {
 
     private void initLayout() {
         adapterCategory = new CategoryAdapter();
-        adapterCategory.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+        adapterCategory.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 if (position == adapterCategory.getSelectedPosition()) return;
@@ -68,23 +68,22 @@ public class TabCategoryFragment extends Fragment {
         binding.vCategory.setAdapter(adapterCategory);
         binding.vCategory.addItemDecoration(new SpaceDecoration());
 
-        final CategoryGoodsAdapter inner = new CategoryGoodsAdapter();
-        inner.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+        adapterGoods = new CategoryGoodsAdapter();
+        adapterGoods.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ItemGoods item = inner.getItem(position);
+                ItemGoods item = adapterGoods.getItem(position);
                 startActivity(AuctionDetailActivity.newIntent(item));
             }
         });
-        adapter = new AdapterWrapper<>(inner);
-        adapter.setLoadMoreListener(new AdapterWrapper.LoadMoreListener() {
+        adapterGoods.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 loadData(currentIndex);
             }
         });
         binding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.vList.setAdapter(adapter);
+        binding.vList.setAdapter(adapterGoods);
         binding.vList.addItemDecoration(new SpaceDecoration());
 
         loadCategory();
@@ -115,17 +114,17 @@ public class TabCategoryFragment extends Fragment {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.setLoaded();
+                adapterGoods.setLoaded();
                 Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
                 DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
-                if (currentIndex == 0) adapter.getInnerAdapter().clear();
+                if (currentIndex == 0) adapterGoods.clear();
 
                 int size = 0;
                 if (obj.data.goods != null) {
                     size = obj.data.goods.size();
-                    adapter.getInnerAdapter().addAll(obj.data.goods);
+                    adapterGoods.addAll(obj.data.goods);
                 }
-                adapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                adapterGoods.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
                 currentIndex += size;
             }
         });
