@@ -21,7 +21,7 @@ import java.util.List;
  * 处理接收到的消息
  */
 
-public class MessagePresenter {
+public class MessageHandler {
     private final List<NetCallback> handlers = Collections.synchronizedList(new ArrayList<NetCallback>());
 
     public void addHandler(NetCallback handler) {

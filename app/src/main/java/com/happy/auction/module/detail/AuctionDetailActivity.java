@@ -170,9 +170,19 @@ public class AuctionDetailActivity extends BaseActivity {
                 binding.tvAuctionStatus.setRepeat(false);
 
                 BidRecord record = new BidRecord(event);
-                if (!TextUtils.isEmpty(record.uid)) {
-                    binding.setNewBid(record);
-                    adapter.addItem(record);
+                if (TextUtils.isEmpty(record.uid)) return;
+                binding.setNewBid(record);
+                adapter.addItem(record);
+
+                if (!record.uid.equals(AppInstance.getInstance().uid)) return;
+                if (auctionCoin.current_bid_coins > 0) {
+                    int progress = auctionCoin.current_bidden_coins + 1;
+                    if (progress == auctionCoin.current_bid_coins) {
+                        auctionCoin.setCurrentProgress(0);
+                        auctionCoin.setCurrentCoin(0);
+                    } else {
+                        auctionCoin.setCurrentProgress(progress);
+                    }
                 }
             }
         });
@@ -183,6 +193,7 @@ public class AuctionDetailActivity extends BaseActivity {
                 if (event.sid != auctionDetail.sid) return;
                 auctionDetail.setStatus(0);
                 binding.tvAuctionStatus.finish();
+                loadAuctionCoin();
             }
         });
     }
@@ -215,6 +226,7 @@ public class AuctionDetailActivity extends BaseActivity {
                 DataResponse<AuctionDetail> obj = GsonSingleton.get().fromJson(response, type);
                 auctionDetail = obj.data;
                 initData();
+                loadAuctionCoin();
             }
         });
     }
@@ -251,7 +263,13 @@ public class AuctionDetailActivity extends BaseActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                if (param.buy > 1) {
+                if (AppInstance.getInstance().getUser().free_coin >= param.buy) {
+                    auctionCoin.setBidGiftCoin(auctionCoin.bid_gift_coin + param.buy);
+                    if (param.buy > 1) {
+                        auctionCoin.setCurrentProgress(0);
+                        auctionCoin.setCurrentCoin(param.buy);
+                    }
+                } else {
                     loadAuctionCoin();
                 }
             }
@@ -341,7 +359,6 @@ public class AuctionDetailActivity extends BaseActivity {
                     indexPrevious += size;
                 }
                 adapterPrevious.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
-                adapterPrevious.notifyDataSetChanged();
             }
         });
     }

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WebSocket client = null;
 
-    private MessagePresenter messagePresenter;
+    private MessageHandler messageHandler;
     private boolean isDestroyed = false;
     private long lastBackPressedTime;
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        messagePresenter = new MessagePresenter();
+        messageHandler = new MessageHandler();
         RxBus.getDefault().subscribe(this, RequestEvent.class, new Consumer<RequestEvent>() {
             @Override
             public void accept(RequestEvent requestEvent) throws Exception {
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        messagePresenter.handle(message);
+                        messageHandler.handle(message);
                     }
                 });
             }
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendMessage(RequestEvent event) {
         if (client == null) return;
         DebugLog.e("sendMessage: " + event.message);
-        messagePresenter.addHandler(event.callback);
+        messageHandler.addHandler(event.callback);
         client.send(event.message);
     }
 

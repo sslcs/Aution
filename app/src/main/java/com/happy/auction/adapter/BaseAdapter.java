@@ -36,7 +36,7 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
     }
 
     public T getItem(int position) {
-        if (data == null || position >= data.size()) return null;
+        if (data == null || position >= data.size() || position < 0) return null;
         return data.get(position);
     }
 
@@ -45,10 +45,9 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
         return data.indexOf(item);
     }
 
-    public void refresh(int position, T item) {
-        if (data == null || data.isEmpty() || position >= data.size()) return;
-        data.remove(position);
-        data.add(position, item);
+    public T getLast() {
+        if (data == null) return null;
+        return getItem(data.size() - 1);
     }
 
     @Override

@@ -73,9 +73,8 @@ public class OrderFragment extends BaseFragment {
         adapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
-                int count = adapter.getItemCount();
-                ItemOrder item = adapter.getItem(count - 1);
-                loadData(item.pid);
+                ItemOrder item = adapter.getLast();
+                if (item != null) loadData(item.pid);
             }
         });
         binding.vList.setAdapter(adapter);

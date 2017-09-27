@@ -83,7 +83,7 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
 
     @Override
     public void onBindViewHolder(CustomViewHolder<B> holder, int position) {
-        if (isShowEmpty()) {
+        if (isShowEmpty() || isShowLoading()) {
             return;
         }
 
@@ -99,6 +99,7 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+
         WrapperUtils.onAttachedToRecyclerView(recyclerView, new WrapperUtils.SpanSizeCallback() {
             @Override
             public int getSpanSize(GridLayoutManager layoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position) {
@@ -136,14 +137,10 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
         return getRealCount() + (hasLoadMore() ? 1 : 0);
     }
 
-    // Empty adapter begin-----------------------------------------
     private boolean isShowEmpty() {
-        return isLoaded && showEmpty && isEmpty();
+        return isEmpty() && isLoaded && showEmpty;
     }
 
-    // Empty adapter end-----------------------------------------
-
-    // LoadMore adapter begin-----------------------------------------
     public void setHasMore(boolean hasMore) {
         this.hasMore = hasMore;
         notifyDataSetChanged();
@@ -158,20 +155,14 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
     }
 
     public void setLoadMoreListener(LoadMoreListener listener) {
-        if (listener != null) {
-            mLoadMoreListener = listener;
-        }
+        mLoadMoreListener = listener;
     }
 
-    // LoadMore adapter end-----------------------------------------
-
-    // Loading adapter begin-----------------------------------------
     private boolean isShowLoading() {
-        return !isLoaded && showLoading && isEmpty();
+        return isEmpty() && !isLoaded && showLoading;
     }
 
     public void setLoaded() {
         isLoaded = true;
     }
-    // Loading adapter end-----------------------------------------
 }
