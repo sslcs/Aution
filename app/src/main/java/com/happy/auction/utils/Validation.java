@@ -11,13 +11,13 @@ public class Validation {
     /**
      * 匹配手机号码
      */
-    private static final Pattern PHONE = Pattern.compile("(^(13|15|18|14|17)[0-9]{9}$)");
+    private static final Pattern PHONE = Pattern.compile("(^(13|15|18|14|17|19)\\d{9}$)");
 
 
     /**
      * 密码必须是6～18位数字或字母组成 <br/>
      */
-    private static final Pattern PASSWORD = Pattern.compile("^[A-Za-z0-9!@#$%^&*]{6,18}$");
+    private static final Pattern PASSWORD = Pattern.compile("^[\\w!@#$%^&*]{6,18}$");
 
     /**
      * 匹配手机号码

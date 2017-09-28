@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
-import com.happy.auction.adapter.SpaceDecoration;
+import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.databinding.FragmentTabLatestBinding;
 import com.happy.auction.entity.item.ItemLatest;
 import com.happy.auction.entity.param.BaseParam;
@@ -49,7 +49,7 @@ public class TabLatestFragment extends Fragment {
 
     private void initLayout() {
         binding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.vList.addItemDecoration(new SpaceDecoration());
+        binding.vList.addItemDecoration(new DecorationSpace());
         adapter = new TabLatestAdapter();
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

@@ -26,7 +26,7 @@ public class MessageHandler {
 
     public void addHandler(NetCallback handler) {
         if (handler == null) return;
-        handlers.add(handler);
+        handlers.add(0, handler);
     }
 
     public void handle(String message) {
@@ -49,24 +49,24 @@ public class MessageHandler {
         }
     }
 
-    private void handleResponse(BaseResponse base, String response) {
-        synchronized (handlers) {
-            if (handlers.isEmpty()) return;
-            if (base.isSuccess()) {
-                for (int i = handlers.size() - 1; i >= 0; i--) {
-                    NetCallback handler = handlers.get(i);
-                    if (base.event.equals(handler.action)) {
-                        handler.onSuccess(response, base.msg);
-                        handlers.remove(i);
-                    }
+    private synchronized void handleResponse(BaseResponse base, String response) {
+        if (handlers.isEmpty()) return;
+        if (base.isSuccess()) {
+            for (int i = handlers.size() - 1; i >= 0; i--) {
+                NetCallback handler = handlers.get(i);
+                if (handler.tag.equals(base.tag)) {
+                    handler.onSuccess(response, base.msg);
+                    handlers.remove(i);
+                    break;
                 }
-            } else {
-                for (int i = handlers.size() - 1; i >= 0; i--) {
-                    NetCallback handler = handlers.get(i);
-                    if (base.event.equals(handler.action)) {
-                        handler.onError(base.code, base.msg);
-                        handlers.remove(i);
-                    }
+            }
+        } else {
+            for (int i = handlers.size() - 1; i >= 0; i--) {
+                NetCallback handler = handlers.get(i);
+                if (handler.tag.equals(base.tag)) {
+                    handler.onError(base.code, base.msg);
+                    handlers.remove(i);
+                    break;
                 }
             }
         }
@@ -74,5 +74,9 @@ public class MessageHandler {
 
     private <T> void onEvent(T data) {
         RxBus.getDefault().post(data);
+    }
+
+    public void clear() {
+        handlers.clear();
     }
 }

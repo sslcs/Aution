@@ -31,8 +31,8 @@ public class BalanceActivity extends BaseActivity {
         binding.tvToolbarTitle.setText(R.string.account_balance);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.add(AuctionCoinFragment.newInstance());
-        adapter.add(FreeCoinFragment.newInstance());
+        adapter.add(CoinFragment.newInstance(CoinFragment.TYPE_COIN));
+        adapter.add(CoinFragment.newInstance(CoinFragment.TYPE_FREE));
         adapter.setTitles(new String[]{getString(R.string.auction_coin), getString(R.string.free_coin)});
         binding.viewPager.setAdapter(adapter);
         binding.tabLayout.setupWithViewPager(binding.viewPager);

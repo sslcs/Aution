@@ -44,31 +44,30 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="佳能 Canon EOS 高配佳能 Canon EOS 高配佳能 Canon EOS 高配佳能 Canon EOS 高配"/>
 
+        <com.happy.auction.ui.CountDownHome
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:textColor="@{data.status != 0 ? @color/main_red : @color/text_normal}"
+            android:textSize="19sp"
+            app:layout_constraintLeft_toRightOf="@+id/iv_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            tools:text="00:00:10"/>
+
         <TextView
             android:id="@+id/tv_current_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
             android:text='@{StringUtil.formatSignMoney(data.current_price)}'
             android:textColor="@color/main_red"
-            android:textSize="17sp"
-            app:layout_constraintLeft_toRightOf="@+id/iv_icon"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            tools:text="￥8888.88"/>
-
-        <TextView
-            android:id="@+id/tv_market_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:layout_marginTop="5dp"
-            android:text='@{@string/category_market_price(StringUtil.formatMoney(data.market_price))}'
-            android:textColor="@color/text_light"
-            android:textSize="11sp"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/iv_icon"
-            app:layout_constraintTop_toBottomOf="@+id/tv_current_price"
-            tools:text="@string/category_market_price"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_time"
+            tools:text="￥8888.88"/>
 
         <Button
             android:id="@+id/btn_bid"

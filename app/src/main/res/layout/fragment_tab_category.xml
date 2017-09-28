@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/tv_toolbar_title"
             android:layout_marginRight="8dp"
+            android:background="@android:color/white"
             app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/item_category"/>
         <android.support.v7.widget.RecyclerView
@@ -25,6 +26,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/tv_toolbar_title"
             android:layout_toRightOf="@+id/v_category"
+            android:background="@android:color/white"
             app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/item_category_goods"/>
     </RelativeLayout>

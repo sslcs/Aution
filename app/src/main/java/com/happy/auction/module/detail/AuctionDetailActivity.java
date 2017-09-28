@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -16,13 +17,14 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.LoadMoreListener;
-import com.happy.auction.adapter.SpaceDecoration;
+import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityAuctionDetailBinding;
 import com.happy.auction.entity.event.AuctionEndEvent;
 import com.happy.auction.entity.event.BidEvent;
 import com.happy.auction.entity.item.BaseGoods;
 import com.happy.auction.entity.item.BidRecord;
+import com.happy.auction.entity.item.ItemBask;
 import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.entity.item.ItemPrevious;
 import com.happy.auction.entity.param.AuctionCancelParam;
@@ -31,6 +33,7 @@ import com.happy.auction.entity.param.AuctionDetailParam;
 import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.BidParam;
+import com.happy.auction.entity.param.DetailBaskParam;
 import com.happy.auction.entity.param.PreviousParam;
 import com.happy.auction.entity.response.AuctionCoin;
 import com.happy.auction.entity.response.AuctionDetail;
@@ -60,7 +63,9 @@ public class AuctionDetailActivity extends BaseActivity {
     private AuctionCoin auctionCoin;
 
     private int indexPrevious = 0;
+    private int indexBask = 0;
     private PreviousAdapter adapterPrevious;
+    private BaskAdapter adapterBask;
 
     public static Intent newIntent(BaseGoods goods) {
         Intent intent = new Intent(AppInstance.getInstance(), AuctionDetailActivity.class);
@@ -88,7 +93,7 @@ public class AuctionDetailActivity extends BaseActivity {
 
         adapter = new AuctionDetailBidAdapter();
         binding.listRecord.setAdapter(adapter);
-        SpaceDecoration decoration = new SpaceDecoration();
+        DecorationSpace decoration = new DecorationSpace();
         decoration.enableHeader();
         binding.listRecord.addItemDecoration(decoration);
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -98,7 +103,14 @@ public class AuctionDetailActivity extends BaseActivity {
         adapterPrevious.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
-                loadPrevious(indexPrevious);
+                loadPrevious();
+            }
+        });
+        adapterBask = new BaskAdapter();
+        adapterBask.setLoadMoreListener(new LoadMoreListener() {
+            @Override
+            public void loadMore() {
+                loadBask();
             }
         });
         binding.vList.addItemDecoration(decoration);
@@ -110,6 +122,33 @@ public class AuctionDetailActivity extends BaseActivity {
         } else {
             auctionDetail = new AuctionDetail(goods);
         }
+
+        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 1) {
+                    binding.vList.setAdapter(adapterBask);
+                    if (adapterBask.isEmpty()) {
+                        loadBask();
+                    }
+                } else {
+                    binding.vList.setAdapter(adapterPrevious);
+                    if (adapterPrevious.isEmpty()) {
+                        loadPrevious();
+                    }
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         initData();
         listenEvents();
@@ -209,8 +248,7 @@ public class AuctionDetailActivity extends BaseActivity {
                 DataResponse<AuctionDetail> obj = GsonSingleton.get().fromJson(response, type);
                 auctionDetail = obj.data;
                 initData();
-
-                loadPrevious(0);
+                loadPrevious();
             }
         });
     }
@@ -334,17 +372,17 @@ public class AuctionDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(String response, String message) {
                 auctionCoin.setCurrentCoin(0);
+                loadAuctionCoin();
             }
         });
     }
 
     public void onClickAutoBid(View view) {}
 
-    private void loadPrevious(int index) {
-        indexPrevious = index;
+    private void loadPrevious() {
         PreviousParam param = new PreviousParam();
         param.gid = auctionDetail.gid;
-        param.start = index;
+        param.start = indexPrevious;
         BaseRequest<PreviousParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
@@ -359,6 +397,28 @@ public class AuctionDetailActivity extends BaseActivity {
                     indexPrevious += size;
                 }
                 adapterPrevious.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+            }
+        });
+    }
+
+    private void loadBask() {
+        DetailBaskParam param = new DetailBaskParam();
+        param.gid = auctionDetail.gid;
+        param.start = indexBask;
+        BaseRequest<DetailBaskParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                adapterBask.setLoaded();
+                Type type = new TypeToken<DataResponse<ArrayList<ItemBask>>>() {}.getType();
+                DataResponse<ArrayList<ItemBask>> obj = GsonSingleton.get().fromJson(response, type);
+                int size = 0;
+                if (obj.data != null && !obj.data.isEmpty()) {
+                    adapterBask.addAll(obj.data);
+                    size = obj.data.size();
+                    indexBask += size;
+                }
+                adapterBask.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
             }
         });
     }

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
-import com.happy.auction.adapter.SpaceDecoration;
+import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentListBinding;
 import com.happy.auction.entity.item.ItemOrder;
@@ -59,7 +59,7 @@ public class OrderFragment extends BaseFragment {
 
     private void initLayout() {
         binding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        SpaceDecoration decoration = new SpaceDecoration(5);
+        DecorationSpace decoration = new DecorationSpace(5);
         decoration.enableHeader();
         binding.vList.addItemDecoration(decoration);
         adapter = new OrderAdapter();

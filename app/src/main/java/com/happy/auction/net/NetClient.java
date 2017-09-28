@@ -12,6 +12,7 @@ import com.happy.auction.utils.RxBus;
 public class NetClient {
     public static void query(BaseRequest request, NetCallback callback) {
         callback.action = request.action;
+        callback.tag = request.tag;
         RxBus.getDefault().post(new RequestEvent(request, callback));
     }
 

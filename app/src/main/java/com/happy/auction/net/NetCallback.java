@@ -7,6 +7,7 @@ package com.happy.auction.net;
 
 public abstract class NetCallback {
     public String action;
+    public String tag;
 
     public void onError(int code, String message) { }
 

@@ -3,6 +3,7 @@ package com.happy.auction.module.home;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.happy.auction.AppInstance;
@@ -32,8 +33,14 @@ public class TabHomeAdapter extends BaseCustomAdapter<ItemGoods, ItemGoodsBindin
     }
 
     @Override
-    public void bindItem(ItemGoodsBinding binding, ItemGoods item, int position) {
+    public void bindItem(final ItemGoodsBinding binding, ItemGoods item, int position) {
         binding.setGoods(item);
+        binding.btnBid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.getRoot().performClick();
+            }
+        });
         String tag = (String) binding.ivPic.getTag(binding.ivPic.getId());
         if (!item.icon.equals(tag)) {
             binding.ivPic.setTag(binding.ivPic.getId(), item.icon);

@@ -58,4 +58,8 @@ public class AppInstance extends Application {
         PreferenceUtil.setUid(uid);
         PreferenceUtil.setToken(token);
     }
+
+    public int getResColor(int resId) {
+        return getResources().getColor(resId);
+    }
 }

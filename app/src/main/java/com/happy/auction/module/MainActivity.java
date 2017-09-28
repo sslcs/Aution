@@ -11,11 +11,11 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.ViewPagerAdapter;
 import com.happy.auction.databinding.ActivityMainBinding;
-import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.event.RequestEvent;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.SyncParam;
 import com.happy.auction.entity.param.UserInfoParam;
+import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.category.TabCategoryFragment;
@@ -44,11 +44,9 @@ import okhttp3.WebSocketListener;
  * 主界面
  */
 public class MainActivity extends AppCompatActivity {
+    private final MessageHandler messageHandler = new MessageHandler();
     private ActivityMainBinding binding;
-
     private WebSocket client = null;
-
-    private MessageHandler messageHandler;
     private boolean isDestroyed = false;
     private long lastBackPressedTime;
 
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        messageHandler = new MessageHandler();
         RxBus.getDefault().subscribe(this, RequestEvent.class, new Consumer<RequestEvent>() {
             @Override
             public void accept(RequestEvent requestEvent) throws Exception {
@@ -141,10 +138,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
                 super.onFailure(webSocket, t, response);
                 DebugLog.e("onFailure");
-                t.printStackTrace();
-                if (response != null) {
-                    DebugLog.e("onFailure : " + response.message());
-                }
+                messageHandler.clear();
                 if (isDestroyed) return;
                 Observable.timer(3, TimeUnit.SECONDS)
                         .subscribe(new Consumer<Long>() {
