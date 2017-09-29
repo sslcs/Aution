@@ -1,5 +1,6 @@
 package com.happy.auction.module.me;
 
+import android.app.ActivityOptions;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -7,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
+import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
-import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentListBinding;
 import com.happy.auction.entity.item.ItemOrder;
@@ -63,6 +64,16 @@ public class OrderFragment extends BaseFragment {
         decoration.enableHeader();
         binding.vList.addItemDecoration(decoration);
         adapter = new OrderAdapter();
+        adapter.setOnButtonClickListener(new OrderAdapter.OnButtonClickListener() {
+            @Override
+            public void go(View view, ItemOrder item) {
+                Bundle bundle = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, "v_info").toBundle();
+                }
+                startActivity(OrderDetailActivity.newIntent(item),bundle);
+            }
+        });
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

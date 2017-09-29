@@ -31,6 +31,8 @@
         <activity android:name=".module.me.BalanceActivity">
         </activity>
         <activity android:name=".module.me.OrderActivity"/>
+        <activity android:name=".module.detail.BidRecordActivity"/>
+        <activity android:name=".module.me.OrderDetailActivity"/>
     </application>
 
 </manifest>

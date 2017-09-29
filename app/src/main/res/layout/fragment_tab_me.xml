@@ -101,34 +101,31 @@
                 android:id="@+id/tv_auction_coin"
                 style="@style/TabMeTextCoin"
                 android:onClick="@{fragment.onClickAuctionCoin}"
-                android:text="@{@string/auction_coin_formatter(user == null ? 0 : user.auction_coin)}"
+                android:text="@{fragment.getAuctionCoin(user)}"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_info"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/divider25"
                 app:layout_constraintTop_toTopOf="@+id/bg_info"
-                app:spanLength="@{2}"
                 tools:text="@string/auction_coin_formatter"/>
             <TextView
                 android:id="@+id/tv_free_coin"
                 style="@style/TabMeTextCoin"
                 android:onClick="@{fragment.onClickFreeCoin}"
-                android:text="@{@string/free_coin_formatter(user == null ? 0 : user.free_coin)}"
+                android:text="@{fragment.getFreeCoin(user)}"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_info"
                 app:layout_constraintLeft_toLeftOf="@+id/divider25"
                 app:layout_constraintRight_toLeftOf="@+id/divider50"
                 app:layout_constraintTop_toTopOf="@+id/bg_info"
-                app:spanLength="@{2}"
                 tools:text="@string/free_coin_formatter"/>
             <TextView
                 android:id="@+id/tv_point"
                 style="@style/TabMeTextCoin"
                 android:onClick="@{fragment.onClickPoint}"
-                android:text="@{@string/point(user == null ? 0 : user.points)}"
+                android:text="@{fragment.getPoint(user)}"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_info"
                 app:layout_constraintLeft_toLeftOf="@+id/divider50"
                 app:layout_constraintRight_toLeftOf="@+id/divider75"
                 app:layout_constraintTop_toTopOf="@+id/bg_info"
-                app:spanLength="@{2}"
                 tools:text="@string/point"/>
 
             <ImageView

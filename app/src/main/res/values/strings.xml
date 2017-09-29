@@ -61,12 +61,12 @@
     <string name="auction_coin">拍币</string>
     <string name="free_coin">赠币</string>
 
-    <!-- record -->
-    <string name="record">订单记录</string>
-    <string name="record_all">全部</string>
-    <string name="record_going">正在拍</string>
-    <string name="record_win">已拍中</string>
-    <string name="record_unpaid">未付款</string>
+    <!-- order -->
+    <string name="order">订单记录</string>
+    <string name="order_all">全部</string>
+    <string name="order_going">正在拍</string>
+    <string name="order_win">已拍中</string>
+    <string name="order_unpaid">未付款</string>
     <string name="charge">充值</string>
     <string name="balance_formatter">拍币余额：%1$d</string>
     <string name="free_balance_formatter">赠币余额：%1$d</string>
@@ -75,14 +75,18 @@
     <string name="format_deal_price">成交价：￥%1$s</string>
     <string name="format_deal_time">成交时间：%1$s</string>
     <string name="format_bid_times">我已出价：%1$d次（退币%2$d）</string>
-    <string name="format_title">(第%1$d期)　%2$s</string>
+    <string name="format_title">(第%1$d期) %2$s</string>
     <string name="hot_going">火热竞拍中……</string>
+
+    <!-- order detail -->
+    <string name="order_detail">订单详情</string>
 
     <!-- detail -->
     <string name="auction_detail">竞拍详情</string>
     <string name="no_person">暂无出价人</string>
     <string name="price_start">起拍价</string>
     <string name="price_step">加价幅度</string>
+    <string name="more_record"><![CDATA[查看更多出价记录 >]]></string>
     <string name="auction_rules"><![CDATA[竞拍规则 >]]></string>
     <string name="fee">手续费</string>
     <string name="format_fee">%1$d币/次</string>
@@ -96,6 +100,7 @@
     <string name="format_market_price">(市场价: ￥%1$s)</string>
     <string name="format_current_price">当前价: ￥%1$s</string>
     <string name="bid_out">出局</string>
+    <string name="bid_first">领先</string>
     <string name="detail_btn_bid">出价\n（%1$d拍币/次）</string>
     <string name="detail_btn_go_latest">前往最新一期</string>
     <string name="detail_btn_cancel">取消剩余出价</string>

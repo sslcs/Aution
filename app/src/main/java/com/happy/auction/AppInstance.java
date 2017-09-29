@@ -4,6 +4,7 @@ import android.app.Application;
 import android.text.TextUtils;
 
 import com.happy.auction.entity.response.LoginResponse;
+import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.utils.PreferenceUtil;
 
@@ -40,6 +41,12 @@ public class AppInstance extends Application {
 
     public void setUser(UserInfo user) {
         this.user = user;
+    }
+
+    public void setBalance(UserBalance data) {
+        if (user == null) return;
+        user.free_coin = data.free_coin;
+        user.auction_coin = data.auction_coin;
     }
 
     public boolean isLogin() {

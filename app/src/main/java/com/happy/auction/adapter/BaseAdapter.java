@@ -25,6 +25,7 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
     public void clear() {
         if (data == null) return;
         data.clear();
+        notifyDataSetChanged();
     }
 
     public void addAll(List<T> items) {

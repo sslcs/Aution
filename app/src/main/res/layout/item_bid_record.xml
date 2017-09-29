@@ -34,6 +34,7 @@
             android:paddingLeft="5dp"
             android:singleLine="true"
             android:text="@{data.username}"
+            android:textColor="@color/text_normal"
             tools:text="用户名名名"/>
 
         <TextView
@@ -45,7 +46,8 @@
             android:layout_toRightOf="@+id/tv_username"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="@{data.ip_address}"/>
+            android:text="@{data.ip_address}"
+            android:textColor="@color/text_normal"/>
 
         <TextView
             android:id="@+id/tv_status"
@@ -54,7 +56,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/tv_address"
-            android:text="@string/bid_out"/>
+            android:text="@string/bid_out"
+            android:textColor="@color/text_normal"/>
 
         <TextView
             android:id="@+id/tv_price"

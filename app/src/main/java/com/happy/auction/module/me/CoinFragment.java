@@ -22,6 +22,7 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.CoinParam;
 import com.happy.auction.entity.response.CoinResponse;
 import com.happy.auction.entity.response.DataResponse;
+import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.DebugLog;
@@ -107,6 +108,12 @@ public class CoinFragment extends BaseFragment {
                 adapter.setLoaded();
                 Type type = new TypeToken<DataResponse<CoinResponse>>() {}.getType();
                 DataResponse<CoinResponse> obj = GsonSingleton.get().fromJson(response, type);
+
+                UserInfo info = AppInstance.getInstance().getUser();
+                info.free_coin = obj.data.gift_coin;
+                info.auction_coin = obj.data.coin;
+                AppInstance.getInstance().setUser(info);
+
                 int size = 0;
                 if (index == 0) adapter.clear();
                 if (obj.data != null && obj.data.records != null) {

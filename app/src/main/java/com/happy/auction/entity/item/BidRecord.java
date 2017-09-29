@@ -9,6 +9,7 @@ import com.happy.auction.entity.event.BidEvent;
  */
 
 public class BidRecord {
+    public int bid;
     /**
      * 用户id
      */

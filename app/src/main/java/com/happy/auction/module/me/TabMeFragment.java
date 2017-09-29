@@ -1,9 +1,7 @@
 package com.happy.auction.module.me;
 
 import android.content.Intent;
-import android.databinding.BindingAdapter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -11,22 +9,32 @@ import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
+import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentTabMeBinding;
+import com.happy.auction.entity.param.BalanceParam;
+import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.response.DataResponse;
+import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.login.LoginActivity;
+import com.happy.auction.net.NetCallback;
+import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.DebugLog;
+import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
+
+import java.lang.reflect.Type;
 
 import io.reactivex.functions.Consumer;
 
 /**
  * 个人中心
  */
-public class TabMeFragment extends Fragment {
+public class TabMeFragment extends BaseFragment {
     private FragmentTabMeBinding binding;
 
     public TabMeFragment() {}
@@ -35,18 +43,32 @@ public class TabMeFragment extends Fragment {
         return new TabMeFragment();
     }
 
-    @BindingAdapter("spanLength")
-    public static void setSpannable(View v, int spanLength) {
-        final String itemText = ((TextView) v).getText().toString();
-        final SpannableString sString = new SpannableString(itemText);
-
-        sString.setSpan(new RelativeSizeSpan(0.765f), itemText.length() - spanLength, itemText.length(),
+    private SpannableString getSpannable(String text, int spanLength) {
+        final SpannableString ss = new SpannableString(text);
+        ss.setSpan(new RelativeSizeSpan(0.765f), text.length() - spanLength, text.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        final int color = v.getContext().getResources().getColor(R.color.text_normal);
-        sString.setSpan(new ForegroundColorSpan(color), itemText.length() - spanLength, itemText.length(),
+        final int color = getResources().getColor(R.color.text_normal);
+        ss.setSpan(new ForegroundColorSpan(color), text.length() - spanLength, text.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return ss;
+    }
 
-        ((TextView) v).setText(sString);
+    public SpannableString getFreeCoin(UserInfo user) {
+        int number = user == null ? 0 : user.free_coin;
+        String text = getString(R.string.free_coin_formatter, number);
+        return getSpannable(text, 2);
+    }
+
+    public SpannableString getAuctionCoin(UserInfo user) {
+        int number = user == null ? 0 : user.auction_coin;
+        String text = getString(R.string.auction_coin_formatter, number);
+        return getSpannable(text, 2);
+    }
+
+    public SpannableString getPoint(UserInfo user) {
+        int number = user == null ? 0 : user.points;
+        String text = getString(R.string.point, number);
+        return getSpannable(text, 2);
     }
 
     @Override
@@ -151,5 +173,30 @@ public class TabMeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         RxBus.getDefault().unsubscribe(this);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getBalance();
+        }
+    }
+
+    private void getBalance() {
+        BalanceParam data = new BalanceParam();
+        BaseRequest<BalanceParam> request = new BaseRequest<>(data);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<UserBalance>>() {}.getType();
+                DataResponse<UserBalance> obj = GsonSingleton.get().fromJson(response, type);
+                if (obj.data == null) return;
+                AppInstance.getInstance().setBalance(obj.data);
+                if (binding != null) {
+                    binding.setUser(AppInstance.getInstance().getUser());
+                }
+            }
+        });
     }
 }

@@ -32,6 +32,7 @@ public class MessageHandler {
     public void handle(String message) {
         Type type = new TypeToken<BaseResponse>() {}.getType();
         BaseResponse base = GsonSingleton.get().fromJson(message, type);
+        if(base==null) return;
 
         if (BaseEvent.EVENT_BID.equals(base.event)) {
 //            DebugLog.e("onBid : " + message);

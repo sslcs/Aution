@@ -13,10 +13,12 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/v_info"
+        android:transitionName="v_info"
         android:background="@android:color/white"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
-        <ImageView
+        <View
             android:id="@+id/bg_img"
             android:layout_width="118dp"
             android:layout_height="120dp"
@@ -105,10 +107,10 @@
             app:layout_constraintStart_toEndOf="@+id/bg_img"
             app:layout_constraintTop_toBottomOf="@+id/tv_deal_time"/>
 
-        <TextView
+        <Button
             android:id="@+id/btn_go"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:background="@drawable/bg_circle"
             android:gravity="center"
             android:padding="3dp"

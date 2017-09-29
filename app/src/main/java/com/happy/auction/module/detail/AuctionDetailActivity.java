@@ -16,8 +16,8 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.DecorationSpace;
+import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityAuctionDetailBinding;
 import com.happy.auction.entity.event.AuctionEndEvent;
@@ -30,6 +30,7 @@ import com.happy.auction.entity.item.ItemPrevious;
 import com.happy.auction.entity.param.AuctionCancelParam;
 import com.happy.auction.entity.param.AuctionCoinParam;
 import com.happy.auction.entity.param.AuctionDetailParam;
+import com.happy.auction.entity.param.BalanceParam;
 import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.BidParam;
@@ -38,6 +39,7 @@ import com.happy.auction.entity.param.PreviousParam;
 import com.happy.auction.entity.response.AuctionCoin;
 import com.happy.auction.entity.response.AuctionDetail;
 import com.happy.auction.entity.response.DataResponse;
+import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
@@ -196,7 +198,12 @@ public class AuctionDetailActivity extends BaseActivity {
         if (auctionDetail.bid_records != null && !auctionDetail.bid_records.isEmpty()) {
             adapter.addAll(auctionDetail.bid_records);
             binding.setNewBid(auctionDetail.bid_records.get(0));
+            setBtnMoreVisibility();
         }
+    }
+
+    private void setBtnMoreVisibility() {
+        binding.tvMore.setVisibility(adapter.getRealCount() > 3 ? View.VISIBLE : View.GONE);
     }
 
     private void listenEvents() {
@@ -210,8 +217,9 @@ public class AuctionDetailActivity extends BaseActivity {
 
                 BidRecord record = new BidRecord(event);
                 if (TextUtils.isEmpty(record.uid)) return;
-                binding.setNewBid(record);
                 adapter.addItem(record);
+                binding.setNewBid(record);
+                setBtnMoreVisibility();
 
                 if (!record.uid.equals(AppInstance.getInstance().uid)) return;
                 if (auctionCoin.current_bid_coins > 0) {
@@ -293,6 +301,10 @@ public class AuctionDetailActivity extends BaseActivity {
 
         if (times.get() == 0) times.set(1);
 
+        getBalance();
+    }
+
+    private void bid() {
         final BidParam param = new BidParam();
         param.sid = auctionDetail.sid;
         param.buy = times.get();
@@ -320,10 +332,12 @@ public class AuctionDetailActivity extends BaseActivity {
         });
     }
 
+
     public void onClickNext(View view) {
         adapter.clear();
         binding.setCoin(null);
         binding.setNewBid(null);
+        setBtnMoreVisibility();
         loadLatest();
     }
 
@@ -419,6 +433,26 @@ public class AuctionDetailActivity extends BaseActivity {
                     indexBask += size;
                 }
                 adapterBask.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+            }
+        });
+    }
+
+    public void onClickMore(View view) {
+        startActivity(BidRecordActivity.newIntent(auctionDetail.sid, auctionDetail.status));
+    }
+
+    private void getBalance() {
+        BalanceParam data = new BalanceParam();
+        BaseRequest<BalanceParam> request = new BaseRequest<>(data);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<UserBalance>>() {}.getType();
+                DataResponse<UserBalance> obj = GsonSingleton.get().fromJson(response, type);
+                if (obj.data != null) {
+                    AppInstance.getInstance().setBalance(obj.data);
+                }
+                bid();
             }
         });
     }

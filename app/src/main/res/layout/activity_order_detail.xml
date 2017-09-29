@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.happy.auction.utils.StringUtil"/>
+        <variable
+            name="data"
+            type="com.happy.auction.entity.item.ItemOrder"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.happy.auction.module.me.SettingActivity">
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            style="@style/TextTitle"
+            android:text="@string/order_detail"/>
+
+        <ImageView
+            style="@style/IconBack"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_toolbar_title"
+            app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/v_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:transitionName="v_info"
+            app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title">
+
+            <View
+                android:id="@+id/bg_img"
+                android:layout_width="118dp"
+                android:layout_height="120dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/iv_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:image_height="@{120}"
+                app:image_url="@{data.icon}"
+                app:image_width="@{118}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/bg_img"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/pic_default"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@{@string/format_title(data.period, data.title)}"
+                android:textColor="@color/text_normal"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_price"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bg_img"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="(第123期) 名称名称名称"/>
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@{@string/format_deal_price(StringUtil.formatMoney(data.current_price))}"
+                android:textColor="@color/main_red"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_bid_times"
+                app:layout_constraintStart_toEndOf="@+id/bg_img"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                tools:text="成交价：￥10.00"/>
+
+            <TextView
+                android:id="@+id/tv_bid_times"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@{@string/format_bid_times(data.buy, data.refund_coin)}"
+                android:textColor="@color/text_light"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_deal_time"
+                app:layout_constraintStart_toEndOf="@+id/bg_img"
+                app:layout_constraintTop_toBottomOf="@+id/tv_price"
+                tools:text="我已出价：5次（退币0）"/>
+
+            <TextView
+                android:id="@+id/tv_deal_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@{@string/format_deal_time(StringUtil.formatDateTime(data.prize_time))}"
+                android:textColor="@color/text_light"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bg_img"
+                app:layout_constraintTop_toBottomOf="@+id/tv_bid_times"
+                tools:text="成交时间：2017-09-21 17:08:46"/>
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/bg_progress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:paddingLeft="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v_info">
+            <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/text_light"
+                app:layout_constraintBottom_toTopOf="@+id/progress_3"
+                app:layout_constraintEnd_toEndOf="@+id/progress_0"
+                app:layout_constraintStart_toStartOf="@+id/progress_0"
+                app:layout_constraintTop_toBottomOf="@+id/progress_0"/>
+
+            <View
+                android:id="@+id/progress_0"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/order_progress"
+                app:layout_constraintStart_toStartOf="@+id/bg_progress"
+                app:layout_constraintTop_toTopOf="@+id/bg_progress"/>
+
+            <View
+                android:id="@+id/progress_1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/order_progress"
+                app:layout_constraintStart_toStartOf="@+id/bg_progress"
+                app:layout_constraintTop_toBottomOf="@+id/progress_0"/>
+
+            <View
+                android:id="@+id/progress_2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/order_progress"
+                app:layout_constraintStart_toStartOf="@+id/bg_progress"
+                app:layout_constraintTop_toBottomOf="@+id/progress_1"/>
+
+            <View
+                android:id="@+id/progress_3"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/order_progress"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/bg_progress"
+                app:layout_constraintTop_toBottomOf="@+id/progress_2"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</layout>

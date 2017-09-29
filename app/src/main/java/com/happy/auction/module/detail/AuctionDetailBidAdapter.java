@@ -9,7 +9,7 @@ import com.happy.auction.entity.item.BidRecord;
 
 /**
  * Created by LiuCongshan on 17-8-18.
- * 竞拍详情参与记录
+ * 竞拍详情竞拍记录
  */
 
 public class AuctionDetailBidAdapter extends BaseAdapter<BidRecord, ItemBidRecordBinding> {
@@ -20,6 +20,7 @@ public class AuctionDetailBidAdapter extends BaseAdapter<BidRecord, ItemBidRecor
 
     @Override
     public void bindItem(ItemBidRecordBinding binding, BidRecord item, int position) {
+        item = getItem(position + 1);
         binding.setData(item);
     }
 
