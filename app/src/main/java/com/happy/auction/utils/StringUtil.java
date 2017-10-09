@@ -26,6 +26,12 @@ public class StringUtil {
         return format.format(date);
     }
 
+    public static String formatTimeMinute(long timestamp) {
+        Date date = new Date(timestamp);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+        return format.format(date);
+    }
+
     public static String formatPercent(int percent) {
         float fPercent = percent / 100f;
         return String.format(Locale.CHINA, "%.2f%%", fPercent);

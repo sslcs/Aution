@@ -32,7 +32,7 @@ public class MessageHandler {
     public void handle(String message) {
         Type type = new TypeToken<BaseResponse>() {}.getType();
         BaseResponse base = GsonSingleton.get().fromJson(message, type);
-        if(base==null) return;
+        if (base == null) return;
 
         if (BaseEvent.EVENT_BID.equals(base.event)) {
 //            DebugLog.e("onBid : " + message);
@@ -57,7 +57,8 @@ public class MessageHandler {
                 NetCallback handler = handlers.get(i);
                 if (handler.tag.equals(base.tag)) {
                     handler.onSuccess(response, base.msg);
-                    handlers.remove(i);
+                    if (i < handlers.size())
+                        handlers.remove(i);
                     break;
                 }
             }
@@ -66,7 +67,8 @@ public class MessageHandler {
                 NetCallback handler = handlers.get(i);
                 if (handler.tag.equals(base.tag)) {
                     handler.onError(base.code, base.msg);
-                    handlers.remove(i);
+                    if (i < handlers.size())
+                        handlers.remove(i);
                     break;
                 }
             }

@@ -1,5 +1,7 @@
 package com.happy.auction.entity.item;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by LiuCongshan on 17-9-12.
  * 订单item
@@ -13,7 +15,8 @@ public class ItemOrder extends BaseGoods {
     /**
      * 订单号
      */
-    public String ordernum;
+    @SerializedName("ordernum")
+    public String order_num;
     /**
      * 我已出价多少次
      */

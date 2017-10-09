@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">王者竞拍</string>
+    <string name="app_name">欢乐竞拍</string>
     <string name="tip_exit">别按了，再按就退出了呀！</string>
 
     <!-- tab -->
@@ -78,10 +78,7 @@
     <string name="format_title">(第%1$d期) %2$s</string>
     <string name="hot_going">火热竞拍中……</string>
 
-    <!-- order detail -->
-    <string name="order_detail">订单详情</string>
-
-    <!-- detail -->
+    <!-- auction detail -->
     <string name="auction_detail">竞拍详情</string>
     <string name="no_person">暂无出价人</string>
     <string name="price_start">起拍价</string>
@@ -106,4 +103,18 @@
     <string name="detail_btn_cancel">取消剩余出价</string>
     <string name="auto_bid_progress">已出价 %1$d/%2$d</string>
     <string name="save">节省</string>
+
+    <!-- order detail -->
+    <string name="order_detail">订单详情</string>
+    <string name="progress_bask">已晒单</string>
+    <string name="progress_confirm">已确认领奖方式</string>
+    <string name="progress_pay">已付款</string>
+    <string name="progress_win">已拍中</string>
+    <string name="go_pay">去付款</string>
+    <string name="mail_username">收货人姓名</string>
+    <string name="phone">手机号码</string>
+    <string name="mail_address">收货地址</string>
+    <string name="mail_info">物流信息</string>
+    <string name="confirm_address">确认收货地址</string>
+    <string name="select_virtual_address">选择充值号码</string>
 </resources>

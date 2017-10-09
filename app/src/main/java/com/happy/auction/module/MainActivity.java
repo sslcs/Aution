@@ -211,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getUserInfo() {
-        UserInfoParam data = new UserInfoParam();
-        BaseRequest<UserInfoParam> request = new BaseRequest<>(data);
+        UserInfoParam param = new UserInfoParam();
+        BaseRequest<UserInfoParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
