@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable
+            name="data"
+            type="com.happy.auction.entity.item.ItemBanner"/>
+    </data>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="400dp"
+            android:scaleType="fitXY"
+            app:banner="@{data.img}"
+            android:layout_height="160dp"/>
+    </FrameLayout>
+</layout>

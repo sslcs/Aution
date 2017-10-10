@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 
 import com.google.gson.reflect.TypeToken;
@@ -18,7 +19,6 @@ import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.OrderDetail;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
-import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.StringUtil;
 
@@ -55,15 +55,14 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void setProgress() {
-        DebugLog.e("status: " + mData.status + " pay_time : " + mData.pay_time);
-        binding.progress0.setSelected(mData.status > 1);
-        binding.progress1.setSelected(mData.status > 2);
-        binding.progress2.setSelected(mData.status > 3);
-        binding.progress3.setSelected(mData.status > 4);
+        binding.progress0.setSelected(mData.status >= 2);
+        binding.progress1.setSelected(mData.status >= 3);
+        binding.progress2.setSelected(mData.status >= 4);
+        binding.progress3.setSelected(mData.status >= 5);
         binding.tvProgress0.setSelected(mData.status == 2);
         binding.tvProgress1.setSelected(mData.status == 3);
         binding.tvProgress2.setSelected(mData.status == 4);
-        binding.tvProgress3.setSelected(mData.status == 5);
+        binding.tvProgress3.setSelected(mData.status >= 5);
         binding.tvTimeProgress0.setText(StringUtil.formatTimeMinute(mData.prize_time));
         if (mData.pay_time != 0)
             binding.tvTimeProgress1.setText(StringUtil.formatTimeMinute(mData.pay_time));
@@ -82,8 +81,6 @@ public class OrderDetailActivity extends BaseActivity {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<OrderDetail>>() {}.getType();
                 DataResponse<OrderDetail> obj = GsonSingleton.get().fromJson(response, type);
-                obj.data.status = 3;
-                obj.data.pay_time = System.currentTimeMillis();
                 mData = obj.data;
                 binding.setData(obj.data);
                 setProgress();
@@ -93,8 +90,35 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void setBottom() {
-        if (mData.type != 1) {
+        if (mData.status == 4) {
+            // 已确认
+            binding.btnBottom.setText(R.string.go_bask);
+        } else if (mData.status >= 5) {
+            // 已晒单
+            binding.btnBottom.setText(R.string.check_bask);
+        } else if (mData.status == 2) {
+            // 已拍中
+            binding.btnBottom.setText(R.string.go_pay);
+        } else if (mData.type == 1) {
+            // 已付款-实物
+            binding.btnBottom.setText(R.string.confirm_address);
+        } else {
+            // 已付款-虚拟物品
             binding.btnBottom.setText(R.string.select_virtual_address);
+        }
+    }
+
+    public void onClickBtnBottom(View view) {
+        if (mData.status == 4) {
+            // 已确认
+        } else if (mData.status >= 5) {
+            // 已晒单
+        } else if (mData.status == 2) {
+            // 已拍中
+        } else if (mData.type == 1) {
+            // 已付款-实物
+        } else {
+            // 已付款-虚拟物品
         }
     }
 }

@@ -497,7 +497,7 @@
             android:afterTextChanged="@{activity.afterTextChanged}"
             android:background="@null"
             android:gravity="center"
-            android:inputType="numberSigned"
+            android:inputType="number"
             android:text="@{String.valueOf(bidTimes.get())}"
             app:layout_constraintBottom_toBottomOf="@+id/btn_bottom"
             app:layout_constraintEnd_toStartOf="@+id/btn_bottom"

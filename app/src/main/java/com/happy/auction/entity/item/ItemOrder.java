@@ -30,8 +30,8 @@ public class ItemOrder extends BaseGoods {
      */
     public long prize_time;
     /**
-     * 记录状态:<br/>
-     * 1：正在拍，2：已拍中，3：待付款，4: 已确认领奖方式，5:已晒单，6:已结束
+     * 订单状态:<br/>
+     * 1：正在拍，2：已拍中，3：已付款，4: 已确认领奖方式，5:已晒单，6:已结束
      */
     public int status;
 }

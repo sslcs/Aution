@@ -3,6 +3,7 @@ package com.happy.auction.glide;
 
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -56,6 +57,20 @@ public class ImageLoader {
                 .placeholder(R.drawable.pic_default)
                 .error(R.drawable.pic_default)
                 .into(imageView);
+    }
+
+    @BindingAdapter("banner")
+    public static void loadBanner(final ImageView imageView, String url) {
+        if (TextUtils.isEmpty(url)) return;
+        GlideApp.with(imageView.getContext())
+                .asBitmap()
+                .load(url)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        imageView.setImageBitmap(resource);
+                    }
+                });
     }
 
     @BindingAdapter("image_url")

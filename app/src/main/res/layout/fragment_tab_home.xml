@@ -23,20 +23,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/divider">
-                <TextView
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_banner"
                     android:layout_width="match_parent"
                     android:layout_height="160dp"
-                    android:layout_marginBottom="1dp"
-                    android:background="@android:color/white"
-                    android:gravity="center"
-                    android:text="banner"
-                    app:layout_scrollFlags="scroll|enterAlways"/>
+                    app:layout_scrollFlags="scroll"/>
                 <include
                     android:id="@+id/menu"
                     layout="@layout/fragment_tab_home_menu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_scrollFlags="scroll|enterAlways"/>
+                    app:layout_scrollFlags="scroll"/>
                 <com.happy.auction.ui.MarqueeTextView
                     android:id="@+id/tv_announce"
                     android:layout_width="match_parent"
@@ -51,7 +48,7 @@
                     android:paddingLeft="10dp"
                     android:singleLine="true"
                     android:textColor="@color/text_title"
-                    app:layout_scrollFlags="scroll|enterAlways"/>
+                    app:layout_scrollFlags="scroll"/>
                 <android.support.design.widget.TabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="match_parent"

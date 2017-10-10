@@ -1,9 +1,11 @@
 package com.happy.auction.module.home;
 
+import android.content.ClipData;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.databinding.FragmentTabHomeBinding;
 import com.happy.auction.entity.event.AuctionEndEvent;
 import com.happy.auction.entity.event.BidEvent;
+import com.happy.auction.entity.item.ItemBanner;
 import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.entity.item.ItemLatest;
 import com.happy.auction.entity.item.ItemMenu;
@@ -69,6 +72,9 @@ public class TabHomeFragment extends Fragment {
     }
 
     private void initLayout() {
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        binding.rvBanner.setLayoutManager(llm);
+
         binding.vList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         binding.vList.addItemDecoration(new HomeDecoration());
         binding.vList.setItemAnimator(null);
@@ -218,7 +224,15 @@ public class TabHomeFragment extends Fragment {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-
+                Type type = new TypeToken<DataResponse<ArrayList<ItemBanner>>>() {}.getType();
+                DataResponse<ArrayList<ItemBanner>> obj = GsonSingleton.get().fromJson(response, type);
+                for(ItemBanner item : obj.data)
+                {
+                    item.img = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=110077978,2276310109&fm=200&gp=0.jpg";
+                }
+                binding.rvBanner.setAdapter(new BannerAdapter(obj.data));
+                PagingScrollHelper helper = new PagingScrollHelper();
+                helper.setUpRecycleView(binding.rvBanner);
             }
         });
     }

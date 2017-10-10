@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:transitionName="v_info"
             app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title">
 
@@ -247,19 +248,61 @@
                     android:layout_marginTop="20dp"
                     app:layout_constraintTop_toBottomOf="@+id/progress_3"/>
 
-                <Button
-                    android:id="@+id/btn_bottom"
-                    style="@style/ButtonCorner"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="50dp"
-                    android:text="@string/go_pay"
-                    android:visibility="@{data.showAddress() ? View.GONE : View.VISIBLE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                <View
+                    android:id="@+id/bg_virtual_address"
+                    android:layout_width="0dp"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="1dp"
+                    android:background="@android:color/white"
+                    android:visibility="@{data.showVirtualAddress() ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/v_dummy"/>
+
+                <TextView
+                    android:id="@+id/tv_virtual_address_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/virtual_address"
+                    android:textColor="@color/text_normal"
+                    android:textSize="16sp"
+                    android:visibility="@{data.showVirtualAddress() ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="@+id/progress_0"
+                    app:layout_constraintTop_toTopOf="@+id/bg_virtual_address"/>
+
+                <TextView
+                    android:id="@+id/tv_virtual_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{data.getVirtualAddress()}"
+                    android:textColor="@color/text_light"
+                    android:textSize="14sp"
+                    android:visibility="@{data.showVirtualAddress()  ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="@+id/progress_0"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_virtual_address_label"
+                    tools:text="31346461313"/>
+
+                <Button
+                    android:id="@+id/btn_go"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@drawable/bg_circle"
+                    android:text="@string/check_card"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:visibility="@{(data.showVirtualAddress() &amp;&amp; data.type==3) ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/bg_virtual_address"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/bg_virtual_address"/>
+
+                <View
+                    android:id="@+id/v_btn_margin"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:visibility="@{data.showAddress() ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintTop_toBottomOf="@+id/bg_virtual_address"/>
 
                 <TextView
                     android:id="@+id/tv_username_label"
@@ -269,7 +312,7 @@
                     android:visibility="@{data.showAddress() ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/v_dummy"/>
+                    app:layout_constraintTop_toBottomOf="@+id/v_btn_margin"/>
 
                 <TextView
                     android:id="@+id/tv_username"
@@ -283,6 +326,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_username_label"
                     tools:text="恭喜发财"/>
+
+                <Button
+                    android:id="@+id/btn_change_address"
+                    style="@style/ButtonCorner"
+                    android:layout_width="69dp"
+                    android:layout_height="23dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/change_address"
+                    android:textSize="13sp"
+                    android:visibility="@{data.showChangeAddress() ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_username_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_username_label"/>
 
                 <TextView
                     android:id="@+id/tv_phone_label"
@@ -343,36 +399,39 @@
                 <TextView
                     android:id="@+id/tv_mail_label"
                     style="@style/TextOrderDetail"
+                    android:layout_height="46dp"
                     android:layout_marginTop="1dp"
                     android:text="@string/mail_info"
-                    android:visibility="@{data.showAddress() ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{data.showMailInfo() ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_address"/>
 
                 <TextView
-                    android:id="@+id/bg_btn_confirm"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="1dp"
-                    android:background="@android:color/white"
-                    android:visibility="@{data.showAddress() ? View.VISIBLE : View.GONE}"
+                    android:id="@+id/tv_mail_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="126dp"
+                    android:text="@string/tip_mail_info"
+                    android:textColor="@color/text_normal"
+                    android:visibility="@{data.showMailInfo() ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_mail_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_mail_label"/>
+
+                <Button
+                    android:id="@+id/btn_bottom"
+                    style="@style/ButtonCorner"
+                    android:onClick="onClickBtnBottom"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/confirm_address"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_mail_label"/>
-
-                <Button
-                    android:id="@+id/btn_confirm"
-                    style="@style/ButtonCorner"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:text="@string/confirm_address"
-                    android:visibility="@{data.showAddress() ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="@+id/bg_btn_confirm"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/bg_btn_confirm"/>
             </android.support.constraint.ConstraintLayout>
         </ScrollView>
     </android.support.constraint.ConstraintLayout>

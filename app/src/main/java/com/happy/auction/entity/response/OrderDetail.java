@@ -1,5 +1,7 @@
 package com.happy.auction.entity.response;
 
+import android.text.TextUtils;
+
 import com.happy.auction.entity.item.Address;
 import com.happy.auction.entity.item.AddressVirtual;
 import com.happy.auction.entity.item.ItemOrder;
@@ -57,19 +59,40 @@ public class OrderDetail extends ItemOrder {
         return address.province + address.city + address.district + address.street;
     }
 
+    public String getVirtualAddress() {
+        if (vir_address == null) return "";
+        if (TextUtils.isEmpty(vir_address.remark))
+            return "1311321312131";
+        return vir_address.vir_addr_type == 2 ? vir_address.qq : vir_address.phone;
+    }
+
     public String getPhone() {
-        if (address == null) return "";if (address.province == null)
+        if (address == null) return "";
+        if (address.province == null)
             return "12345678910";
         return address.phone;
     }
 
     public String getUsername() {
-        if (address == null) return "";if (address.province == null)
+        if (address == null) return "";
+        if (address.province == null)
             return "恭喜发财";
         return address.username;
     }
 
     public boolean showAddress() {
         return type == 1 && status > 2;
+    }
+
+    public boolean showChangeAddress() {
+        return type == 1 && status == 3;
+    }
+
+    public boolean showMailInfo() {
+        return type == 1 && status > 3;
+    }
+
+    public boolean showVirtualAddress() {
+        return type != 1 && status > 3;
     }
 }
