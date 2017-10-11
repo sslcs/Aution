@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
+import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityListBinding;
@@ -56,6 +57,7 @@ public class BidRecordActivity extends BaseActivity {
 
     private void initLayout() {
         binding.vList.setLayoutManager(new LinearLayoutManager(this));
+        binding.vList.addItemDecoration(new DecorationSpace());
         adapter = new BidRecordAdapter();
         adapter.setLoadMoreListener(new LoadMoreListener() {
             @Override

@@ -17,6 +17,7 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.OrderDetailParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.OrderDetail;
+import com.happy.auction.module.pay.OrderPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
@@ -26,8 +27,11 @@ import java.lang.reflect.Type;
 
 public class OrderDetailActivity extends BaseActivity {
     private static final String KEY_ITEM = "KEY_ITEM";
-    private ActivityOrderDetailBinding binding;
+    private static final int REQUEST_CODE_PAY = 100;
+
+    private ActivityOrderDetailBinding mBinding;
     private OrderDetail mData;
+    private ItemOrder mOrder;
 
     public static Intent newIntent(ItemOrder item) {
         Intent intent = new Intent(AppInstance.getInstance(), OrderDetailActivity.class);
@@ -41,35 +45,35 @@ public class OrderDetailActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
         }
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_order_detail);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_order_detail);
         initLayout();
     }
 
     private void initLayout() {
-        ItemOrder item = (ItemOrder) getIntent().getSerializableExtra(KEY_ITEM);
-        mData = new OrderDetail(item);
-        binding.setData(mData);
+        mOrder = (ItemOrder) getIntent().getSerializableExtra(KEY_ITEM);
+        mData = new OrderDetail(mOrder);
+        mBinding.setData(mData);
         setProgress();
 
         loadData();
     }
 
     private void setProgress() {
-        binding.progress0.setSelected(mData.status >= 2);
-        binding.progress1.setSelected(mData.status >= 3);
-        binding.progress2.setSelected(mData.status >= 4);
-        binding.progress3.setSelected(mData.status >= 5);
-        binding.tvProgress0.setSelected(mData.status == 2);
-        binding.tvProgress1.setSelected(mData.status == 3);
-        binding.tvProgress2.setSelected(mData.status == 4);
-        binding.tvProgress3.setSelected(mData.status >= 5);
-        binding.tvTimeProgress0.setText(StringUtil.formatTimeMinute(mData.prize_time));
+        mBinding.progress0.setSelected(mData.status >= 2);
+        mBinding.progress1.setSelected(mData.status >= 3);
+        mBinding.progress2.setSelected(mData.status >= 4);
+        mBinding.progress3.setSelected(mData.status >= 5);
+        mBinding.tvProgress0.setSelected(mData.status == 2);
+        mBinding.tvProgress1.setSelected(mData.status == 3);
+        mBinding.tvProgress2.setSelected(mData.status == 4);
+        mBinding.tvProgress3.setSelected(mData.status >= 5);
+        mBinding.tvTimeProgress0.setText(StringUtil.formatTimeMinute(mData.prize_time));
         if (mData.pay_time != 0)
-            binding.tvTimeProgress1.setText(StringUtil.formatTimeMinute(mData.pay_time));
+            mBinding.tvTimeProgress1.setText(StringUtil.formatTimeMinute(mData.pay_time));
         if (mData.confirm_prize_time != 0)
-            binding.tvTimeProgress2.setText(StringUtil.formatTimeMinute(mData.confirm_prize_time));
+            mBinding.tvTimeProgress2.setText(StringUtil.formatTimeMinute(mData.confirm_prize_time));
         if (mData.bask_time != 0)
-            binding.tvTimeProgress3.setText(StringUtil.formatTimeMinute(mData.bask_time));
+            mBinding.tvTimeProgress3.setText(StringUtil.formatTimeMinute(mData.bask_time));
     }
 
     private void loadData() {
@@ -82,7 +86,7 @@ public class OrderDetailActivity extends BaseActivity {
                 Type type = new TypeToken<DataResponse<OrderDetail>>() {}.getType();
                 DataResponse<OrderDetail> obj = GsonSingleton.get().fromJson(response, type);
                 mData = obj.data;
-                binding.setData(obj.data);
+                mBinding.setData(obj.data);
                 setProgress();
                 setBottom();
             }
@@ -92,19 +96,19 @@ public class OrderDetailActivity extends BaseActivity {
     private void setBottom() {
         if (mData.status == 4) {
             // 已确认
-            binding.btnBottom.setText(R.string.go_bask);
+            mBinding.btnBottom.setText(R.string.go_bask);
         } else if (mData.status >= 5) {
             // 已晒单
-            binding.btnBottom.setText(R.string.check_bask);
+            mBinding.btnBottom.setText(R.string.check_bask);
         } else if (mData.status == 2) {
             // 已拍中
-            binding.btnBottom.setText(R.string.go_pay);
+            mBinding.btnBottom.setText(R.string.go_pay);
         } else if (mData.type == 1) {
             // 已付款-实物
-            binding.btnBottom.setText(R.string.confirm_address);
+            mBinding.btnBottom.setText(R.string.confirm_address);
         } else {
             // 已付款-虚拟物品
-            binding.btnBottom.setText(R.string.select_virtual_address);
+            mBinding.btnBottom.setText(R.string.select_virtual_address);
         }
     }
 
@@ -115,10 +119,17 @@ public class OrderDetailActivity extends BaseActivity {
             // 已晒单
         } else if (mData.status == 2) {
             // 已拍中
+            Intent intent = OrderPayActivity.newIntent(this, mOrder);
+            startActivityForResult(intent, REQUEST_CODE_PAY);
         } else if (mData.type == 1) {
             // 已付款-实物
         } else {
             // 已付款-虚拟物品
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

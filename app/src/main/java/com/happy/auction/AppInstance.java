@@ -66,6 +66,10 @@ public class AppInstance extends Application {
         PreferenceUtil.setToken(token);
     }
 
+    public String getChannel(){
+        return "";
+    }
+
     public int getResColor(int resId) {
         return getResources().getColor(resId);
     }

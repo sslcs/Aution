@@ -118,9 +118,16 @@
     <string name="confirm_address">确认收货地址</string>
     <string name="select_virtual_address">选择充值号码</string>
     <string name="change_address">更改地址</string>
-    <string name="tip_mail_info">将在1-5个工作日发货</string>
+    <string name="tip_mail_info">将在1–5个工作日发货</string>
     <string name="virtual_address">充值号码</string>
     <string name="check_card">查看卡密</string>
     <string name="check_bask">查看晒单</string>
     <string name="go_bask">去晒单</string>
+
+    <!-- order pay -->
+    <string name="order_pay">拍品购买</string>
+    <string name="select_pay_type">选择支付方式</string>
+    <string name="confirm_pay">确认支付(￥%1$s)</string>
+    <string name="error_wechat">请检查微信客户端是否正常!</string>
+    <string name="error_alipay">请检查支付宝客户端是否正常!</string>
 </resources>

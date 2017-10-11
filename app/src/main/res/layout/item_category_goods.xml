@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="佳能 Canon EOS 高配佳能 Canon EOS 高配佳能 Canon EOS 高配佳能 Canon EOS 高配"/>
 
-        <com.happy.auction.ui.CountDownHome
+        <com.happy.auction.module.home.CountDownHome
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="30dp"

@@ -1,4 +1,4 @@
-package com.happy.auction.ui;
+package com.happy.auction.module.home;
 
 import android.content.Context;
 import android.os.CountDownTimer;

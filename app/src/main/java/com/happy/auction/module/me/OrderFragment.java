@@ -36,7 +36,7 @@ public class OrderFragment extends BaseFragment {
     public final static int TYPE_UNPAID = 3;
 
     private static final String KEY_TYPE = "type";
-    private FragmentListBinding binding;
+    private FragmentListBinding mBinding;
 
     private OrderAdapter adapter;
 
@@ -53,16 +53,16 @@ public class OrderFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle bundle) {
-        binding = FragmentListBinding.inflate(inflater);
+        mBinding = FragmentListBinding.inflate(inflater);
         initLayout();
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     private void initLayout() {
-        binding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
         DecorationSpace decoration = new DecorationSpace(5);
         decoration.enableHeader();
-        binding.vList.addItemDecoration(decoration);
+        mBinding.vList.addItemDecoration(decoration);
         adapter = new OrderAdapter();
         adapter.setOnButtonClickListener(new OrderAdapter.OnButtonClickListener() {
             @Override
@@ -88,7 +88,7 @@ public class OrderFragment extends BaseFragment {
                 if (item != null) loadData(item.pid);
             }
         });
-        binding.vList.setAdapter(adapter);
+        mBinding.vList.setAdapter(adapter);
 
         if (getUserVisibleHint()) {
             loadData(0);

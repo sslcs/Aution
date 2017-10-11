@@ -1,4 +1,4 @@
-package com.happy.auction.ui;
+package com.happy.auction.module.detail;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;

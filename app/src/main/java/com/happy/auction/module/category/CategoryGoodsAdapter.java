@@ -8,7 +8,7 @@ import com.happy.auction.adapter.BaseCustomAdapter;
 import com.happy.auction.databinding.ItemCategoryGoodsBinding;
 import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.glide.ImageLoader;
-import com.happy.auction.ui.CountDownHome;
+import com.happy.auction.module.home.CountDownHome;
 
 /**
  * 分类商品Adapter

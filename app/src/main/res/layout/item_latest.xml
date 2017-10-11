@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="24dp"
-            android:text='@{StringUtil.formatPercent(data.save)}'
+            android:text='@{data.save + "%"}'
             android:textColor="@color/text_dark"
             android:textSize="19sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_username"

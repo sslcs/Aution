@@ -33,6 +33,8 @@
         <activity android:name=".module.me.OrderActivity"/>
         <activity android:name=".module.detail.BidRecordActivity"/>
         <activity android:name=".module.me.OrderDetailActivity"/>
+        <activity android:name=".module.pay.OrderPayActivity">
+        </activity>
     </application>
 
 </manifest>
