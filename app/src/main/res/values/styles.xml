@@ -42,15 +42,18 @@
     <style name="TabMeTextItem" parent="Clickable">
         <item name="android:background">@android:color/white</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:drawableRight">@drawable/ic_arrow_right</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
         <item name="android:textColor">@color/text_dark</item>
         <item name="android:textSize">15sp</item>
     </style>
 
-    <style name="TextItemSetting" parent="TabMeTextItem">
+    <style name="TabMeTextItemArrow" parent="TabMeTextItem">
+        <item name="android:drawableRight">@drawable/ic_arrow_right</item>
+    </style>
+
+    <style name="TextItemSetting" parent="TabMeTextItemArrow">
         <item name="android:layout_height">50dp</item>
     </style>
 

@@ -141,4 +141,13 @@
     <string name="select_charge_amount">选择充值金额</string>
     <string name="hint_input_amount">请输入金额</string>
     <string name="charge_pay">马上充值 (￥%1$d)</string>
+
+    <!-- manager -->
+    <string name="title_manager">帐号管理</string>
+    <string name="avatar">头像</string>
+    <string name="username">昵称</string>
+    <string name="hint_username">好的名字带给你好的运气～</string>
+    <string name="manage_password">密码管理</string>
+    <string name="manage_address">地址管理</string>
+    <string name="manage_contact">联系人管理</string>
 </resources>

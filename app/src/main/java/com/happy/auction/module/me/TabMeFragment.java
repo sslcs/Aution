@@ -111,9 +111,8 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickAvatar(View view) {
-        if (isLogin()) {
-            DebugLog.e("showInfo");
-        }
+        if (!isLogin()) return;
+        startActivity(ManagerActivity.newIntent(getActivity()));
     }
 
     public void onClickAuctionCoin(View view) {

@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 //                .url("ws://192.168.1.64:9999/v1/ws")
 //                .url("ws://192.168.1.225:8888/v1/ws")
                 .url("ws://192.168.1.250:80/v1/ws")
+//                .url("ws://118.190.74.25/v1/ws")
                 .build();
         httpClient.newWebSocket(request, new WebSocketListener() {
             @Override

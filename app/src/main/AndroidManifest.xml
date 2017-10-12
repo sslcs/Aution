@@ -37,6 +37,9 @@
         </activity>
         <activity android:name=".module.pay.AuctionPayActivity"/>
         <activity android:name=".module.pay.ChargePayActivity"/>
+        <activity android:name=".module.me.ManagerActivity">
+        </activity>
+        <activity android:name=".module.me.UsernameActivity"/>
     </application>
 
 </manifest>

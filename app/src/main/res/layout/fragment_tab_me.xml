@@ -141,7 +141,7 @@
 
             <TextView
                 android:id="@+id/tv_order"
-                style="@style/TabMeTextItem"
+                style="@style/TabMeTextItemArrow"
                 android:layout_height="36dp"
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="8dp"
@@ -192,7 +192,7 @@
 
             <TextView
                 android:id="@+id/tv_card"
-                style="@style/TabMeTextItem"
+                style="@style/TabMeTextItemArrow"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 android:onClick="@{fragment.onClickMyCard}"
@@ -203,7 +203,7 @@
 
             <TextView
                 android:id="@+id/tv_publish"
-                style="@style/TabMeTextItem"
+                style="@style/TabMeTextItemArrow"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 android:onClick="@{fragment.onClickMyPublish}"
@@ -214,7 +214,7 @@
 
             <TextView
                 android:id="@+id/tv_service"
-                style="@style/TabMeTextItem"
+                style="@style/TabMeTextItemArrow"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 android:onClick="@{fragment.onClickMyService}"
@@ -225,7 +225,7 @@
 
             <TextView
                 android:id="@+id/tv_message"
-                style="@style/TabMeTextItem"
+                style="@style/TabMeTextItemArrow"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 android:onClick="@{fragment.onClickMyMessage}"
