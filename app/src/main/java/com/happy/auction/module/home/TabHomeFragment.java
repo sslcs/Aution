@@ -1,9 +1,7 @@
 package com.happy.auction.module.home;
 
-import android.content.ClipData;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -15,6 +13,7 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
+import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentTabHomeBinding;
 import com.happy.auction.entity.event.AuctionEndEvent;
 import com.happy.auction.entity.event.BidEvent;
@@ -50,10 +49,10 @@ import io.reactivex.functions.Consumer;
 /**
  * 首页
  */
-public class TabHomeFragment extends Fragment {
+public class TabHomeFragment extends BaseFragment {
     private FragmentTabHomeBinding binding;
     private TabHomeAdapter adapter;
-    private int start;
+    private int start = 0;
     private String goods_type = GoodsParam.TYPE_HOT;
     private Disposable disposableRefresh;
 
@@ -82,7 +81,7 @@ public class TabHomeFragment extends Fragment {
         adapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
-                loadGoods(start + GoodsParam.DEFAULT_LIMIT);
+                loadGoods();
                 binding.vList.stopScroll();
             }
         });
@@ -110,13 +109,13 @@ public class TabHomeFragment extends Fragment {
                     if (!GoodsParam.TYPE_NEWBIE.equals(goods_type)) {
                         adapter.clear();
                         goods_type = GoodsParam.TYPE_NEWBIE;
-                        loadGoods(1);
+                        refresh();
                     }
                 } else {
                     if (!GoodsParam.TYPE_HOT.equals(goods_type)) {
                         adapter.clear();
                         goods_type = GoodsParam.TYPE_HOT;
-                        loadGoods(1);
+                        refresh();
                     }
                 }
             }
@@ -130,6 +129,11 @@ public class TabHomeFragment extends Fragment {
 
         loadData();
         listenEvents();
+    }
+
+    private void refresh() {
+        start = 0;
+        loadGoods();
     }
 
     private void listenEvents() {
@@ -165,7 +169,7 @@ public class TabHomeFragment extends Fragment {
                             .subscribe(new Consumer<Long>() {
                                 @Override
                                 public void accept(Long aLong) throws Exception {
-                                    loadGoods(0);
+                                    refresh();
                                 }
                             });
                 }
@@ -180,7 +184,7 @@ public class TabHomeFragment extends Fragment {
 
         loadAnnounce();
 
-        loadGoods(0);
+        refresh();
     }
 
     private void loadAnnounce() {
@@ -226,8 +230,7 @@ public class TabHomeFragment extends Fragment {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemBanner>>>() {}.getType();
                 DataResponse<ArrayList<ItemBanner>> obj = GsonSingleton.get().fromJson(response, type);
-                for(ItemBanner item : obj.data)
-                {
+                for (ItemBanner item : obj.data) {
                     item.img = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=110077978,2276310109&fm=200&gp=0.jpg";
                 }
                 binding.rvBanner.setAdapter(new BannerAdapter(obj.data));
@@ -237,8 +240,7 @@ public class TabHomeFragment extends Fragment {
         });
     }
 
-    private void loadGoods(final int start) {
-        this.start = start;
+    private void loadGoods() {
         GoodsParam param = new GoodsParam();
         param.type = goods_type;
         param.start = start;
@@ -250,8 +252,14 @@ public class TabHomeFragment extends Fragment {
                 Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
                 DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
                 if (start == 0) adapter.clear();
-                adapter.addAll(obj.data.goods);
-                adapter.setHasMore(obj.data.goods != null && obj.data.goods.size() >= BaseParam.DEFAULT_LIMIT);
+                if (obj.data.goods != null) {
+                    int size = obj.data.goods.size();
+                    start += size;
+                    adapter.addAll(obj.data.goods);
+                    adapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                } else {
+                    adapter.setHasMore(false);
+                }
             }
 
             @Override
@@ -266,5 +274,13 @@ public class TabHomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         RxBus.getDefault().unsubscribe(this);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (hasCreatedView && isVisibleToUser) {
+            refresh();
+        }
     }
 }

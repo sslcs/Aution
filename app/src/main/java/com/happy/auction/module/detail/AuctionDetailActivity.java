@@ -11,11 +11,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
@@ -45,6 +41,7 @@ import com.happy.auction.entity.response.AuctionDetail;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.module.login.LoginActivity;
+import com.happy.auction.module.pay.AuctionPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
@@ -60,13 +57,15 @@ import io.reactivex.functions.Consumer;
  * 竞拍详情
  */
 public class AuctionDetailActivity extends BaseActivity {
+    private static final String KEY_GOODS = "GOODS";
     private static final int REQUEST_CODE_LOGIN = 100;
+    private static final int REQUEST_CODE_PAY = 101;
 
-    private final ObservableInt times = new ObservableInt(1);
-    private ActivityAuctionDetailBinding binding;
-    private AuctionDetailBidAdapter adapter;
-    private AuctionDetail auctionDetail;
-    private AuctionCoin auctionCoin;
+    private final ObservableInt mTimes = new ObservableInt(1);
+    private ActivityAuctionDetailBinding mBinding;
+    private AuctionDetailBidAdapter mAdapter;
+    private AuctionDetail mData;
+    private AuctionCoin mAuctionCoin;
 
     private int indexPrevious = 0;
     private int indexBask = 0;
@@ -75,35 +74,34 @@ public class AuctionDetailActivity extends BaseActivity {
 
     public static Intent newIntent(BaseGoods goods) {
         Intent intent = new Intent(AppInstance.getInstance(), AuctionDetailActivity.class);
-        intent.putExtra("goods", goods);
+        intent.putExtra(KEY_GOODS, goods);
         return intent;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_auction_detail);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_auction_detail);
         initLayout();
     }
 
     private void initLayout() {
-        binding.tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-        binding.tvMarketPrice.requestFocus();
+        mBinding.tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
 
-        binding.appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        mBinding.appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 showBlackTitle(verticalOffset);
             }
         });
 
-        adapter = new AuctionDetailBidAdapter();
-        binding.listRecord.setAdapter(adapter);
+        mAdapter = new AuctionDetailBidAdapter();
+        mBinding.listRecord.setAdapter(mAdapter);
         DecorationSpace decoration = new DecorationSpace();
         decoration.enableHeader();
-        binding.listRecord.addItemDecoration(decoration);
+        mBinding.listRecord.addItemDecoration(decoration);
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        binding.listRecord.setLayoutManager(manager);
+        mBinding.listRecord.setLayoutManager(manager);
 
         adapterPrevious = new PreviousAdapter();
         adapterPrevious.setLoadMoreListener(new LoadMoreListener() {
@@ -119,26 +117,26 @@ public class AuctionDetailActivity extends BaseActivity {
                 loadBask();
             }
         });
-        binding.vList.addItemDecoration(decoration);
-        binding.vList.setAdapter(adapterPrevious);
+        mBinding.vList.addItemDecoration(decoration);
+        mBinding.vList.setAdapter(adapterPrevious);
 
-        BaseGoods goods = (BaseGoods) getIntent().getSerializableExtra("goods");
+        BaseGoods goods = (BaseGoods) getIntent().getSerializableExtra(KEY_GOODS);
         if (goods instanceof ItemGoods) {
-            auctionDetail = new AuctionDetail((ItemGoods) goods);
+            mData = new AuctionDetail((ItemGoods) goods);
         } else {
-            auctionDetail = new AuctionDetail(goods);
+            mData = new AuctionDetail(goods);
         }
 
-        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
-                    binding.vList.setAdapter(adapterBask);
+                    mBinding.vList.setAdapter(adapterBask);
                     if (adapterBask.isEmpty()) {
                         loadBask();
                     }
                 } else {
-                    binding.vList.setAdapter(adapterPrevious);
+                    mBinding.vList.setAdapter(adapterPrevious);
                     if (adapterPrevious.isEmpty()) {
                         loadPrevious();
                     }
@@ -163,19 +161,19 @@ public class AuctionDetailActivity extends BaseActivity {
     }
 
     private void showBlackTitle(int verticalOffset) {
-        int offset = -binding.tvAuctionStatus.getTop();
+        int offset = -mBinding.tvAuctionStatus.getTop();
         if (verticalOffset > offset) {
-            binding.tvToolbarPrice.setVisibility(View.GONE);
-            binding.tvToolbarTime.setVisibility(View.GONE);
+            mBinding.tvToolbarPrice.setVisibility(View.GONE);
+            mBinding.tvToolbarTime.setVisibility(View.GONE);
             return;
         }
 
-        binding.tvToolbarPrice.setVisibility(View.VISIBLE);
-        binding.tvToolbarTime.setVisibility(View.VISIBLE);
+        mBinding.tvToolbarPrice.setVisibility(View.VISIBLE);
+        mBinding.tvToolbarTime.setVisibility(View.VISIBLE);
         int height = offset - verticalOffset;
-        ConstraintLayout.LayoutParams paramsPrice = (ConstraintLayout.LayoutParams) binding.tvToolbarPrice.getLayoutParams();
-        ConstraintLayout.LayoutParams paramsTime = (ConstraintLayout.LayoutParams) binding.tvToolbarTime.getLayoutParams();
-        int heightTitle = binding.tvToolbarTitle.getHeight();
+        ConstraintLayout.LayoutParams paramsPrice = (ConstraintLayout.LayoutParams) mBinding.tvToolbarPrice.getLayoutParams();
+        ConstraintLayout.LayoutParams paramsTime = (ConstraintLayout.LayoutParams) mBinding.tvToolbarTime.getLayoutParams();
+        int heightTitle = mBinding.tvToolbarTitle.getHeight();
         if (height < heightTitle) {
             paramsPrice.height = height;
             paramsTime.height = height;
@@ -183,56 +181,56 @@ public class AuctionDetailActivity extends BaseActivity {
             paramsPrice.height = heightTitle;
             paramsTime.height = heightTitle;
         }
-        binding.tvToolbarPrice.setLayoutParams(paramsPrice);
-        binding.tvToolbarTime.setLayoutParams(paramsTime);
+        mBinding.tvToolbarPrice.setLayoutParams(paramsPrice);
+        mBinding.tvToolbarTime.setLayoutParams(paramsTime);
     }
 
     private void initData() {
-        binding.setActivity(this);
-        binding.setBidTimes(times);
-        binding.setData(auctionDetail);
-        binding.tvAuctionStatus.setSyncView(binding.tvToolbarTime);
-        if (auctionDetail.status == 0) {
-            binding.tvAuctionStatus.finish();
+        mBinding.setActivity(this);
+        mBinding.setBidTimes(mTimes);
+        mBinding.setData(mData);
+        mBinding.tvAuctionStatus.setSyncView(mBinding.tvToolbarTime);
+        if (mData.status == 0) {
+            mBinding.tvAuctionStatus.finish();
         } else {
-            binding.tvAuctionStatus.setExpireTime(auctionDetail.bid_expire_time);
-            binding.tvAuctionStatus.setRepeat(auctionDetail.current_price == auctionDetail.bid_start_price);
+            mBinding.tvAuctionStatus.setExpireTime(mData.bid_expire_time);
+            mBinding.tvAuctionStatus.setRepeat(mData.current_price == mData.bid_start_price);
         }
 
-        if (auctionDetail.bid_records != null && !auctionDetail.bid_records.isEmpty()) {
-            adapter.addAll(auctionDetail.bid_records);
-            binding.setNewBid(auctionDetail.bid_records.get(0));
+        if (mData.bid_records != null && !mData.bid_records.isEmpty()) {
+            mAdapter.addAll(mData.bid_records);
+            mBinding.setNewBid(mData.bid_records.get(0));
             setBtnMoreVisibility();
         }
     }
 
     private void setBtnMoreVisibility() {
-        binding.tvMore.setVisibility(adapter.getRealCount() > 3 ? View.VISIBLE : View.GONE);
+        mBinding.tvMore.setVisibility(mAdapter.getRealCount() > 3 ? View.VISIBLE : View.GONE);
     }
 
     private void listenEvents() {
         RxBus.getDefault().subscribe(this, BidEvent.class, new Consumer<BidEvent>() {
             @Override
             public void accept(BidEvent event) throws Exception {
-                if (event.sid != auctionDetail.sid) return;
-                auctionDetail.setCurrentPrice(event.current_price);
-                binding.tvAuctionStatus.setExpireTime(event.bid_expire_time);
-                binding.tvAuctionStatus.setRepeat(false);
+                if (event.sid != mData.sid) return;
+                mData.setCurrentPrice(event.current_price);
+                mBinding.tvAuctionStatus.setExpireTime(event.bid_expire_time);
+                mBinding.tvAuctionStatus.setRepeat(false);
 
                 BidRecord record = new BidRecord(event);
                 if (TextUtils.isEmpty(record.uid)) return;
-                adapter.addItem(record);
-                binding.setNewBid(record);
+                mAdapter.addItem(record);
+                mBinding.setNewBid(record);
                 setBtnMoreVisibility();
 
                 if (!record.uid.equals(AppInstance.getInstance().uid)) return;
-                if (auctionCoin.current_bid_coins > 0) {
-                    int progress = auctionCoin.current_bidden_coins + 1;
-                    if (progress == auctionCoin.current_bid_coins) {
-                        auctionCoin.setCurrentProgress(0);
-                        auctionCoin.setCurrentCoin(0);
+                if (mAuctionCoin.current_bid_coins > 0) {
+                    int progress = mAuctionCoin.current_bidden_coins + 1;
+                    if (progress == mAuctionCoin.current_bid_coins) {
+                        mAuctionCoin.setCurrentProgress(0);
+                        mAuctionCoin.setCurrentCoin(0);
                     } else {
-                        auctionCoin.setCurrentProgress(progress);
+                        mAuctionCoin.setCurrentProgress(progress);
                     }
                 }
             }
@@ -241,9 +239,9 @@ public class AuctionDetailActivity extends BaseActivity {
         RxBus.getDefault().subscribe(this, AuctionEndEvent.class, new Consumer<AuctionEndEvent>() {
             @Override
             public void accept(AuctionEndEvent event) throws Exception {
-                if (event.sid != auctionDetail.sid) return;
-                auctionDetail.setStatus(0);
-                binding.tvAuctionStatus.finish();
+                if (event.sid != mData.sid) return;
+                mData.setStatus(0);
+                mBinding.tvAuctionStatus.finish();
                 loadAuctionCoin();
             }
         });
@@ -251,14 +249,14 @@ public class AuctionDetailActivity extends BaseActivity {
 
     private void loadData() {
         AuctionDetailParam param = new AuctionDetailParam();
-        param.sid = auctionDetail.sid;
+        param.sid = mData.sid;
         BaseRequest<AuctionDetailParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<AuctionDetail>>() {}.getType();
                 DataResponse<AuctionDetail> obj = GsonSingleton.get().fromJson(response, type);
-                auctionDetail = obj.data;
+                mData = obj.data;
                 initData();
                 loadPrevious();
             }
@@ -267,14 +265,14 @@ public class AuctionDetailActivity extends BaseActivity {
 
     private void loadLatest() {
         AuctionDetailParam param = new AuctionDetailParam();
-        param.gid = auctionDetail.gid;
+        param.gid = mData.gid;
         BaseRequest<AuctionDetailParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<AuctionDetail>>() {}.getType();
                 DataResponse<AuctionDetail> obj = GsonSingleton.get().fromJson(response, type);
-                auctionDetail = obj.data;
+                mData = obj.data;
                 initData();
                 loadAuctionCoin();
             }
@@ -283,15 +281,15 @@ public class AuctionDetailActivity extends BaseActivity {
 
     private void loadAuctionCoin() {
         AuctionCoinParam param = new AuctionCoinParam();
-        param.sid = auctionDetail.sid;
+        param.sid = mData.sid;
         BaseRequest<AuctionCoinParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<AuctionCoin>>() {}.getType();
                 DataResponse<AuctionCoin> obj = GsonSingleton.get().fromJson(response, type);
-                auctionCoin = obj.data;
-                binding.setCoin(auctionCoin);
+                mAuctionCoin = obj.data;
+                mBinding.setCoin(mAuctionCoin);
             }
         });
     }
@@ -303,29 +301,27 @@ public class AuctionDetailActivity extends BaseActivity {
             return;
         }
 
-        if (times.get() == 0) times.set(1);
-
         getBalance();
     }
 
     private void bid() {
-        final BidParam param = new BidParam();
-        param.sid = auctionDetail.sid;
-        param.buy = times.get();
+        if (mTimes.get() == 0) mTimes.set(1);
+        final int count = mTimes.get();
+        if (AppInstance.getInstance().getBalance() < count) {
+            Intent pay = AuctionPayActivity.newIntent(this, mData.getItemGoods(), count);
+            startActivityForResult(pay, REQUEST_CODE_PAY);
+            return;
+        }
+
+        BidParam param = new BidParam();
+        param.sid = mData.sid;
+        param.buy = mTimes.get();
         param.take_coin = param.buy;
         BaseRequest<BidParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                if (AppInstance.getInstance().getUser().free_coin >= param.buy) {
-                    auctionCoin.setBidGiftCoin(auctionCoin.bid_gift_coin + param.buy);
-                    if (param.buy > 1) {
-                        auctionCoin.setCurrentProgress(0);
-                        auctionCoin.setCurrentCoin(param.buy);
-                    }
-                } else {
-                    loadAuctionCoin();
-                }
+                onPaySuccess(count);
             }
 
             @Override
@@ -336,11 +332,22 @@ public class AuctionDetailActivity extends BaseActivity {
         });
     }
 
+    private void onPaySuccess(int count) {
+        if (AppInstance.getInstance().getUser().free_coin >= count) {
+            mAuctionCoin.setBidGiftCoin(mAuctionCoin.bid_gift_coin + count);
+            if (count > 1) {
+                mAuctionCoin.setCurrentProgress(0);
+                mAuctionCoin.setCurrentCoin(count);
+            }
+        } else {
+            loadAuctionCoin();
+        }
+    }
 
     public void onClickNext(View view) {
-        adapter.clear();
-        binding.setCoin(null);
-        binding.setNewBid(null);
+        mAdapter.clear();
+        mBinding.setCoin(null);
+        mBinding.setNewBid(null);
         setBtnMoreVisibility();
         loadLatest();
     }
@@ -348,8 +355,8 @@ public class AuctionDetailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (auctionDetail.status != 0) {
-            binding.tvAuctionStatus.cancel();
+        if (mData.status != 0) {
+            mBinding.tvAuctionStatus.cancel();
         }
         RxBus.getDefault().unsubscribe(this);
     }
@@ -358,38 +365,41 @@ public class AuctionDetailActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
-        if (requestCode == REQUEST_CODE_LOGIN) {
-            onClickBid(null);
+
+        if (REQUEST_CODE_LOGIN == requestCode) {
+            getBalance();
+        } else if (REQUEST_CODE_PAY == requestCode) {
+            onPaySuccess(mTimes.get());
         }
     }
 
     public void onClickMinus(View view) {
-        if (times.get() > 1) {
-            times.set(times.get() - 1);
+        if (mTimes.get() > 1) {
+            mTimes.set(mTimes.get() - 1);
         }
     }
 
     public void onClickPlus(View view) {
-        times.set(times.get() + 1);
+        mTimes.set(mTimes.get() + 1);
     }
 
     public void afterTextChanged(Editable editable) {
         try {
             int number = Integer.parseInt(editable.toString());
-            times.set(number);
+            mTimes.set(number);
         } catch (NumberFormatException e) {
-            times.set(0);
+            mTimes.set(0);
         }
     }
 
     public void onClickCancel(View view) {
         AuctionCancelParam param = new AuctionCancelParam();
-        param.sid = auctionDetail.sid;
+        param.sid = mData.sid;
         BaseRequest<AuctionCancelParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                auctionCoin.setCurrentCoin(0);
+                mAuctionCoin.setCurrentCoin(0);
                 loadAuctionCoin();
             }
         });
@@ -399,7 +409,7 @@ public class AuctionDetailActivity extends BaseActivity {
 
     private void loadPrevious() {
         PreviousParam param = new PreviousParam();
-        param.gid = auctionDetail.gid;
+        param.gid = mData.gid;
         param.start = indexPrevious;
         BaseRequest<PreviousParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
@@ -421,7 +431,7 @@ public class AuctionDetailActivity extends BaseActivity {
 
     private void loadBask() {
         DetailBaskParam param = new DetailBaskParam();
-        param.gid = auctionDetail.gid;
+        param.gid = mData.gid;
         param.start = indexBask;
         BaseRequest<DetailBaskParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
@@ -442,7 +452,7 @@ public class AuctionDetailActivity extends BaseActivity {
     }
 
     public void onClickMore(View view) {
-        startActivity(BidRecordActivity.newIntent(auctionDetail.sid, auctionDetail.status));
+        startActivity(BidRecordActivity.newIntent(mData.sid, mData.status));
     }
 
     private void getBalance() {

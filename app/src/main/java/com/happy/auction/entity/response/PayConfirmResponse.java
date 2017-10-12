@@ -11,10 +11,6 @@ public class PayConfirmResponse {
      */
     public String tradenum;
     /**
-     * 订单号
-     */
-    public String ordernum;
-    /**
      * 支付方式
      */
     public int pay_type;

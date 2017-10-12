@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="activity"
+            type="com.happy.auction.module.pay.ChargePayActivity"/>
+        <variable
+            name="amount"
+            type="android.databinding.ObservableInt"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.happy.auction.module.pay.OrderPayActivity">
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            style="@style/TextTitle"
+            android:text="@string/charge_page"/>
+
+        <ImageView
+            style="@style/IconBack"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_toolbar_title"
+            app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
+
+        <View
+            android:id="@+id/bg_title"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:background="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="12dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingBottom="16dp"
+            android:text="@string/select_charge_amount"
+            android:textColor="@color/text_dark"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@+id/bg_title"
+            app:layout_constraintTop_toTopOf="@+id/bg_title"/>
+
+        <TextView
+            android:id="@+id/tv_amount_0"
+            style="@style/ButtonChargeAmount"
+            android:onClick="onClickAmount"
+            android:tag="10"
+            android:text="10"
+            app:layout_constraintEnd_toStartOf="@+id/tv_amount_1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+
+        <TextView
+            android:id="@+id/tv_amount_1"
+            style="@style/ButtonChargeAmount"
+            android:onClick="onClickAmount"
+            android:tag="30"
+            android:text="30"
+            app:layout_constraintEnd_toStartOf="@+id/tv_amount_2"
+            app:layout_constraintStart_toEndOf="@+id/tv_amount_0"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+
+        <TextView
+            android:id="@+id/tv_amount_2"
+            style="@style/ButtonChargeAmount"
+            android:onClick="onClickAmount"
+            android:tag="50"
+            android:text="50"
+            app:layout_constraintEnd_toEndOf="@+id/bg_title"
+            app:layout_constraintStart_toEndOf="@+id/tv_amount_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+
+        <TextView
+            android:id="@+id/tv_amount_3"
+            style="@style/ButtonChargeAmount"
+            android:layout_marginTop="24dp"
+            android:onClick="onClickAmount"
+            android:tag="100"
+            android:text="100"
+            app:layout_constraintEnd_toStartOf="@+id/tv_amount_4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_amount_0"/>
+
+        <TextView
+            android:id="@+id/tv_amount_4"
+            style="@style/ButtonChargeAmount"
+            android:onClick="onClickAmount"
+            android:tag="200"
+            android:text="200"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_amount_3"
+            app:layout_constraintEnd_toStartOf="@id/et_amount"
+            app:layout_constraintStart_toEndOf="@+id/tv_amount_3"
+            app:layout_constraintTop_toTopOf="@+id/tv_amount_3"/>
+
+        <EditText
+            android:id="@+id/et_amount"
+            android:layout_width="100dp"
+            android:layout_height="34dp"
+            android:afterTextChanged="@{activity.afterTextChanged}"
+            android:background="@drawable/bg_input"
+            android:gravity="center"
+            android:hint="@string/hint_input_amount"
+            android:inputType="numberDecimal"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_amount_3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_amount_4"
+            app:layout_constraintTop_toTopOf="@+id/tv_amount_3"/>
+
+        <TextView
+            android:id="@+id/tv_pay_label"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:text="@string/select_pay_type"
+            android:textColor="@color/text_normal"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bg_title"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/v_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="1dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_bottom"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_pay_label"
+            tools:listitem="@layout/item_pay_type"/>
+
+        <TextView
+            android:id="@+id/btn_bottom"
+            style="@style/ButtonBottom"
+            android:enabled="@{amount.get()>0}"
+            android:onClick="onClickPay"
+            android:text='@{@string/charge_pay(amount.get())}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="马上充值 (￥30)"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

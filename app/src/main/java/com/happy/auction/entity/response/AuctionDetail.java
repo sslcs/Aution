@@ -99,4 +99,12 @@ public class AuctionDetail extends ItemGoods {
         sb.append("：").append(StringUtil.formatSignMoney(price));
         return sb.toString();
     }
+
+    public ItemGoods getItemGoods() {
+        ItemGoods item = new ItemGoods();
+        item.sid = sid;
+        item.title = title;
+        item.period = period;
+        return item;
+    }
 }

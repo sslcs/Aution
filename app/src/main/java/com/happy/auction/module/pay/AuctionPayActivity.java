@@ -8,14 +8,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
+import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.OnItemClickListener;
-import com.happy.auction.databinding.ActivityOrderPayBinding;
-import com.happy.auction.entity.item.ItemOrder;
+import com.happy.auction.databinding.ActivityAuctionPayBinding;
+import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.entity.item.ItemPayType;
 import com.happy.auction.entity.param.BaseRequest;
-import com.happy.auction.entity.param.PayConfirmParam;
+import com.happy.auction.entity.param.BidParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.PayConfirmResponse;
 import com.happy.auction.net.NetCallback;
@@ -25,30 +26,35 @@ import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
 
-public class OrderPayActivity extends BasePayActivity {
-    private static final String KEY_EXTRA = "EXTRA";
+public class AuctionPayActivity extends BasePayActivity {
+    private static final String KEY_EXTRA_DATA = "EXTRA_DATA";
+    private static final String KEY_EXTRA_COUNT = "EXTRA_COUNT";
 
-    private ActivityOrderPayBinding mBinding;
-    private ItemOrder mData;
+    private ActivityAuctionPayBinding mBinding;
+    private ItemGoods mData;
+    private int mCount;
     private PayTypeAdapter mAdapter;
 
-    public static Intent newIntent(Context context, ItemOrder data) {
-        Intent intent = new Intent(context, OrderPayActivity.class);
-        intent.putExtra(KEY_EXTRA, data);
+    public static Intent newIntent(Context context, ItemGoods data, int count) {
+        Intent intent = new Intent(context, AuctionPayActivity.class);
+        intent.putExtra(KEY_EXTRA_DATA, data);
+        intent.putExtra(KEY_EXTRA_COUNT, count);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_order_pay);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_auction_pay);
 
         initLayout();
     }
 
     private void initLayout() {
-        mData = (ItemOrder) getIntent().getSerializableExtra(KEY_EXTRA);
+        mData = (ItemGoods) getIntent().getSerializableExtra(KEY_EXTRA_DATA);
+        mCount = getIntent().getIntExtra(KEY_EXTRA_COUNT, 0);
         mBinding.setData(mData);
+        mBinding.setPay(new PayData(mCount));
 
         mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.vList.addItemDecoration(new DecorationSpace());
@@ -66,10 +72,12 @@ public class OrderPayActivity extends BasePayActivity {
 
     public void onClickPay(View view) {
         final ItemPayType current = mAdapter.getItem(mAdapter.getSelectedPosition());
-        PayConfirmParam param = new PayConfirmParam();
+        BidParam param = new BidParam();
         param.pay_type = current.pay_type;
         param.sid = mData.sid;
-        BaseRequest<PayConfirmParam> request = new BaseRequest<>(param);
+        param.buy = mCount;
+        param.take_coin = AppInstance.getInstance().getBalance();
+        BaseRequest<BidParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {

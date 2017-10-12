@@ -6,6 +6,9 @@
     <data>
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
+            name="pay"
+            type="com.happy.auction.module.pay.PayData"/>
+        <variable
             name="data"
             type="com.happy.auction.entity.item.BaseGoods"/>
     </data>
@@ -16,7 +19,7 @@
         <TextView
             android:id="@+id/tv_toolbar_title"
             style="@style/TextTitle"
-            android:text="@string/order_pay"/>
+            android:text="@string/pay"/>
 
         <ImageView
             style="@style/IconBack"
@@ -38,14 +41,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:text="@{@string/format_deal_price(StringUtil.formatMoney(data.current_price))}"
+            android:text="@{@string/bid_times(pay.count)}"
             android:textColor="@color/main_red"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/bg_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/bg_title"
-            tools:text="成交价:￥10.8"/>
+            tools:text="出价:10次"/>
 
         <TextView
             android:id="@+id/tv_title"
@@ -61,13 +64,43 @@
             app:layout_constraintEnd_toStartOf="@+id/tv_price"
             app:layout_constraintStart_toStartOf="@+id/bg_title"
             app:layout_constraintTop_toTopOf="@+id/bg_title"
-            tools:text="(第123期)急啊来大家类垃圾袋了房间撒来大家临时"/>
+            tools:text="(第123期)名称名称名称名称名称名称名称"/>
+
+        <TextView
+            android:id="@+id/tv_balance"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:text="@{pay.getStringBalance()}"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bg_title"
+            tools:text="@string/pay_balance"/>
+
+        <TextView
+            android:id="@+id/tv_minus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:text='@{"-" + pay.getIntBalance()}'
+            android:textColor="@color/main_red"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_balance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_balance"
+            tools:text="-4"/>
 
         <TextView
             android:id="@+id/tv_pay_label"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:background="@android:color/white"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -76,21 +109,21 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bg_title"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_balance"/>
 
         <TextView
             android:id="@+id/tv_pay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:text="@{StringUtil.formatSignMoney(data.current_price)}"
+            android:text='@{pay.getPay()}'
             android:textColor="@color/main_red"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/tv_pay_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_pay_label"
-            tools:text="￥10.8"/>
+            tools:text="￥6"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/v_list"
@@ -107,7 +140,7 @@
             android:id="@+id/btn_bottom"
             style="@style/ButtonBottom"
             android:onClick="onClickPay"
-            android:text="@{@string/confirm_pay(StringUtil.formatSignMoney(data.current_price))}"
+            android:text="@{@string/confirm_pay(pay.getPay())}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>

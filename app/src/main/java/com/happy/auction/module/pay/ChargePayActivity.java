@@ -3,19 +3,20 @@ package com.happy.auction.module.pay;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.OnItemClickListener;
-import com.happy.auction.databinding.ActivityOrderPayBinding;
-import com.happy.auction.entity.item.ItemOrder;
+import com.happy.auction.databinding.ActivityChargePayBinding;
 import com.happy.auction.entity.item.ItemPayType;
 import com.happy.auction.entity.param.BaseRequest;
-import com.happy.auction.entity.param.PayConfirmParam;
+import com.happy.auction.entity.param.PayChargeParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.PayConfirmResponse;
 import com.happy.auction.net.NetCallback;
@@ -25,30 +26,31 @@ import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
 
-public class OrderPayActivity extends BasePayActivity {
-    private static final String KEY_EXTRA = "EXTRA";
-
-    private ActivityOrderPayBinding mBinding;
-    private ItemOrder mData;
+public class ChargePayActivity extends BasePayActivity {
+    private final ObservableInt mAmount = new ObservableInt(10);
+    private ActivityChargePayBinding mBinding;
     private PayTypeAdapter mAdapter;
+    private View vCurrentAmount;
 
-    public static Intent newIntent(Context context, ItemOrder data) {
-        Intent intent = new Intent(context, OrderPayActivity.class);
-        intent.putExtra(KEY_EXTRA, data);
-        return intent;
+    public static Intent newIntent(Context context) {
+        return new Intent(context, ChargePayActivity.class);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_order_pay);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_charge_pay);
 
         initLayout();
     }
 
     private void initLayout() {
-        mData = (ItemOrder) getIntent().getSerializableExtra(KEY_EXTRA);
-        mBinding.setData(mData);
+        mBinding.setAmount(mAmount);
+        mBinding.setActivity(this);
+
+        vCurrentAmount = mBinding.tvAmount0;
+        vCurrentAmount.requestFocus();
+        vCurrentAmount.setSelected(true);
 
         mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.vList.addItemDecoration(new DecorationSpace());
@@ -66,10 +68,10 @@ public class OrderPayActivity extends BasePayActivity {
 
     public void onClickPay(View view) {
         final ItemPayType current = mAdapter.getItem(mAdapter.getSelectedPosition());
-        PayConfirmParam param = new PayConfirmParam();
+        PayChargeParam param = new PayChargeParam();
         param.pay_type = current.pay_type;
-        param.sid = mData.sid;
-        BaseRequest<PayConfirmParam> request = new BaseRequest<>(param);
+        param.coin = mAmount.get();
+        BaseRequest<PayChargeParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
@@ -84,5 +86,24 @@ public class OrderPayActivity extends BasePayActivity {
                 ToastUtil.show(message);
             }
         });
+    }
+
+    public void afterTextChanged(Editable editable) {
+        try {
+            int number = Integer.parseInt(editable.toString());
+            mAmount.set(number);
+        } catch (NumberFormatException e) {
+            mAmount.set(0);
+        }
+    }
+
+    public void onClickAmount(View view) {
+        mBinding.etAmount.clearFocus();
+        int amount = Integer.valueOf((String) view.getTag());
+        if (vCurrentAmount == view && mAmount.get() == amount) return;
+        mAmount.set(amount);
+        vCurrentAmount.setSelected(false);
+        vCurrentAmount = view;
+        vCurrentAmount.setSelected(true);
     }
 }

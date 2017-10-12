@@ -128,15 +128,16 @@
                 app:layout_constraintTop_toTopOf="@+id/bg_info"
                 tools:text="@string/point"/>
 
-            <ImageView
+            <Button
                 android:id="@+id/btn_charge"
-                android:layout_width="wrap_content"
-                android:layout_height="80dp"
+                android:layout_width="67dp"
+                android:layout_height="27dp"
+                android:background="@drawable/btn_charge"
                 android:onClick="@{fragment.onClickCharge}"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_info"
                 app:layout_constraintLeft_toRightOf="@+id/divider75"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/bg_info"
-                app:srcCompat="@drawable/btn_charge"/>
+                app:layout_constraintTop_toTopOf="@+id/bg_info"/>
 
             <TextView
                 android:id="@+id/tv_order"

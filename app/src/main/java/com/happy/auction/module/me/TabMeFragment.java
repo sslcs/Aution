@@ -21,6 +21,7 @@ import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.login.LoginActivity;
+import com.happy.auction.module.pay.ChargePayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.DebugLog;
@@ -117,12 +118,12 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickAuctionCoin(View view) {
         if (!isLogin()) return;
-        startActivity(BalanceActivity.newInstance(getActivity(), 0));
+        startActivity(BalanceActivity.newIntent(getActivity(), 0));
     }
 
     public void onClickFreeCoin(View view) {
         if (!isLogin()) return;
-        startActivity(BalanceActivity.newInstance(getActivity(), 1));
+        startActivity(BalanceActivity.newIntent(getActivity(), 1));
     }
 
     public void onClickPoint(View view) {
@@ -130,27 +131,28 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickCharge(View view) {
-        DebugLog.e("onClick");
+        if (!isLogin()) return;
+        startActivity(ChargePayActivity.newIntent(getActivity()));
     }
 
     public void onClickOrder(View view) {
         if (!isLogin()) return;
-        startActivity(OrderActivity.newInstance(getActivity(), 0));
+        startActivity(OrderActivity.newIntent(getActivity(), 0));
     }
 
     public void onClickAuctionGoing(View view) {
         if (!isLogin()) return;
-        startActivity(OrderActivity.newInstance(getActivity(), 1));
+        startActivity(OrderActivity.newIntent(getActivity(), 1));
     }
 
     public void onClickAuctionWin(View view) {
         if (!isLogin()) return;
-        startActivity(OrderActivity.newInstance(getActivity(), 2));
+        startActivity(OrderActivity.newIntent(getActivity(), 2));
     }
 
     public void onClickAuctionUnpaid(View view) {
         if (!isLogin()) return;
-        startActivity(OrderActivity.newInstance(getActivity(), 3));
+        startActivity(OrderActivity.newIntent(getActivity(), 3));
     }
 
     public void onClickMyCard(View view) {

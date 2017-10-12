@@ -43,6 +43,11 @@ public class AppInstance extends Application {
         this.user = user;
     }
 
+    public int getBalance() {
+        if (user == null) return -1;
+        return user.free_coin + user.auction_coin;
+    }
+
     public void setBalance(UserBalance data) {
         if (user == null) return;
         user.free_coin = data.free_coin;
@@ -66,7 +71,7 @@ public class AppInstance extends Application {
         PreferenceUtil.setToken(token);
     }
 
-    public String getChannel(){
+    public String getChannel() {
         return "";
     }
 

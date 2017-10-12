@@ -1,11 +1,13 @@
 package com.happy.auction.entity.param;
 
+import java.io.Serializable;
+
 /**
  * Created by LiuCongshan on 17-8-21.
  * 参与竞拍参数
  */
 
-public class BidParam extends BaseParam {
+public class BidParam extends BaseParam implements Serializable{
     /**
      * 商品动态sid
      */

@@ -9,15 +9,8 @@ public class ItemPayType {
     //支付宝
     public static final int ALIPAY = 1;
 
-    //爱贝
-    public static final int IAPPAY_WEB = 6;
-
     //银联支付
     public static final int UNIONPAY = 9;
-
-    //易宝支付
-    public static final int EPAY = 8;
-
     /**
      * 威富通
      */

@@ -14,7 +14,7 @@ public class BalanceActivity extends BaseActivity {
     private static final String KEY_SELECTION = "selection";
     private ActivityTabPagerBinding binding;
 
-    public static Intent newInstance(Context context, int selection) {
+    public static Intent newIntent(Context context, int selection) {
         Intent intent = new Intent(context, BalanceActivity.class);
         intent.putExtra(KEY_SELECTION, selection);
         return intent;

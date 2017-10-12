@@ -6,7 +6,12 @@ package com.happy.auction.entity.param;
  */
 
 public class BaseParam {
+    /**
+     * 每个分页item的数量
+     */
+    public final static int DEFAULT_LIMIT = 10;
+    /**
+     * 接口名称
+     */
     transient String action;
-
-    public final static  int DEFAULT_LIMIT = 10;
 }
