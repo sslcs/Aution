@@ -25,7 +25,7 @@
 
         <EditText
             android:id="@+id/et_phone"
-            style="@style/EditText"
+            style="@style/LoginEditText"
             android:afterTextChanged="@{activity.afterPhoneChanged}"
             android:hint="@string/hint_phone"
             android:inputType="phone"
@@ -51,7 +51,7 @@
 
         <EditText
             android:id="@+id/et_captcha"
-            style="@style/EditText"
+            style="@style/LoginEditText"
             android:layout_marginTop="1dp"
             android:afterTextChanged="@{activity.afterTextChanged}"
             android:hint="@string/hint_captcha"
@@ -65,7 +65,7 @@
 
         <EditText
             android:id="@+id/et_password"
-            style="@style/EditText"
+            style="@style/LoginEditText"
             android:layout_marginTop="1dp"
             android:afterTextChanged="@{activity.afterTextChanged}"
             android:hint="@string/hint_password"
@@ -90,7 +90,7 @@
 
         <EditText
             android:id="@+id/et_password_confirm"
-            style="@style/EditText"
+            style="@style/LoginEditText"
             android:layout_marginTop="1dp"
             android:afterTextChanged="@{activity.afterTextChanged}"
             android:hint="@string/hint_password_confirm"

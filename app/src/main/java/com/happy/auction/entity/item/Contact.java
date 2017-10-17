@@ -2,10 +2,10 @@ package com.happy.auction.entity.item;
 
 /**
  * Created by LiuCongshan on 17-10-09.
- * 虚拟收货地址
+ * 联系人
  */
 
-public class AddressVirtual {
+public class Contact {
     /**
      * 是否默认， 1:是；0:否
      */

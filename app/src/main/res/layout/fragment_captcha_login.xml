@@ -13,7 +13,7 @@
         tools:context="com.happy.auction.module.login.CaptchaLoginFragment">
         <EditText
             android:id="@+id/et_phone"
-            style="@style/EditText"
+            style="@style/LoginEditText"
             android:layout_marginTop="8dp"
             android:afterTextChanged="@{fragment.afterPhoneChanged}"
             android:hint="@string/hint_phone"
@@ -39,7 +39,7 @@
 
         <EditText
             android:id="@+id/et_captcha"
-            style="@style/EditText"
+            style="@style/LoginEditText"
             android:layout_marginTop="1dp"
             android:afterTextChanged="@{fragment.afterCaptchaChanged}"
             android:hint="@string/hint_captcha"

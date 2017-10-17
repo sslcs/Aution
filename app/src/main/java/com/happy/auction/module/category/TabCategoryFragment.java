@@ -68,7 +68,9 @@ public class TabCategoryFragment extends Fragment {
         adapterCategory.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (position == adapterCategory.getSelectedPosition()) return;
+                if (position == adapterCategory.getSelectedPosition()) {
+                    return;
+                }
                 adapterCategory.setSelectedPosition(position);
                 currentCategory = adapterCategory.getItem(position);
                 refresh();
@@ -112,7 +114,9 @@ public class TabCategoryFragment extends Fragment {
                 ItemGoods item = new ItemGoods();
                 item.sid = event.sid;
                 int position = adapterGoods.getPosition(item);
-                if (position == -1) return;
+                if (position == -1) {
+                    return;
+                }
                 item = adapterGoods.getItem(position);
                 item.current_price = event.current_price;
                 item.bid_expire_time = event.bid_expire_time;
@@ -126,7 +130,9 @@ public class TabCategoryFragment extends Fragment {
                 ItemGoods item = new ItemGoods();
                 item.sid = event.sid;
                 int position = adapterGoods.getPosition(item);
-                if (position == -1) return;
+                if (position == -1) {
+                    return;
+                }
                 item = adapterGoods.getItem(position);
                 item.setStatus(0);
                 adapterGoods.notifyItemChanged(position);
@@ -153,7 +159,9 @@ public class TabCategoryFragment extends Fragment {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemCategory>>>() {}.getType();
                 DataResponse<ArrayList<ItemCategory>> obj = GsonSingleton.get().fromJson(response, type);
-                if (obj.data == null || obj.data.isEmpty()) return;
+                if (obj.data == null || obj.data.isEmpty()) {
+                    return;
+                }
                 adapterCategory.addAll(obj.data);
                 currentCategory = adapterCategory.getItem(0);
                 refresh();
@@ -172,7 +180,9 @@ public class TabCategoryFragment extends Fragment {
                 adapterGoods.setLoaded();
                 Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
                 DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
-                if (currentIndex == 0) adapterGoods.clear();
+                if (currentIndex == 0) {
+                    adapterGoods.clear();
+                }
 
                 int size = 0;
                 if (obj.data.goods != null && !obj.data.goods.isEmpty()) {

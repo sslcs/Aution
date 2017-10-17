@@ -81,7 +81,7 @@ public class CoinFragment extends BaseFragment {
     }
 
     public void onClickCharge(View view) {
-        DebugLog.e("onClick");
+        DebugLog.e("onClickView");
     }
 
     public Spannable getBalance() {

@@ -3,7 +3,7 @@ package com.happy.auction.entity.response;
 import android.text.TextUtils;
 
 import com.happy.auction.entity.item.Address;
-import com.happy.auction.entity.item.AddressVirtual;
+import com.happy.auction.entity.item.Contact;
 import com.happy.auction.entity.item.ItemOrder;
 
 /**
@@ -35,7 +35,7 @@ public class OrderDetail extends ItemOrder {
     /**
      * status==4、type!=1 时为确认收货的虚拟收货地址
      */
-    public AddressVirtual vir_address;
+    public Contact vir_address;
     /**
      * status==3、type==1 时为用户默认实物收货地址，status==4、type==1 时为确认收货的实物收货地址
      */

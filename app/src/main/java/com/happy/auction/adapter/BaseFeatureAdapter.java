@@ -164,5 +164,6 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
 
     public void setLoaded() {
         isLoaded = true;
+        notifyDataSetChanged();
     }
 }

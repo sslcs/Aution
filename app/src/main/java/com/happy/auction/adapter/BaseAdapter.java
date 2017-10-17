@@ -23,7 +23,9 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
     }
 
     public void clear() {
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
         data.clear();
         notifyDataSetChanged();
     }
@@ -37,17 +39,23 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
     }
 
     public T getItem(int position) {
-        if (data == null || position >= data.size() || position < 0) return null;
+        if (data == null || position >= data.size() || position < 0) {
+            return null;
+        }
         return data.get(position);
     }
 
     public int getPosition(T item) {
-        if (data == null || data.isEmpty()) return -1;
+        if (data == null || data.isEmpty()) {
+            return -1;
+        }
         return data.indexOf(item);
     }
 
     public T getLast() {
-        if (data == null) return null;
+        if (data == null) {
+            return null;
+        }
         return getItem(data.size() - 1);
     }
 
@@ -69,7 +77,9 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (item == null || onItemClickListener == null) return;
+                if (item == null || onItemClickListener == null) {
+                    return;
+                }
                 onItemClickListener.onItemClick(view, holder.getAdapterPosition());
             }
         });
@@ -107,15 +117,25 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
             return null;
         }
         T item = data.remove(position);
-        notifyDataSetChanged();
+        notifyItemChanged(position);
         return item;
     }
 
     public boolean removeItem(T item) {
-        if (data == null) return false;
-        boolean success = data.remove(item);
-        notifyDataSetChanged();
-        return success;
+        if (data == null) {
+            return false;
+        }
+        int position = data.indexOf(item);
+        return removeItem(position) != null;
+    }
+
+    public void notifyItemChanged(T item) {
+        if (data != null) {
+            int position = data.indexOf(item);
+            if (position != -1) {
+                notifyItemChanged(position);
+            }
+        }
     }
 
     final public int getRealCount() {

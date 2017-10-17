@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable
+            name="data"
+            type="com.happy.auction.entity.item.Address"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            style="@style/TextTitle"
+            android:text="@string/manage_address"/>
+
+        <ImageView
+            style="@style/IconBack"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_toolbar_title"
+            app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
+
+        <TextView
+            android:id="@+id/tv_username_label"
+            style="@style/TabMeTextItem"
+            android:layout_height="50dp"
+            android:text="@string/contact"
+            android:textColor="@color/text_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title"/>
+
+        <EditText
+            android:id="@+id/et_username"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="100dp"
+            android:background="@null"
+            android:inputType="text"
+            android:text='@{data==null ? "" : data.username}'
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_username_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_username_label"/>
+
+        <TextView
+            android:id="@+id/tv_phone_label"
+            style="@style/TabMeTextItem"
+            android:layout_height="50dp"
+            android:layout_marginTop="1dp"
+            android:text="@string/contact_phone"
+            android:textColor="@color/text_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_username_label"/>
+
+        <EditText
+            android:id="@+id/et_phone"
+            style="@style/PhoneEditText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="100dp"
+            android:background="@null"
+            android:text='@{data==null ? "" : data.phone}'
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_phone_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_phone_label"/>
+
+        <Button
+            android:id="@+id/btn_store"
+            style="@style/ButtonCorner"
+            android:layout_margin="20dp"
+            android:onClick="onClickStore"
+            android:text="@string/store"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_phone_label"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@string/tip_contact"
+            android:textColor="@color/text_light"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_store"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

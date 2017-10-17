@@ -38,7 +38,9 @@ public class CountDownHome extends android.support.v7.widget.AppCompatTextView {
     }
 
     public void cancel() {
-        if (timer != null) timer.cancel();
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 
     public void finish() {
@@ -65,7 +67,9 @@ public class CountDownHome extends android.support.v7.widget.AppCompatTextView {
             @Override
             public void onFinish() {
                 setTime("00:00:00");
-                if (repeat) setExpireTime(System.currentTimeMillis() + 10000);
+                if (repeat) {
+                    setExpireTime(System.currentTimeMillis() + 10000);
+                }
             }
         }.start();
     }

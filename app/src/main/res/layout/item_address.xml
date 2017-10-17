@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.happy.auction.utils.StringUtil"/>
+        <variable
+            name="data"
+            type="com.happy.auction.entity.item.Address"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="15dp">
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@{data.username}"
+            android:textColor="@color/main_blue"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="(第123期)　名称名称名称"/>
+
+        <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@{data.phone}"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="13800138000"/>
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@{data.getAddress()}"
+            android:textColor="@color/text_light"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_username"
+            tools:text="广东省广州市番禺区方圆时光大学401室"/>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_address"/>
+
+        <TextView
+            android:id="@+id/tv_default"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:drawableLeft="@drawable/ic_check"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/default_address"
+            android:textColor="@color/text_light"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/divider"/>
+
+        <TextView
+            android:id="@+id/tv_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginRight="31dp"
+            android:drawableLeft="@drawable/ic_edit"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/edit"
+            android:textColor="@color/text_light"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_default"
+            app:layout_constraintEnd_toStartOf="@+id/tv_delete"
+            app:layout_constraintTop_toTopOf="@+id/tv_default"/>
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:drawableLeft="@drawable/ic_delete"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/delete"
+            android:textColor="@color/text_light"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_default"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

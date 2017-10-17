@@ -1,11 +1,17 @@
 package com.happy.auction.entity.item;
 
+import java.io.Serializable;
+
 /**
  * Created by LiuCongshan on 17-10-09.
  * 收货地址
  */
 
-public class Address {
+public class Address implements Serializable{
+    /**
+     * id
+     */
+    public int aid;
     /**
      * 是否默认， 1:是；0:否
      */
@@ -42,4 +48,8 @@ public class Address {
      * 镇
      */
     public String town;
+
+    public String getAddress() {
+        return province + city + district + street;
+    }
 }

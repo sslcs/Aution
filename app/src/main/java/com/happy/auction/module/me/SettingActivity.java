@@ -23,11 +23,11 @@ public class SettingActivity extends BaseActivity {
     }
 
     public void onClickServiceContract(View view) {
-        DebugLog.e("onClick");
+        DebugLog.e("onClickView");
     }
 
     public void onClickAboutUs(View view) {
-        DebugLog.e("onClick");
+        DebugLog.e("onClickView");
     }
 
     public void onClickLogout(View view) {

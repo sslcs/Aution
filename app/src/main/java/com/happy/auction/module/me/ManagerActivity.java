@@ -10,8 +10,11 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityManagerBinding;
+import com.happy.auction.module.address.AddressActivity;
+import com.happy.auction.module.address.ContactActivity;
 
 public class ManagerActivity extends BaseActivity {
+    private static final int REQUEST_USER_INFO = 100;
     private ActivityManagerBinding mBinding;
 
     public static Intent newIntent(Context context) {
@@ -33,11 +36,25 @@ public class ManagerActivity extends BaseActivity {
 
     public void onClickPassword(View view) {}
 
-    public void onClickAddress(View view) {}
+    public void onClickAddress(View view) {
+        startActivity(AddressActivity.newIntent());
+    }
 
-    public void onClickContact(View view) {}
+    public void onClickContact(View view) {
+        startActivity(ContactActivity.newIntent());
+    }
 
     public void onClickUsername(View view) {
-        startActivity(UsernameActivity.newIntent(this));
+        startActivityForResult(UsernameActivity.newIntent(this), REQUEST_USER_INFO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) return;
+
+        if (REQUEST_USER_INFO == requestCode) {
+            mBinding.setUser(AppInstance.getInstance().getUser());
+        }
     }
 }

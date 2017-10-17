@@ -40,6 +40,11 @@
         <activity android:name=".module.me.ManagerActivity">
         </activity>
         <activity android:name=".module.me.UsernameActivity"/>
+        <activity android:name=".module.address.AddressActivity"/>
+        <activity android:name=".module.address.AddressEditActivity"/>
+        <activity android:name=".module.address.ContactActivity"/>
+        <activity android:name=".module.address.ContactEditActivity"/>
+        <activity android:name=".module.address.ContactSelectActivity"/>
     </application>
 
 </manifest>

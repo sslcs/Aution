@@ -43,6 +43,16 @@ public class AppInstance extends Application {
         this.user = user;
     }
 
+    public void setUsername(String username) {
+        if (user == null) return;
+        user.username = username;
+    }
+
+    public void setAvatar(String avatar) {
+        if (user == null) return;
+        user.avatar = avatar;
+    }
+
     public int getBalance() {
         if (user == null) return -1;
         return user.free_coin + user.auction_coin;

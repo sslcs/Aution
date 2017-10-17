@@ -25,13 +25,9 @@
             app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:gravity="center_vertical"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:text="@string/username"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
+            style="@style/TextTitleRight"
+            android:text="@string/store"
+            android:onClick="onClickStore"
             app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_title"
             app:layout_constraintEnd_toEndOf="@+id/tv_toolbar_title"
             app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>

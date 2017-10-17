@@ -126,7 +126,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickPoint(View view) {
-        DebugLog.e("onClick");
+        DebugLog.e("onClickView");
     }
 
     public void onClickCharge(View view) {
@@ -155,19 +155,19 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickMyCard(View view) {
-        DebugLog.e("onClick");
+        DebugLog.e("onClickView");
     }
 
     public void onClickMyPublish(View view) {
-        DebugLog.e("onClick");
+        DebugLog.e("onClickView");
     }
 
     public void onClickMyService(View view) {
-        DebugLog.e("onClick");
+        DebugLog.e("onClickView");
     }
 
     public void onClickMyMessage(View view) {
-        DebugLog.e("onClick");
+        DebugLog.e("onClickView");
     }
 
     @Override

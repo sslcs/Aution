@@ -57,4 +57,5 @@ dependencies {
     implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
     // RxBinding
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    implementation 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
 }
