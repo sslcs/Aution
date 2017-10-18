@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
+import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivitySelectAddressBinding;
 import com.happy.auction.entity.item.Contact;
@@ -29,10 +30,10 @@ import java.util.ArrayList;
  * 选择联系人界面
  */
 public class ContactSelectActivity extends BaseActivity {
+    public static final String KEY_CONTACT_ID = "CONTACT";
     private final static int REQUEST_CODE = 100;
-
     private ActivitySelectAddressBinding mBinding;
-    private ContactAdapter adapter;
+    private ContactSelectAdapter adapter;
 
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), ContactSelectActivity.class);
@@ -50,7 +51,13 @@ public class ContactSelectActivity extends BaseActivity {
 
         mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.vList.addItemDecoration(new DecorationSpace(10));
-        adapter = new ContactAdapter();
+        adapter = new ContactSelectAdapter();
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                adapter.setSelectPosition(position);
+            }
+        });
         mBinding.vList.setAdapter(adapter);
 
         loadData();
@@ -66,6 +73,7 @@ public class ContactSelectActivity extends BaseActivity {
                 Type type = new TypeToken<DataResponse<ArrayList<Contact>>>() {}.getType();
                 DataResponse<ArrayList<Contact>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null && !obj.data.isEmpty()) {
+                    adapter.clear();
                     adapter.addAll(obj.data);
                 }
             }
@@ -79,14 +87,16 @@ public class ContactSelectActivity extends BaseActivity {
     }
 
     public void onClickConfirm(View view) {
-
+        Intent intent = new Intent();
+        intent.putExtra(KEY_CONTACT_ID, adapter.getItem(adapter.getSelectPosition()).vaid);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (RESULT_OK == resultCode) {
-            adapter.clear();
             loadData();
         }
     }

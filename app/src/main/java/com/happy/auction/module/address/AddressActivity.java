@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
+import com.happy.auction.adapter.OnViewClickListener;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityAddressBinding;
 import com.happy.auction.entity.item.Address;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
  * Created by LiuCongshan on 17-10-16.
  * 收货地址界面
  */
-public class AddressActivity extends BaseActivity implements AddressAdapter.OnViewClickListener {
+public class AddressActivity extends BaseActivity implements OnViewClickListener<Address> {
     private final static int REQUEST_ADD = 100;
 
     private ActivityAddressBinding mBinding;
@@ -64,10 +65,10 @@ public class AddressActivity extends BaseActivity implements AddressAdapter.OnVi
             @Override
             public void onSuccess(String response, String message) {
                 adapter.setLoaded();
-                adapter.clear();
                 Type type = new TypeToken<DataResponse<ArrayList<Address>>>() {}.getType();
                 DataResponse<ArrayList<Address>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null && !obj.data.isEmpty()) {
+                    adapter.clear();
                     adapter.addAll(obj.data);
                 }
             }
@@ -93,9 +94,9 @@ public class AddressActivity extends BaseActivity implements AddressAdapter.OnVi
     }
 
     @Override
-    public void onClickView(View view, Address item) {
+    public void onViewClick(View view, Address item, int position) {
         if (R.id.tv_default == view.getId()) {
-            setDefault(item);
+            setDefault(item, position);
         } else if (R.id.tv_edit == view.getId()) {
             edit(item);
         } else if (R.id.tv_delete == view.getId()) {
@@ -103,15 +104,14 @@ public class AddressActivity extends BaseActivity implements AddressAdapter.OnVi
         }
     }
 
-    private void setDefault(final Address item) {
+    private void setDefault(final Address item, final int position) {
         AddressDefaultParam param = new AddressDefaultParam();
         param.aid = item.aid;
         BaseRequest<AddressDefaultParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.clear();
-                loadData();
+                adapter.setPositionDefault(position);
             }
         });
     }
@@ -127,7 +127,8 @@ public class AddressActivity extends BaseActivity implements AddressAdapter.OnVi
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.removeItem(item);
+                int position = adapter.getPosition(item);
+                adapter.removeItem(position);
             }
         });
     }

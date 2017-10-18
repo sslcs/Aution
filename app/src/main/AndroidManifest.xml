@@ -10,35 +10,25 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".module.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".module.detail.AuctionDetailActivity">
-        </activity>
-        <activity android:name=".module.me.SettingActivity">
-        </activity>
-        <activity android:name=".module.login.LoginActivity">
-        </activity>
-        <activity android:name=".module.login.ForgetActivity">
-        </activity>
-        <activity android:name=".module.me.BalanceActivity">
-        </activity>
+        <activity android:name=".module.detail.AuctionDetailActivity"/>
+        <activity android:name=".module.me.SettingActivity"/>
+        <activity android:name=".module.login.LoginActivity"/>
+        <activity android:name=".module.login.ForgetActivity"/>
+        <activity android:name=".module.me.BalanceActivity"/>
         <activity android:name=".module.me.OrderActivity"/>
         <activity android:name=".module.detail.BidRecordActivity"/>
         <activity android:name=".module.me.OrderDetailActivity"/>
-        <activity android:name=".module.pay.OrderPayActivity">
-        </activity>
+        <activity android:name=".module.pay.OrderPayActivity"/>
         <activity android:name=".module.pay.AuctionPayActivity"/>
         <activity android:name=".module.pay.ChargePayActivity"/>
-        <activity android:name=".module.me.ManagerActivity">
-        </activity>
+        <activity android:name=".module.me.ManagerActivity"/>
         <activity android:name=".module.me.UsernameActivity"/>
         <activity android:name=".module.address.AddressActivity"/>
         <activity android:name=".module.address.AddressEditActivity"/>

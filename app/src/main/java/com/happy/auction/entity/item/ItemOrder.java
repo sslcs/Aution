@@ -8,6 +8,11 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ItemOrder extends BaseGoods {
+    public final static int STATUS_GOING = 1;
+    public final static int STATUS_WIN = 2;
+    public final static int STATUS_PAID = 3;
+    public final static int STATUS_CONFIRM = 4;
+    public final static int STATUS_BASK = 5;
     /**
      * 订单 id
      */

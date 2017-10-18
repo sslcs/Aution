@@ -14,20 +14,24 @@ import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityOrderDetailBinding;
 import com.happy.auction.entity.item.ItemOrder;
 import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.param.ConfirmAddressParam;
 import com.happy.auction.entity.param.OrderDetailParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.OrderDetail;
+import com.happy.auction.module.address.ContactSelectActivity;
 import com.happy.auction.module.pay.OrderPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.StringUtil;
+import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
 
 public class OrderDetailActivity extends BaseActivity {
     private static final String KEY_ITEM = "KEY_ITEM";
     private static final int REQUEST_CODE_PAY = 100;
+    private static final int REQUEST_CODE_CONTACT = 101;
 
     private ActivityOrderDetailBinding mBinding;
     private OrderDetail mData;
@@ -68,12 +72,15 @@ public class OrderDetailActivity extends BaseActivity {
         mBinding.tvProgress2.setSelected(mData.status == 4);
         mBinding.tvProgress3.setSelected(mData.status >= 5);
         mBinding.tvTimeProgress0.setText(StringUtil.formatTimeMinute(mData.prize_time));
-        if (mData.pay_time != 0)
+        if (mData.pay_time != 0) {
             mBinding.tvTimeProgress1.setText(StringUtil.formatTimeMinute(mData.pay_time));
-        if (mData.confirm_prize_time != 0)
+        }
+        if (mData.confirm_prize_time != 0) {
             mBinding.tvTimeProgress2.setText(StringUtil.formatTimeMinute(mData.confirm_prize_time));
-        if (mData.bask_time != 0)
+        }
+        if (mData.bask_time != 0) {
             mBinding.tvTimeProgress3.setText(StringUtil.formatTimeMinute(mData.bask_time));
+        }
     }
 
     private void loadData() {
@@ -94,13 +101,13 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void setBottom() {
-        if (mData.status == 4) {
+        if (mData.status == OrderDetail.STATUS_CONFIRM) {
             // 已确认
             mBinding.btnBottom.setText(R.string.go_bask);
-        } else if (mData.status >= 5) {
+        } else if (mData.status >= OrderDetail.STATUS_BASK) {
             // 已晒单
             mBinding.btnBottom.setText(R.string.check_bask);
-        } else if (mData.status == 2) {
+        } else if (mData.status == OrderDetail.STATUS_WIN) {
             // 已拍中
             mBinding.btnBottom.setText(R.string.go_pay);
         } else if (mData.type == 1) {
@@ -113,11 +120,11 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     public void onClickBtnBottom(View view) {
-        if (mData.status == 4) {
+        if (mData.status == OrderDetail.STATUS_CONFIRM) {
             // 已确认
-        } else if (mData.status >= 5) {
+        } else if (mData.status >= OrderDetail.STATUS_BASK) {
             // 已晒单
-        } else if (mData.status == 2) {
+        } else if (mData.status == OrderDetail.STATUS_WIN) {
             // 已拍中
             Intent intent = OrderPayActivity.newIntent(this, mOrder);
             startActivityForResult(intent, REQUEST_CODE_PAY);
@@ -125,11 +132,42 @@ public class OrderDetailActivity extends BaseActivity {
             // 已付款-实物
         } else {
             // 已付款-虚拟物品
+            Intent intent = ContactSelectActivity.newIntent();
+            startActivityForResult(intent, REQUEST_CODE_CONTACT);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (REQUEST_CODE_CONTACT == requestCode) {
+            int id = data.getIntExtra(ContactSelectActivity.KEY_CONTACT_ID, -1);
+            if (id != -1) {
+                onSelectContact(id);
+            }
+        }
+    }
+
+    private void onSelectContact(int id) {
+        ConfirmAddressParam param = new ConfirmAddressParam();
+        param.aid = id;
+        param.sid = mData.sid;
+        BaseRequest<ConfirmAddressParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                loadData();
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                super.onError(code, message);
+                ToastUtil.show(message);
+            }
+        });
     }
 }

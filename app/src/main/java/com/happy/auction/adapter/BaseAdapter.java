@@ -101,7 +101,7 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
             data = new ArrayList<>();
         }
         data.add(item);
-        notifyDataSetChanged();
+        notifyItemInserted(data.size() - 1);
     }
 
     public void addItem(int position, T item) {
@@ -109,7 +109,7 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
             data = new ArrayList<>();
         }
         data.add(position, item);
-        notifyDataSetChanged();
+        notifyItemInserted(position);
     }
 
     public T removeItem(int position) {
@@ -117,25 +117,8 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
             return null;
         }
         T item = data.remove(position);
-        notifyItemChanged(position);
+        notifyItemRemoved(position);
         return item;
-    }
-
-    public boolean removeItem(T item) {
-        if (data == null) {
-            return false;
-        }
-        int position = data.indexOf(item);
-        return removeItem(position) != null;
-    }
-
-    public void notifyItemChanged(T item) {
-        if (data != null) {
-            int position = data.indexOf(item);
-            if (position != -1) {
-                notifyItemChanged(position);
-            }
-        }
     }
 
     final public int getRealCount() {

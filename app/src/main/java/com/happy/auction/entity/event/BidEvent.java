@@ -11,7 +11,7 @@ public class BidEvent extends BaseEvent {
     public int sid;
     public int gid;
     public int current_price;
-    public long bid_expire_time;
+    public int bid_expire_time;
 
     public String uid;
     public String username;

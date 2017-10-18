@@ -50,17 +50,14 @@ public class CountDownHome extends android.support.v7.widget.AppCompatTextView {
         setText(getResources().getString(R.string.auction_finish));
     }
 
-    public void setExpireTime(long expireTime) {
+    public void setExpireTime(int expireTime) {
         cancel();
-        long left = expireTime - System.currentTimeMillis();
-        timer = new CountDownTimer(left, 1000) {
+        timer = new CountDownTimer(expireTime, 1000) {
             @Override
             public void onTick(long l) {
-                long mod1000 = l % 1000;
                 long divide1000 = l / 1000;
                 long minutes = divide1000 / 60;
                 long seconds = divide1000 % 60;
-                long millis = mod1000 / 10;
                 setTime(String.format(Locale.CHINA, FORMATTER, 0, minutes, seconds));
             }
 
@@ -68,7 +65,7 @@ public class CountDownHome extends android.support.v7.widget.AppCompatTextView {
             public void onFinish() {
                 setTime("00:00:00");
                 if (repeat) {
-                    setExpireTime(System.currentTimeMillis() + 10000);
+                    setExpireTime(10000);
                 }
             }
         }.start();

@@ -1,7 +1,5 @@
 package com.happy.auction.entity.response;
 
-import android.text.TextUtils;
-
 import com.happy.auction.entity.item.Address;
 import com.happy.auction.entity.item.Contact;
 import com.happy.auction.entity.item.ItemOrder;
@@ -42,7 +40,9 @@ public class OrderDetail extends ItemOrder {
     public Address address;
 
     public OrderDetail(ItemOrder item) {
-        if (item == null) return;
+        if (item == null) {
+            return;
+        }
 
         pid = item.pid;
         order_num = item.order_num;
@@ -53,46 +53,46 @@ public class OrderDetail extends ItemOrder {
     }
 
     public String getAddress() {
-        if (address == null) return "";
-        if (address.province == null)
-            return "a;sjdfl;asjdlfjaslfjlasjlfjasfjashkfhakshfkhaskfhkasdhfkhskdhfkshadkhsa";
+        if (address == null) {
+            return "";
+        }
         return address.province + address.city + address.district + address.street;
     }
 
     public String getVirtualAddress() {
-        if (vir_address == null) return "";
-        if (TextUtils.isEmpty(vir_address.remark))
-            return "1311321312131";
-        return vir_address.vir_addr_type == 2 ? vir_address.qq : vir_address.phone;
+        if (vir_address == null) {
+            return "";
+        }
+        return vir_address.type == 2 ? vir_address.qq : vir_address.phone;
     }
 
     public String getPhone() {
-        if (address == null) return "";
-        if (address.province == null)
-            return "12345678910";
+        if (address == null) {
+            return "";
+        }
         return address.phone;
     }
 
     public String getUsername() {
-        if (address == null) return "";
-        if (address.province == null)
-            return "恭喜发财";
+        if (address == null) {
+            return "";
+        }
         return address.username;
     }
 
     public boolean showAddress() {
-        return type == 1 && status > 2;
+        return type == 1 && status > STATUS_WIN;
     }
 
     public boolean showChangeAddress() {
-        return type == 1 && status == 3;
+        return type == 1 && status == STATUS_PAID;
     }
 
     public boolean showMailInfo() {
-        return type == 1 && status > 3;
+        return type == 1 && status > STATUS_PAID;
     }
 
     public boolean showVirtualAddress() {
-        return type != 1 && status > 3;
+        return type != 1 && status > STATUS_PAID;
     }
 }

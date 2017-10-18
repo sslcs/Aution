@@ -10,6 +10,7 @@ import com.happy.auction.net.NetCallback;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
+import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -25,14 +26,18 @@ public class MessageHandler {
     private final List<NetCallback> handlers = Collections.synchronizedList(new ArrayList<NetCallback>());
 
     public void addHandler(NetCallback handler) {
-        if (handler == null) return;
+        if (handler == null) {
+            return;
+        }
         handlers.add(0, handler);
     }
 
     public void handle(String message) {
         Type type = new TypeToken<BaseResponse>() {}.getType();
         BaseResponse base = GsonSingleton.get().fromJson(message, type);
-        if (base == null) return;
+        if (base == null) {
+            return;
+        }
 
         if (BaseEvent.EVENT_BID.equals(base.event)) {
             DebugLog.e("onBid : " + message);
@@ -44,6 +49,8 @@ public class MessageHandler {
             type = new TypeToken<DataResponse<AuctionEndEvent>>() {}.getType();
             DataResponse<AuctionEndEvent> response = GsonSingleton.get().fromJson(message, type);
             onEvent(response.data);
+        } else if (BaseEvent.EVENT_OFFLINE.equals(base.event)) {
+            ToastUtil.show(message);
         } else {
             DebugLog.e("onMessage : " + message);
             handleResponse(base, message);
@@ -51,14 +58,17 @@ public class MessageHandler {
     }
 
     private synchronized void handleResponse(BaseResponse base, String response) {
-        if (handlers.isEmpty()) return;
+        if (handlers.isEmpty()) {
+            return;
+        }
         if (base.isSuccess()) {
             for (int i = handlers.size() - 1; i >= 0; i--) {
                 NetCallback handler = handlers.get(i);
                 if (handler.tag.equals(base.tag)) {
                     handler.onSuccess(response, base.msg);
-                    if (i < handlers.size())
+                    if (i < handlers.size()) {
                         handlers.remove(i);
+                    }
                     break;
                 }
             }
@@ -67,8 +77,9 @@ public class MessageHandler {
                 NetCallback handler = handlers.get(i);
                 if (handler.tag.equals(base.tag)) {
                     handler.onError(base.code, base.msg);
-                    if (i < handlers.size())
+                    if (i < handlers.size()) {
                         handlers.remove(i);
+                    }
                     break;
                 }
             }

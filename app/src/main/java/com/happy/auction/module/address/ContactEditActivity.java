@@ -10,8 +10,9 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityContactEditBinding;
+import com.happy.auction.entity.item.Contact;
 import com.happy.auction.entity.param.BaseRequest;
-import com.happy.auction.entity.param.ContactAddParam;
+import com.happy.auction.entity.param.ContactEditParam;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.ToastUtil;
@@ -22,10 +23,18 @@ import com.happy.auction.utils.ToastUtil;
  */
 
 public class ContactEditActivity extends BaseActivity {
+    private static final String KEY_DATA = "DATA";
     private ActivityContactEditBinding mBinding;
+    private Contact mData;
 
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), ContactEditActivity.class);
+    }
+
+    public static Intent newIntent(Contact contact) {
+        Intent intent = newIntent();
+        intent.putExtra(KEY_DATA, contact);
+        return intent;
     }
 
     @Override
@@ -37,14 +46,20 @@ public class ContactEditActivity extends BaseActivity {
     }
 
     private void initLayout() {
-
+        if (getIntent().hasExtra(KEY_DATA)) {
+            mData = (Contact) getIntent().getSerializableExtra(KEY_DATA);
+            mBinding.setData(mData);
+        }
     }
 
     public void onClickStore(View view) {
-        ContactAddParam param = new ContactAddParam();
+        ContactEditParam param = new ContactEditParam(mData != null);
         param.remark = mBinding.etUsername.getText().toString().trim();
         param.phone = mBinding.etPhone.getText().toString().trim();
-        BaseRequest<ContactAddParam> request = new BaseRequest<>(param);
+        if (mData != null) {
+            param.vaid = mData.vaid;
+        }
+        BaseRequest<ContactEditParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {

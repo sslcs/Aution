@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.happy.auction.entity.item.Address"/>
+            type="com.happy.auction.entity.item.Contact"/>
     </data>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         <TextView
             android:id="@+id/tv_toolbar_title"
             style="@style/TextTitle"
-            android:text="@string/manage_address"/>
+            android:text="@string/manage_contact"/>
 
         <ImageView
             style="@style/IconBack"
@@ -40,7 +40,7 @@
             android:layout_marginLeft="100dp"
             android:background="@null"
             android:inputType="text"
-            android:text='@{data==null ? "" : data.username}'
+            android:text='@{data==null ? "" : data.remark}'
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_username_label"
             app:layout_constraintEnd_toEndOf="parent"

@@ -11,7 +11,6 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.adapter.DecorationColor;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
-import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.databinding.FragmentTabCategoryBinding;
 import com.happy.auction.entity.event.AuctionEndEvent;
 import com.happy.auction.entity.event.BidEvent;

@@ -27,7 +27,6 @@ public class CountDownDetail extends android.support.v7.widget.AppCompatTextView
 
     private int widthNormal;
     private boolean reset = false;
-    private boolean disableAnimator = false;
 
     public CountDownDetail(Context context) {
         super(context);
@@ -53,7 +52,9 @@ public class CountDownDetail extends android.support.v7.widget.AppCompatTextView
     }
 
     public void cancel() {
-        if (timer != null) timer.cancel();
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 
     public void finish() {
@@ -66,10 +67,9 @@ public class CountDownDetail extends android.support.v7.widget.AppCompatTextView
         this.tvSync = tvSync;
     }
 
-    public void setExpireTime(long expireTime) {
+    public void setExpireTime(int expireTime) {
         cancel();
-        long left = expireTime - System.currentTimeMillis();
-        timer = new CountDownTimer(left, 10) {
+        timer = new CountDownTimer(expireTime, 10) {
             @Override
             public void onTick(long l) {
                 long mod1000 = l % 1000;
@@ -79,7 +79,6 @@ public class CountDownDetail extends android.support.v7.widget.AppCompatTextView
                 long millis = mod1000 / 10;
                 setTime(String.format(Locale.CHINA, FORMATTER, minutes, seconds, millis));
 
-                if (disableAnimator) return;
                 if (l < 3300 && l > 1200 && mod1000 < 300 && mod1000 > 200) {
                     startAnimator();
                 }
@@ -88,7 +87,9 @@ public class CountDownDetail extends android.support.v7.widget.AppCompatTextView
             @Override
             public void onFinish() {
                 setTime("00:00:00");
-                if (repeat) setExpireTime(System.currentTimeMillis() + 10000);
+                if (repeat) {
+                    setExpireTime(10000);
+                }
             }
         }.start();
     }
@@ -120,9 +121,5 @@ public class CountDownDetail extends android.support.v7.widget.AppCompatTextView
         if (!animator.isRunning()) {
             animator.start();
         }
-    }
-
-    public void setDisableAnimator() {
-        disableAnimator = true;
     }
 }

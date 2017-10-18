@@ -8,6 +8,7 @@ package com.happy.auction.entity.response;
 public class BaseEvent {
     public final static String EVENT_BID = "goods_new_bid";
     public final static String EVENT_AUCTION_END = "goods_bid_end";
+    public final static String EVENT_OFFLINE = "user_other_login";
 
     /**
      * 事件代码

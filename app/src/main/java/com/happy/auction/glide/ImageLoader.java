@@ -3,7 +3,6 @@ package com.happy.auction.glide;
 
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -27,8 +26,14 @@ public class ImageLoader {
                 .into(view);
     }
 
-    public static void displayImage(String requestUrl, ImageView view) {
-        displayImage(requestUrl, view, R.drawable.pic_default);
+    public static void displayImage(String url, ImageView view) {
+        displayImage(url, view, R.drawable.pic_default);
+    }
+
+    public static void displayMenu(String url, ImageView view) {
+        GlideApp.with(AppInstance.getInstance())
+                .load(url)
+                .into(view);
     }
 
     public static void displayOriginal(String url, final ImageView view) {

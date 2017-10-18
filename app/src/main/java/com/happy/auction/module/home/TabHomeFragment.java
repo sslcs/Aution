@@ -96,7 +96,9 @@ public class TabHomeFragment extends BaseFragment {
         binding.tvAnnounce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (view.getTag() == null) return;
+                if (view.getTag() == null) {
+                    return;
+                }
                 ItemLatest item = (ItemLatest) view.getTag();
                 startActivity(AuctionDetailActivity.newIntent(item));
             }
@@ -143,7 +145,9 @@ public class TabHomeFragment extends BaseFragment {
                 ItemGoods item = new ItemGoods();
                 item.sid = event.sid;
                 int position = adapter.getPosition(item);
-                if (position == -1) return;
+                if (position == -1) {
+                    return;
+                }
                 item = adapter.getItem(position);
                 item.current_price = event.current_price;
                 item.bid_expire_time = event.bid_expire_time;
@@ -158,7 +162,9 @@ public class TabHomeFragment extends BaseFragment {
                 ItemGoods item = new ItemGoods();
                 item.sid = event.sid;
                 int position = adapter.getPosition(item);
-                if (position == -1) return;
+                if (position == -1) {
+                    return;
+                }
                 item = adapter.getItem(position);
                 item.setStatus(0);
                 adapter.notifyItemChanged(position);
@@ -195,7 +201,9 @@ public class TabHomeFragment extends BaseFragment {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemLatest>>>() {}.getType();
                 DataResponse<ArrayList<ItemLatest>> obj = GsonSingleton.get().fromJson(response, type);
-                if (obj.data == null || obj.data.isEmpty()) return;
+                if (obj.data == null || obj.data.isEmpty()) {
+                    return;
+                }
                 binding.tvAnnounce.addData(obj.data);
             }
         });
@@ -209,14 +217,16 @@ public class TabHomeFragment extends BaseFragment {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemMenu>>>() {}.getType();
                 DataResponse<ArrayList<ItemMenu>> obj = GsonSingleton.get().fromJson(response, type);
-                if (obj.data == null || obj.data.isEmpty()) return;
+                if (obj.data == null || obj.data.isEmpty()) {
+                    return;
+                }
                 int length = obj.data.size();
                 ImageView[] ivMenu = new ImageView[]{binding.menu.ivMenu0, binding.menu.ivMenu1, binding.menu.ivMenu2, binding.menu.ivMenu3};
                 TextView[] tvMenu = new TextView[]{binding.menu.tvMenu0, binding.menu.tvMenu1, binding.menu.tvMenu2, binding.menu.tvMenu3};
                 for (int i = 0; i < length && i < 4; i++) {
                     ItemMenu menu = obj.data.get(i);
                     tvMenu[i].setText(menu.title);
-                    ImageLoader.displayImage(menu.icon, ivMenu[i]);
+                    ImageLoader.displayMenu(menu.icon, ivMenu[i]);
                 }
             }
         });
@@ -230,9 +240,6 @@ public class TabHomeFragment extends BaseFragment {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemBanner>>>() {}.getType();
                 DataResponse<ArrayList<ItemBanner>> obj = GsonSingleton.get().fromJson(response, type);
-                for (ItemBanner item : obj.data) {
-                    item.img = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=110077978,2276310109&fm=200&gp=0.jpg";
-                }
                 binding.rvBanner.setAdapter(new BannerAdapter(obj.data));
                 PagingScrollHelper helper = new PagingScrollHelper();
                 helper.setUpRecycleView(binding.rvBanner);
@@ -251,7 +258,9 @@ public class TabHomeFragment extends BaseFragment {
                 adapter.setLoaded();
                 Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
                 DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
-                if (start == 0) adapter.clear();
+                if (start == 0) {
+                    adapter.clear();
+                }
                 if (obj.data.goods != null) {
                     int size = obj.data.goods.size();
                     start += size;

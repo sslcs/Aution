@@ -12,7 +12,7 @@ import com.happy.auction.R;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityAddressEditBinding;
 import com.happy.auction.entity.item.Address;
-import com.happy.auction.entity.param.AddressAddParam;
+import com.happy.auction.entity.param.AddressEditParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.TownParam;
 import com.happy.auction.entity.response.DataResponse;
@@ -56,11 +56,14 @@ public class AddressEditActivity extends BaseActivity {
     }
 
     private void initLayout() {
-
+        if (getIntent().hasExtra(KEY_DATA)) {
+            mData = (Address) getIntent().getSerializableExtra(KEY_DATA);
+            mBinding.setData(mData);
+        }
     }
 
     public void onClickStore(View view) {
-        AddressAddParam param = new AddressAddParam();
+        AddressEditParam param = new AddressEditParam(mData != null);
         param.username = mBinding.etUsername.getText().toString().trim();
         param.phone = mBinding.etPhone.getText().toString().trim();
         param.province = mProvince;
@@ -68,7 +71,10 @@ public class AddressEditActivity extends BaseActivity {
         param.district = mDistrict;
         param.town = mTown;
         param.street = mBinding.etStreet.getText().toString();
-        BaseRequest<AddressAddParam> request = new BaseRequest<>(param);
+        if (mData != null) {
+            param.aid = mData.aid;
+        }
+        BaseRequest<AddressEditParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
