@@ -20,7 +20,6 @@ public class SyncParam extends BaseParam {
     public String android_id;
     public String mac;
     public String channel = "0";
-    private int is_visitor = 0;
     private String app_ver = BuildConfig.VERSION_NAME;
     private String app_ver_num = String.valueOf(BuildConfig.VERSION_CODE);
     private String token = AppInstance.getInstance().token;
@@ -32,7 +31,6 @@ public class SyncParam extends BaseParam {
         if (!AppInstance.getInstance().isLogin()) {
             uid = null;
             token = null;
-            is_visitor = 1;
         }
     }
 }

@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
+import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.OnItemClickListener;
@@ -32,8 +33,8 @@ public class ChargePayActivity extends BasePayActivity {
     private PayTypeAdapter mAdapter;
     private View vCurrentAmount;
 
-    public static Intent newIntent(Context context) {
-        return new Intent(context, ChargePayActivity.class);
+    public static Intent newIntent() {
+        return new Intent(AppInstance.getInstance(), ChargePayActivity.class);
     }
 
     @Override

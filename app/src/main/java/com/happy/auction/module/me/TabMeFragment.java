@@ -38,38 +38,8 @@ import io.reactivex.functions.Consumer;
 public class TabMeFragment extends BaseFragment {
     private FragmentTabMeBinding binding;
 
-    public TabMeFragment() {}
-
     public static TabMeFragment newInstance() {
         return new TabMeFragment();
-    }
-
-    private SpannableString getSpannable(String text, int spanLength) {
-        final SpannableString ss = new SpannableString(text);
-        ss.setSpan(new RelativeSizeSpan(0.765f), text.length() - spanLength, text.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        final int color = getResources().getColor(R.color.text_normal);
-        ss.setSpan(new ForegroundColorSpan(color), text.length() - spanLength, text.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return ss;
-    }
-
-    public SpannableString getFreeCoin(UserInfo user) {
-        int number = user == null ? 0 : user.free_coin;
-        String text = getString(R.string.free_coin_formatter, number);
-        return getSpannable(text, 2);
-    }
-
-    public SpannableString getAuctionCoin(UserInfo user) {
-        int number = user == null ? 0 : user.auction_coin;
-        String text = getString(R.string.auction_coin_formatter, number);
-        return getSpannable(text, 2);
-    }
-
-    public SpannableString getPoint(UserInfo user) {
-        int number = user == null ? 0 : user.points;
-        String text = getString(R.string.point, number);
-        return getSpannable(text, 2);
     }
 
     @Override
@@ -111,17 +81,23 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickAvatar(View view) {
-        if (!isLogin()) return;
+        if (!isLogin()) {
+            return;
+        }
         startActivity(ManagerActivity.newIntent(getActivity()));
     }
 
     public void onClickAuctionCoin(View view) {
-        if (!isLogin()) return;
+        if (!isLogin()) {
+            return;
+        }
         startActivity(BalanceActivity.newIntent(getActivity(), 0));
     }
 
     public void onClickFreeCoin(View view) {
-        if (!isLogin()) return;
+        if (!isLogin()) {
+            return;
+        }
         startActivity(BalanceActivity.newIntent(getActivity(), 1));
     }
 
@@ -130,27 +106,37 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickCharge(View view) {
-        if (!isLogin()) return;
-        startActivity(ChargePayActivity.newIntent(getActivity()));
+        if (!isLogin()) {
+            return;
+        }
+        startActivity(ChargePayActivity.newIntent());
     }
 
     public void onClickOrder(View view) {
-        if (!isLogin()) return;
+        if (!isLogin()) {
+            return;
+        }
         startActivity(OrderActivity.newIntent(getActivity(), 0));
     }
 
     public void onClickAuctionGoing(View view) {
-        if (!isLogin()) return;
+        if (!isLogin()) {
+            return;
+        }
         startActivity(OrderActivity.newIntent(getActivity(), 1));
     }
 
     public void onClickAuctionWin(View view) {
-        if (!isLogin()) return;
+        if (!isLogin()) {
+            return;
+        }
         startActivity(OrderActivity.newIntent(getActivity(), 2));
     }
 
     public void onClickAuctionUnpaid(View view) {
-        if (!isLogin()) return;
+        if (!isLogin()) {
+            return;
+        }
         startActivity(OrderActivity.newIntent(getActivity(), 3));
     }
 
@@ -177,9 +163,17 @@ public class TabMeFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (AppInstance.getInstance().isLogin()) {
+            getBalance();
+        }
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+        if (isVisibleToUser && AppInstance.getInstance().isLogin()) {
             getBalance();
         }
     }
@@ -192,12 +186,42 @@ public class TabMeFragment extends BaseFragment {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<UserBalance>>() {}.getType();
                 DataResponse<UserBalance> obj = GsonSingleton.get().fromJson(response, type);
-                if (obj.data == null) return;
+                if (obj.data == null) {
+                    return;
+                }
                 AppInstance.getInstance().setBalance(obj.data);
                 if (binding != null) {
                     binding.setUser(AppInstance.getInstance().getUser());
                 }
             }
         });
+    }
+
+    private SpannableString getSpannable(String text, int spanLength) {
+        final SpannableString ss = new SpannableString(text);
+        ss.setSpan(new RelativeSizeSpan(0.765f), text.length() - spanLength, text.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        final int color = getResources().getColor(R.color.text_normal);
+        ss.setSpan(new ForegroundColorSpan(color), text.length() - spanLength, text.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return ss;
+    }
+
+    public SpannableString getFreeCoin(UserInfo user) {
+        int number = user == null ? 0 : user.free_coin;
+        String text = getString(R.string.free_coin_formatter, number);
+        return getSpannable(text, 2);
+    }
+
+    public SpannableString getAuctionCoin(UserInfo user) {
+        int number = user == null ? 0 : user.auction_coin;
+        String text = getString(R.string.auction_coin_formatter, number);
+        return getSpannable(text, 2);
+    }
+
+    public SpannableString getPoint(UserInfo user) {
+        int number = user == null ? 0 : user.points;
+        String text = getString(R.string.point, number);
+        return getSpannable(text, 2);
     }
 }

@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.DecorationSpace;
+import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentAuctionCoinBinding;
 import com.happy.auction.entity.param.BaseParam;
@@ -22,10 +22,10 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.CoinParam;
 import com.happy.auction.entity.response.CoinResponse;
 import com.happy.auction.entity.response.DataResponse;
-import com.happy.auction.entity.response.UserInfo;
+import com.happy.auction.entity.response.UserBalance;
+import com.happy.auction.module.pay.ChargePayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
-import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
 
 import java.lang.reflect.Type;
@@ -38,13 +38,10 @@ public class CoinFragment extends BaseFragment {
     public static final int TYPE_FREE = 2;
     private static final String KEY_TYPE = "TYPE";
 
-    private FragmentAuctionCoinBinding binding;
-    private CoinAdapter adapter;
-    private int type;
-    private int index;
-
-    public CoinFragment() {
-    }
+    private FragmentAuctionCoinBinding mBinding;
+    private CoinAdapter mAdapter;
+    private int mType;
+    private int mIndex;
 
     public static CoinFragment newInstance(int type) {
         CoinFragment fragment = new CoinFragment();
@@ -56,37 +53,37 @@ public class CoinFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle bundle) {
-        binding = FragmentAuctionCoinBinding.inflate(inflater);
+        mBinding = FragmentAuctionCoinBinding.inflate(inflater);
         initLayout();
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     private void initLayout() {
-        type = getArguments().getInt(KEY_TYPE, 1);
-        binding.btnCharge.setVisibility(type == TYPE_COIN ? View.VISIBLE : View.GONE);
+        mType = getArguments().getInt(KEY_TYPE, 1);
+        mBinding.btnCharge.setVisibility(mType == TYPE_COIN ? View.VISIBLE : View.GONE);
 
-        binding.setFragment(this);
-        binding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.vList.addItemDecoration(new DecorationSpace());
-        adapter = new CoinAdapter();
-        adapter.setLoadMoreListener(new LoadMoreListener() {
+        mBinding.setFragment(this);
+        mBinding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.vList.addItemDecoration(new DecorationSpace());
+        mAdapter = new CoinAdapter();
+        mAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 loadData();
             }
         });
-        binding.vList.setAdapter(adapter);
+        mBinding.vList.setAdapter(mAdapter);
 
         loadData();
     }
 
     public void onClickCharge(View view) {
-        DebugLog.e("onClickView");
+        startActivity(ChargePayActivity.newIntent());
     }
 
     public Spannable getBalance() {
         SpannableStringBuilder ss = new SpannableStringBuilder();
-        if (type == TYPE_COIN) {
+        if (mType == TYPE_COIN) {
             ss.append(getString(R.string.balance_formatter, AppInstance.getInstance().getUser().auction_coin));
         } else {
             ss.append(getString(R.string.free_balance_formatter, AppInstance.getInstance().getUser().free_coin));
@@ -96,33 +93,50 @@ public class CoinFragment extends BaseFragment {
         return ss;
     }
 
+    private void setBalance(CoinResponse data) {
+        if (data == null) {
+            return;
+        }
+        UserBalance balance = new UserBalance();
+        balance.free_coin = data.gift_coin;
+        balance.auction_coin = data.coin;
+        AppInstance.getInstance().setBalance(balance);
+        mBinding.tvBalance.setText(getBalance());
+    }
+
     private void loadData() {
         CoinParam param = new CoinParam();
-        param.start = index;
-        param.coin_type = type;
+        param.start = mIndex;
+        param.coin_type = mType;
         BaseRequest<CoinParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                DebugLog.e("onSuccess");
-                adapter.setLoaded();
+                mAdapter.setLoaded();
                 Type type = new TypeToken<DataResponse<CoinResponse>>() {}.getType();
                 DataResponse<CoinResponse> obj = GsonSingleton.get().fromJson(response, type);
-
-                UserInfo info = AppInstance.getInstance().getUser();
-                info.free_coin = obj.data.gift_coin;
-                info.auction_coin = obj.data.coin;
-                AppInstance.getInstance().setUser(info);
+                setBalance(obj.data);
 
                 int size = 0;
-                if (index == 0) adapter.clear();
-                if (obj.data != null && obj.data.records != null) {
-                    adapter.addAll(obj.data.records);
-                    size = obj.data.records.size();
-                    index = adapter.getLast().id;
+                if (mIndex == 0) {
+                    mAdapter.clear();
                 }
-                adapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                if (obj.data != null && obj.data.records != null) {
+                    mAdapter.addAll(obj.data.records);
+                    size = obj.data.records.size();
+                    mIndex = mAdapter.getLast().id;
+                }
+                mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getUserVisibleHint() && mType == TYPE_COIN) {
+            mIndex = 0;
+            loadData();
+        }
     }
 }

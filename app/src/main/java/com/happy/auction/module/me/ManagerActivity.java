@@ -12,6 +12,7 @@ import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityManagerBinding;
 import com.happy.auction.module.address.AddressActivity;
 import com.happy.auction.module.address.ContactActivity;
+import com.happy.auction.module.login.ChangePasswordActivity;
 
 public class ManagerActivity extends BaseActivity {
     private static final int REQUEST_USER_INFO = 100;
@@ -34,7 +35,7 @@ public class ManagerActivity extends BaseActivity {
 
     public void onClickAvatar(View view) {}
 
-    public void onClickPassword(View view) {}
+    public void onClickPassword(View view) {startActivity(ChangePasswordActivity.newIntent());}
 
     public void onClickAddress(View view) {
         startActivity(AddressActivity.newIntent());
@@ -51,7 +52,9 @@ public class ManagerActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) return;
+        if (resultCode != RESULT_OK) {
+            return;
+        }
 
         if (REQUEST_USER_INFO == requestCode) {
             mBinding.setUser(AppInstance.getInstance().getUser());

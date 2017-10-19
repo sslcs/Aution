@@ -44,11 +44,11 @@ import okhttp3.WebSocketListener;
  * 主界面
  */
 public class MainActivity extends AppCompatActivity {
-    private final MessageHandler messageHandler = new MessageHandler();
+    private final MessageHandler mMessageHandler = new MessageHandler();
     private ActivityMainBinding binding;
-    private WebSocket client = null;
+    private WebSocket mSocket = null;
     private boolean isDestroyed = false;
-    private long lastBackPressedTime;
+    private long mLastBackPressedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,15 +72,6 @@ public class MainActivity extends AppCompatActivity {
             public void accept(LoginResponse response) throws Exception {
                 AppInstance.getInstance().setLoginResponse(response);
                 syncClient();
-                getUserInfo();
-            }
-        });
-
-        RxBus.getDefault().subscribe(this, UserInfo.class, new Consumer<UserInfo>() {
-            @Override
-            public void accept(UserInfo user) throws Exception {
-                user.avatar = "http://mobile-pic.cache.iciba.com/1486980953-8616_218-135-%E9%95%BF%E5%8F%91%E5%A4%96%E5%9B%BD%E5%A5%B3.jpg";
-                AppInstance.getInstance().setUser(user);
             }
         });
     }
@@ -128,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             public void onOpen(WebSocket webSocket, Response response) {
                 super.onOpen(webSocket, response);
                 DebugLog.e("onOpen");
-                client = webSocket;
+                mSocket = webSocket;
                 syncClient();
             }
 
@@ -151,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
                 super.onFailure(webSocket, t, response);
                 DebugLog.e("onFailure");
-                messageHandler.clear();
+                mMessageHandler.clear();
                 if (isDestroyed) {
                     return;
                 }
@@ -170,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        messageHandler.handle(message);
+                        mMessageHandler.handle(message);
                     }
                 });
             }
@@ -178,12 +169,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendMessage(RequestEvent event) {
-        if (client == null) {
+        if (mSocket == null) {
             return;
         }
         DebugLog.e("sendMessage: " + event.message);
-        messageHandler.addHandler(event.callback);
-        client.send(event.message);
+        mMessageHandler.addHandler(event.callback);
+        mSocket.send(event.message);
     }
 
     private void syncClient() {
@@ -219,9 +210,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (System.currentTimeMillis() - lastBackPressedTime > 1500) {
+        if (System.currentTimeMillis() - mLastBackPressedTime > 1500) {
             ToastUtil.show(R.string.tip_exit);
-            lastBackPressedTime = System.currentTimeMillis();
+            mLastBackPressedTime = System.currentTimeMillis();
         } else {
             super.onBackPressed();
         }
@@ -235,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<UserInfo>>() {}.getType();
                 DataResponse<UserInfo> obj = GsonSingleton.get().fromJson(response, type);
+                AppInstance.getInstance().setUser(obj.data);
                 RxBus.getDefault().post(obj.data);
             }
         });

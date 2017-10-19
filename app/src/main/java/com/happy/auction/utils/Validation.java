@@ -15,9 +15,9 @@ public class Validation {
 
 
     /**
-     * 密码必须是6～18位数字或字母组成 <br/>
+     * 密码必须是8～20位数字或字母组成 <br/>
      */
-    private static final Pattern PASSWORD = Pattern.compile("^[\\w!@#$%^&*]{6,18}$");
+    private static final Pattern PASSWORD = Pattern.compile("^[\\w!@#$%^&*]{8,20}$");
 
     /**
      * 匹配手机号码

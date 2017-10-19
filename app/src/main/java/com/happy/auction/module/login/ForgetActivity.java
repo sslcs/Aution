@@ -47,12 +47,8 @@ public class ForgetActivity extends BaseActivity {
         return Validation.password(binding.etPassword.getText());
     }
 
-    private boolean validPasswordConfirm() {
-        return Validation.password(binding.etPasswordConfirm.getText());
-    }
-
     private boolean checkValid() {
-        boolean valid = validPhone() && validCaptcha() && validPassword() && validPasswordConfirm();
+        boolean valid = validPhone() && validCaptcha() && validPassword();
         if (valid) {
             String password = binding.etPassword.getText().toString();
             String confirm = binding.etPasswordConfirm.getText().toString();

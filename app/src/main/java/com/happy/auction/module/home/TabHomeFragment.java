@@ -50,14 +50,11 @@ import io.reactivex.functions.Consumer;
  * 首页
  */
 public class TabHomeFragment extends BaseFragment {
-    private FragmentTabHomeBinding binding;
-    private TabHomeAdapter adapter;
-    private int start = 0;
-    private String goods_type = GoodsParam.TYPE_HOT;
-    private Disposable disposableRefresh;
-
-    public TabHomeFragment() {
-    }
+    private FragmentTabHomeBinding mBinding;
+    private TabHomeAdapter mAdapter;
+    private int mStart = 0;
+    private String mType = GoodsParam.TYPE_HOT;
+    private Disposable mDisposableRefresh;
 
     public static TabHomeFragment newInstance() {
         return new TabHomeFragment();
@@ -65,35 +62,35 @@ public class TabHomeFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle bundle) {
-        binding = FragmentTabHomeBinding.inflate(inflater);
+        mBinding = FragmentTabHomeBinding.inflate(inflater);
         initLayout();
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     private void initLayout() {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        binding.rvBanner.setLayoutManager(llm);
+        mBinding.rvBanner.setLayoutManager(llm);
 
-        binding.vList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        binding.vList.addItemDecoration(new HomeDecoration());
-        binding.vList.setItemAnimator(null);
-        adapter = new TabHomeAdapter();
-        adapter.setLoadMoreListener(new LoadMoreListener() {
+        mBinding.vList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        mBinding.vList.addItemDecoration(new HomeDecoration());
+        mBinding.vList.setItemAnimator(null);
+        mAdapter = new TabHomeAdapter();
+        mAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 loadGoods();
-                binding.vList.stopScroll();
+                mBinding.vList.stopScroll();
             }
         });
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ItemGoods goods = adapter.getItem(position);
+                ItemGoods goods = mAdapter.getItem(position);
                 startActivity(AuctionDetailActivity.newIntent(goods));
             }
         });
-        binding.vList.setAdapter(adapter);
-        binding.tvAnnounce.setOnClickListener(new View.OnClickListener() {
+        mBinding.vList.setAdapter(mAdapter);
+        mBinding.tvAnnounce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (view.getTag() == null) {
@@ -104,19 +101,19 @@ public class TabHomeFragment extends BaseFragment {
             }
         });
 
-        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
-                    if (!GoodsParam.TYPE_NEWBIE.equals(goods_type)) {
-                        adapter.clear();
-                        goods_type = GoodsParam.TYPE_NEWBIE;
+                    if (!GoodsParam.TYPE_NEWBIE.equals(mType)) {
+                        mAdapter.clear();
+                        mType = GoodsParam.TYPE_NEWBIE;
                         refresh();
                     }
                 } else {
-                    if (!GoodsParam.TYPE_HOT.equals(goods_type)) {
-                        adapter.clear();
-                        goods_type = GoodsParam.TYPE_HOT;
+                    if (!GoodsParam.TYPE_HOT.equals(mType)) {
+                        mAdapter.clear();
+                        mType = GoodsParam.TYPE_HOT;
                         refresh();
                     }
                 }
@@ -134,7 +131,7 @@ public class TabHomeFragment extends BaseFragment {
     }
 
     private void refresh() {
-        start = 0;
+        mStart = 0;
         loadGoods();
     }
 
@@ -144,15 +141,15 @@ public class TabHomeFragment extends BaseFragment {
             public void accept(BidEvent event) throws Exception {
                 ItemGoods item = new ItemGoods();
                 item.sid = event.sid;
-                int position = adapter.getPosition(item);
+                int position = mAdapter.getPosition(item);
                 if (position == -1) {
                     return;
                 }
-                item = adapter.getItem(position);
+                item = mAdapter.getItem(position);
                 item.current_price = event.current_price;
                 item.bid_expire_time = event.bid_expire_time;
-                adapter.addChangedPosition(position);
-                adapter.notifyItemChanged(position);
+                mAdapter.addChangedPosition(position);
+                mAdapter.notifyItemChanged(position);
             }
         });
 
@@ -161,16 +158,16 @@ public class TabHomeFragment extends BaseFragment {
             public void accept(AuctionEndEvent event) throws Exception {
                 ItemGoods item = new ItemGoods();
                 item.sid = event.sid;
-                int position = adapter.getPosition(item);
+                int position = mAdapter.getPosition(item);
                 if (position == -1) {
                     return;
                 }
-                item = adapter.getItem(position);
+                item = mAdapter.getItem(position);
                 item.setStatus(0);
-                adapter.notifyItemChanged(position);
+                mAdapter.notifyItemChanged(position);
 
-                if (disposableRefresh == null || disposableRefresh.isDisposed()) {
-                    disposableRefresh = Observable.timer(10, TimeUnit.SECONDS)
+                if (mDisposableRefresh == null || mDisposableRefresh.isDisposed()) {
+                    mDisposableRefresh = Observable.timer(10, TimeUnit.SECONDS)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Consumer<Long>() {
                                 @Override
@@ -204,7 +201,7 @@ public class TabHomeFragment extends BaseFragment {
                 if (obj.data == null || obj.data.isEmpty()) {
                     return;
                 }
-                binding.tvAnnounce.addData(obj.data);
+                mBinding.tvAnnounce.addData(obj.data);
             }
         });
     }
@@ -221,8 +218,8 @@ public class TabHomeFragment extends BaseFragment {
                     return;
                 }
                 int length = obj.data.size();
-                ImageView[] ivMenu = new ImageView[]{binding.menu.ivMenu0, binding.menu.ivMenu1, binding.menu.ivMenu2, binding.menu.ivMenu3};
-                TextView[] tvMenu = new TextView[]{binding.menu.tvMenu0, binding.menu.tvMenu1, binding.menu.tvMenu2, binding.menu.tvMenu3};
+                ImageView[] ivMenu = new ImageView[]{mBinding.menu.ivMenu0, mBinding.menu.ivMenu1, mBinding.menu.ivMenu2, mBinding.menu.ivMenu3};
+                TextView[] tvMenu = new TextView[]{mBinding.menu.tvMenu0, mBinding.menu.tvMenu1, mBinding.menu.tvMenu2, mBinding.menu.tvMenu3};
                 for (int i = 0; i < length && i < 4; i++) {
                     ItemMenu menu = obj.data.get(i);
                     tvMenu[i].setText(menu.title);
@@ -240,34 +237,34 @@ public class TabHomeFragment extends BaseFragment {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemBanner>>>() {}.getType();
                 DataResponse<ArrayList<ItemBanner>> obj = GsonSingleton.get().fromJson(response, type);
-                binding.rvBanner.setAdapter(new BannerAdapter(obj.data));
+                mBinding.rvBanner.setAdapter(new BannerAdapter(obj.data));
                 PagingScrollHelper helper = new PagingScrollHelper();
-                helper.setUpRecycleView(binding.rvBanner);
+                helper.setUpRecycleView(mBinding.rvBanner);
             }
         });
     }
 
     private void loadGoods() {
         GoodsParam param = new GoodsParam();
-        param.type = goods_type;
-        param.start = start;
+        param.type = mType;
+        param.start = mStart;
         BaseRequest<GoodsParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.setLoaded();
+                mAdapter.setLoaded();
                 Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
                 DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
-                if (start == 0) {
-                    adapter.clear();
+                if (mStart == 0) {
+                    mAdapter.clear();
                 }
                 if (obj.data.goods != null) {
                     int size = obj.data.goods.size();
-                    start += size;
-                    adapter.addAll(obj.data.goods);
-                    adapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                    mStart += size;
+                    mAdapter.addAll(obj.data.goods);
+                    mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
                 } else {
-                    adapter.setHasMore(false);
+                    mAdapter.setHasMore(false);
                 }
             }
 

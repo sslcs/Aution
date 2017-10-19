@@ -44,22 +44,30 @@ public class AppInstance extends Application {
     }
 
     public void setUsername(String username) {
-        if (user == null) return;
+        if (user == null) {
+            return;
+        }
         user.username = username;
     }
 
     public void setAvatar(String avatar) {
-        if (user == null) return;
+        if (user == null) {
+            return;
+        }
         user.avatar = avatar;
     }
 
     public int getBalance() {
-        if (user == null) return -1;
+        if (user == null) {
+            return -1;
+        }
         return user.free_coin + user.auction_coin;
     }
 
     public void setBalance(UserBalance data) {
-        if (user == null) return;
+        if (user == null) {
+            return;
+        }
         user.free_coin = data.free_coin;
         user.auction_coin = data.auction_coin;
     }

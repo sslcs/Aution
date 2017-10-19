@@ -36,6 +36,7 @@
         <activity android:name=".module.address.ContactEditActivity"/>
         <activity android:name=".module.address.ContactSelectActivity"/>
         <activity android:name=".module.address.AddressSelectActivity"/>
+        <activity android:name=".module.login.ChangePasswordActivity"/>
     </application>
 
 </manifest>
