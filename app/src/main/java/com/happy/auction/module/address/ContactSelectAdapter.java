@@ -20,7 +20,7 @@ public class ContactSelectAdapter extends BaseCustomAdapter<Contact, ItemSelectC
     }
 
     @Override
-    public void bindItem(ItemSelectContactBinding binding, final Contact item, final int position) {
+    public void bindItem(ItemSelectContactBinding binding, Contact item, int position) {
         binding.setData(item);
         binding.ivCheck.setSelected(mSelectedPosition == position);
     }

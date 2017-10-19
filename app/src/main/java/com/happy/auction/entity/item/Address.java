@@ -37,6 +37,10 @@ public class Address implements Serializable{
      */
     public String district;
     /**
+     * 区id
+     */
+    public int district_aid;
+    /**
      * 街道
      */
     public String street;
@@ -50,6 +54,6 @@ public class Address implements Serializable{
     public String town;
 
     public String getAddress() {
-        return province + city + district + street;
+        return province + city + district;
     }
 }

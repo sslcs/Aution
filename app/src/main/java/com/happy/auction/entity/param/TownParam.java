@@ -6,7 +6,7 @@ package com.happy.auction.entity.param;
  */
 
 public class TownParam extends BaseParam {
-    public String aid;
+    public int aid;
 
     public TownParam() {
         action = "jd_addr_get_child_addr";

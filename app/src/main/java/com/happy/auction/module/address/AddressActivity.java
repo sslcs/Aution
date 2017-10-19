@@ -33,9 +33,11 @@ import java.util.ArrayList;
  */
 public class AddressActivity extends BaseActivity implements OnViewClickListener<Address> {
     private final static int REQUEST_ADD = 100;
+    private final static int REQUEST_EDIT = 101;
 
     private ActivityAddressBinding mBinding;
     private AddressAdapter adapter;
+    private boolean mDataChanged = false;
 
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), AddressActivity.class);
@@ -89,6 +91,7 @@ public class AddressActivity extends BaseActivity implements OnViewClickListener
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (RESULT_OK == resultCode) {
+            mDataChanged = true;
             loadData();
         }
     }
@@ -117,7 +120,7 @@ public class AddressActivity extends BaseActivity implements OnViewClickListener
     }
 
     private void edit(Address item) {
-        startActivityForResult(AddressEditActivity.newIntent(item), 100);
+        startActivityForResult(AddressEditActivity.newIntent(item), REQUEST_EDIT);
     }
 
     private void delete(final Address item) {
@@ -127,9 +130,20 @@ public class AddressActivity extends BaseActivity implements OnViewClickListener
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
+                mDataChanged = true;
                 int position = adapter.getPosition(item);
                 adapter.removeItem(position);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDataChanged) {
+            setResult(RESULT_OK);
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -33,7 +33,8 @@ import java.util.ArrayList;
 public class AddressEditActivity extends BaseActivity {
     private static final String KEY_DATA = "DATA";
     private ActivityAddressEditBinding mBinding;
-    private String mProvince, mCity, mDistrict, mTown, mAid;
+    private String mProvince, mCity, mDistrict, mTown;
+    private int mDistrictId;
     private ArrayList<AddressRecord> mTownList;
     private Address mData;
 
@@ -59,6 +60,12 @@ public class AddressEditActivity extends BaseActivity {
         if (getIntent().hasExtra(KEY_DATA)) {
             mData = (Address) getIntent().getSerializableExtra(KEY_DATA);
             mBinding.setData(mData);
+            mProvince = mData.province;
+            mCity = mData.city;
+            mTown = mData.town;
+            mDistrict = mData.district;
+            mDistrictId = mData.district_aid;
+            loadTown();
         }
     }
 
@@ -93,11 +100,11 @@ public class AddressEditActivity extends BaseActivity {
     public void onClickArea(View view) {
         AddressSelector selector = AddressSelector.newInstance(new AddressSelector.OnSelectListener() {
             @Override
-            public void onSelect(String province, String city, String district, String aid) {
+            public void onSelect(String province, String city, String district, int aid) {
                 mProvince = province;
                 mCity = city;
                 mDistrict = district;
-                mAid = aid;
+                mDistrictId = aid;
                 mBinding.tvArea.setText(mProvince + mCity + mDistrict);
 
                 loadTown();
@@ -123,7 +130,7 @@ public class AddressEditActivity extends BaseActivity {
         mBinding.tvTown.setVisibility(View.GONE);
         mBinding.tvTownLabel.setVisibility(View.GONE);
         TownParam param = new TownParam();
-        param.aid = mAid;
+        param.aid = mDistrictId;
         BaseRequest<TownParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override

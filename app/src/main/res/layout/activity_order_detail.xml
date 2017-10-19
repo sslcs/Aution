@@ -334,6 +334,7 @@
                     android:layout_height="23dp"
                     android:layout_marginRight="10dp"
                     android:text="@string/change_address"
+                    android:onClick="onClickChangeAddress"
                     android:textSize="13sp"
                     android:visibility="@{data.showChangeAddress() ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_username_label"

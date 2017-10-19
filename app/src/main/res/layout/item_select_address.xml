@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.happy.auction.entity.item.Contact"/>
+            type="com.happy.auction.entity.item.Address"/>
     </data>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:layout_marginTop="15dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="@{data.remark}"
+            android:text="@{data.username}"
             android:textColor="@color/main_blue"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/iv_check"

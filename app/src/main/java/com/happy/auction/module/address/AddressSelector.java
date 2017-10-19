@@ -140,6 +140,6 @@ public class AddressSelector extends BottomSheetDialogFragment {
          * @param district 区
          * @param aid      id
          */
-        void onSelect(String province, String city, String district, String aid);
+        void onSelect(String province, String city, String district, int aid);
     }
 }

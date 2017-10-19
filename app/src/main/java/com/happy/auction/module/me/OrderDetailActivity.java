@@ -12,12 +12,14 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityOrderDetailBinding;
+import com.happy.auction.entity.item.Address;
 import com.happy.auction.entity.item.ItemOrder;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.ConfirmAddressParam;
 import com.happy.auction.entity.param.OrderDetailParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.OrderDetail;
+import com.happy.auction.module.address.AddressSelectActivity;
 import com.happy.auction.module.address.ContactSelectActivity;
 import com.happy.auction.module.pay.OrderPayActivity;
 import com.happy.auction.net.NetCallback;
@@ -32,6 +34,7 @@ public class OrderDetailActivity extends BaseActivity {
     private static final String KEY_ITEM = "KEY_ITEM";
     private static final int REQUEST_CODE_PAY = 100;
     private static final int REQUEST_CODE_CONTACT = 101;
+    private static final int REQUEST_CODE_ADDRESS = 102;
 
     private ActivityOrderDetailBinding mBinding;
     private OrderDetail mData;
@@ -130,6 +133,11 @@ public class OrderDetailActivity extends BaseActivity {
             startActivityForResult(intent, REQUEST_CODE_PAY);
         } else if (mData.type == 1) {
             // 已付款-实物
+            if (mData.address != null) {
+                onSelectAddress(mData.address.aid);
+            } else {
+                onClickChangeAddress(null);
+            }
         } else {
             // 已付款-虚拟物品
             Intent intent = ContactSelectActivity.newIntent();
@@ -145,14 +153,17 @@ public class OrderDetailActivity extends BaseActivity {
         }
 
         if (REQUEST_CODE_CONTACT == requestCode) {
-            int id = data.getIntExtra(ContactSelectActivity.KEY_CONTACT_ID, -1);
+            int id = data.getIntExtra(ContactSelectActivity.EXTRA_CONTACT_ID, -1);
             if (id != -1) {
-                onSelectContact(id);
+                onSelectAddress(id);
             }
+        } else if (REQUEST_CODE_ADDRESS == requestCode) {
+            mData.address = (Address) data.getSerializableExtra(AddressSelectActivity.EXTRA_ADDRESS);
+            mBinding.setData(mData);
         }
     }
 
-    private void onSelectContact(int id) {
+    private void onSelectAddress(int id) {
         ConfirmAddressParam param = new ConfirmAddressParam();
         param.aid = id;
         param.sid = mData.sid;
@@ -169,5 +180,10 @@ public class OrderDetailActivity extends BaseActivity {
                 ToastUtil.show(message);
             }
         });
+    }
+
+    public void onClickChangeAddress(View view) {
+        Intent intent = AddressSelectActivity.newIntent(mData.address.aid);
+        startActivityForResult(intent, REQUEST_CODE_ADDRESS);
     }
 }

@@ -52,7 +52,7 @@ public class XmlParserHandler extends DefaultHandler {
         } else if (KEY_DISTRICT.equals(qName)) {
             mDistrict = new AddressRecord();
             mDistrict.name = attributes.getValue(0);
-            mDistrict.aid = attributes.getValue(1);
+            mDistrict.aid = Integer.parseInt(attributes.getValue(1));
         }
     }
 

@@ -86,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initLayout() {
-        if (binding.viewPager.getAdapter() != null) return;
+        if (binding.viewPager.getAdapter() != null) {
+            return;
+        }
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.add(TabHomeFragment.newInstance());
         adapter.add(TabLatestFragment.newInstance());
@@ -96,13 +98,21 @@ public class MainActivity extends AppCompatActivity {
         binding.viewPager.setAdapter(adapter);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
         TabLayout.Tab tab = binding.tabLayout.getTabAt(0);
-        if (tab != null) tab.setCustomView(R.layout.tab_home);
+        if (tab != null) {
+            tab.setCustomView(R.layout.tab_home);
+        }
         tab = binding.tabLayout.getTabAt(1);
-        if (tab != null) tab.setCustomView(R.layout.tab_latest);
+        if (tab != null) {
+            tab.setCustomView(R.layout.tab_latest);
+        }
         tab = binding.tabLayout.getTabAt(2);
-        if (tab != null) tab.setCustomView(R.layout.tab_category);
+        if (tab != null) {
+            tab.setCustomView(R.layout.tab_category);
+        }
         tab = binding.tabLayout.getTabAt(3);
-        if (tab != null) tab.setCustomView(R.layout.tab_me);
+        if (tab != null) {
+            tab.setCustomView(R.layout.tab_me);
+        }
     }
 
     private void initWebSocket() {
@@ -126,7 +136,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClosed(WebSocket webSocket, int code, String reason) {
                 super.onClosed(webSocket, code, reason);
                 DebugLog.e("onClosed : " + reason);
-                if (!isDestroyed) initWebSocket();
+                if (!isDestroyed) {
+                    initWebSocket();
+                }
             }
 
             @Override
@@ -140,7 +152,9 @@ public class MainActivity extends AppCompatActivity {
                 super.onFailure(webSocket, t, response);
                 DebugLog.e("onFailure");
                 messageHandler.clear();
-                if (isDestroyed) return;
+                if (isDestroyed) {
+                    return;
+                }
                 Observable.timer(3, TimeUnit.SECONDS)
                         .subscribe(new Consumer<Long>() {
                             @Override
@@ -164,7 +178,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendMessage(RequestEvent event) {
-        if (client == null) return;
+        if (client == null) {
+            return;
+        }
         DebugLog.e("sendMessage: " + event.message);
         messageHandler.addHandler(event.callback);
         client.send(event.message);

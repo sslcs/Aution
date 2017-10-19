@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class AddressRecord {
     public String name;
-    public String aid;
+    public int aid;
 
     public ArrayList<AddressRecord> child;
 
