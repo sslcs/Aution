@@ -28,7 +28,7 @@
     <string name="point">%1$d\n积分</string>
     <string name="my_order">我的订单</string>
     <string name="my_card">我的卡密</string>
-    <string name="my_publish">我的晒单</string>
+    <string name="my_bask">我的晒单</string>
     <string name="my_service">客服中心</string>
     <string name="my_message">消息通知</string>
     <string name="auction_going">正在拍</string>
@@ -100,7 +100,7 @@
     <string name="countdown_time">竞拍倒计时</string>
     <string name="return_percent">返币比例额</string>
     <string name="previous_deal">往期成交</string>
-    <string name="publish_share">晒单分享</string>
+    <string name="bask_share">晒单分享</string>
     <string name="my_bid_times">我已出价：%1$d拍币，%2$d赠币</string>
     <string name="price_current">当前价</string>
     <string name="price_deal">成交价</string>

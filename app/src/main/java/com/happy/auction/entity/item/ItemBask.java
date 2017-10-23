@@ -5,13 +5,18 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 /**
+ * 晒单分享item<br/>
  * Created by LiuCongshan on 17-9-12.
- * 晒单分享item
+ *
+ * @author LiuCongshan
  */
-
 public class ItemBask {
     /**
-     * 晒单编号id
+     * 晒单id
+     */
+    public int bid;
+    /**
+     * 商品动态编号id
      */
     public int sid;
     /**

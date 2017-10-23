@@ -19,6 +19,7 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
+import com.happy.auction.module.WebActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.pay.ChargePayActivity;
 import com.happy.auction.net.NetCallback;
@@ -32,7 +33,9 @@ import java.lang.reflect.Type;
 import io.reactivex.functions.Consumer;
 
 /**
- * 个人中心
+ * 个人中心界面
+ *
+ * @author cs
  */
 public class TabMeFragment extends BaseFragment {
     private FragmentTabMeBinding binding;
@@ -147,11 +150,16 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickMyPublish(View view) {
-        DebugLog.e("onClickView");
+        if (!isLogin()) {
+            return;
+        }
+        startActivity(BaskActivity.newIntent());
     }
 
     public void onClickMyService(View view) {
-        DebugLog.e("onClickView");
+        String title = getString(R.string.my_service);
+        String url = "http://106.75.177.248/service_center/index.html";
+        startActivity(WebActivity.newIntent(title, url));
     }
 
     public void onClickMyMessage(View view) {

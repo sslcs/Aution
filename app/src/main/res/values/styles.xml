@@ -6,8 +6,11 @@
         <item name="colorPrimaryDark">@color/main_red</item>
         <item name="colorAccent">@color/main_red</item>
         <item name="android:windowBackground">@color/divider</item>
-        <item name="android:typeface">monospace</item>
-        <item name="android:fontFamily">monospace</item>
+    </style>
+
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="TextTab">

@@ -1,5 +1,6 @@
 package com.happy.auction.module.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -30,6 +31,7 @@ import com.happy.auction.entity.param.MenuParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.glide.ImageLoader;
+import com.happy.auction.module.WebActivity;
 import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
@@ -47,7 +49,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /**
- * 首页
+ * 首页<br/>
+ *
+ * @author LiuCongshan
  */
 public class TabHomeFragment extends BaseFragment {
     private FragmentTabHomeBinding mBinding;
@@ -220,9 +224,20 @@ public class TabHomeFragment extends BaseFragment {
                 ImageView[] ivMenu = new ImageView[]{mBinding.menu.ivMenu0, mBinding.menu.ivMenu1, mBinding.menu.ivMenu2, mBinding.menu.ivMenu3};
                 TextView[] tvMenu = new TextView[]{mBinding.menu.tvMenu0, mBinding.menu.tvMenu1, mBinding.menu.tvMenu2, mBinding.menu.tvMenu3};
                 for (int i = 0; i < length && i < 4; i++) {
-                    ItemMenu menu = obj.data.get(i);
+                    final ItemMenu menu = obj.data.get(i);
                     tvMenu[i].setText(menu.title);
                     ImageLoader.displayMenu(menu.icon, ivMenu[i]);
+                    View.OnClickListener listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = WebActivity.newIntent(menu.title, menu.url);
+                            if (intent != null) {
+                                startActivity(intent);
+                            }
+                        }
+                    };
+                    tvMenu[i].setOnClickListener(listener);
+                    ivMenu[i].setOnClickListener(listener);
                 }
             }
         });
@@ -236,9 +251,20 @@ public class TabHomeFragment extends BaseFragment {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemBanner>>>() {}.getType();
                 DataResponse<ArrayList<ItemBanner>> obj = GsonSingleton.get().fromJson(response, type);
-                mBinding.rvBanner.setAdapter(new BannerAdapter(obj.data));
+                BannerAdapter adapter = new BannerAdapter(obj.data);
+                adapter.setOnItemClickListener(new OnItemClickListener<ItemBanner>() {
+                    @Override
+                    public void onItemClick(View view, ItemBanner item, int position) {
+                        Intent intent = WebActivity.newIntent(item.title, item.url);
+                        if (intent != null) {
+                            startActivity(intent);
+                        }
+                    }
+                });
+                mBinding.rvBanner.setAdapter(adapter);
                 PagingScrollHelper helper = new PagingScrollHelper();
                 helper.setUpRecycleView(mBinding.rvBanner);
+
             }
         });
     }

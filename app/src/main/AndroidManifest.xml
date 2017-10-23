@@ -11,12 +11,17 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".module.MainActivity">
+
+        <activity
+            android:name=".module.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".module.MainActivity"/>
         <activity android:name=".module.detail.AuctionDetailActivity"/>
         <activity android:name=".module.me.SettingActivity"/>
         <activity android:name=".module.login.LoginActivity"/>
@@ -38,6 +43,8 @@
         <activity android:name=".module.address.AddressSelectActivity"/>
         <activity android:name=".module.login.ChangePasswordActivity"/>
         <activity android:name=".module.me.CardActivity"/>
+        <activity android:name=".module.me.BaskActivity"/>
+        <activity android:name=".module.WebActivity"/>
     </application>
 
 </manifest>
