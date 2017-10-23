@@ -34,6 +34,10 @@
     <string name="auction_going">正在拍</string>
     <string name="auction_win">已拍中</string>
     <string name="auction_unpaid">待付款</string>
+    <string name="receive_time">领取时间：%1$s</string>
+    <string name="easy_copy">一键复制</string>
+    <string name="select_all">全选(已选择%1$d个)</string>
+    <string name="tip_clipboard">已成功复制到粘帖版</string>
 
     <!-- setting -->
     <string name="setting">设置</string>
@@ -104,12 +108,14 @@
     <string name="format_current_price">当前价: ￥%1$s</string>
     <string name="bid_out">出局</string>
     <string name="bid_first">领先</string>
+    <string name="bid_deal">成交</string>
     <string name="detail_btn_bid">出价\n（%1$d拍币/次）</string>
     <string name="bid_times">出价:%1$d次</string>
     <string name="detail_btn_go_latest">前往最新一期</string>
     <string name="detail_btn_cancel">取消剩余出价</string>
     <string name="auto_bid_progress">已出价 %1$d/%2$d</string>
     <string name="save">节省</string>
+    <string name="auction_good">竞拍商品</string>
 
     <!-- order detail -->
     <string name="order_detail">订单详情</string>

@@ -44,7 +44,10 @@
             app:layout_constraintEnd_toStartOf="@+id/pick_city"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_cancel"
-            app:wheel_curved="true"/>
+            app:wheel_atmospheric="true"
+            app:wheel_curved="true"
+            app:wheel_item_text_size="16sp"
+            app:wheel_selected_item_text_color="@color/main_red"/>
 
         <com.aigestudio.wheelpicker.WheelPicker
             android:id="@+id/pick_city"
@@ -53,7 +56,10 @@
             app:layout_constraintEnd_toStartOf="@+id/pick_district"
             app:layout_constraintStart_toEndOf="@+id/pick_province"
             app:layout_constraintTop_toBottomOf="@+id/tv_cancel"
-            app:wheel_curved="true"/>
+            app:wheel_atmospheric="true"
+            app:wheel_curved="true"
+            app:wheel_item_text_size="16sp"
+            app:wheel_selected_item_text_color="@color/main_red"/>
 
         <com.aigestudio.wheelpicker.WheelPicker
             android:id="@+id/pick_district"
@@ -62,6 +68,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/pick_city"
             app:layout_constraintTop_toBottomOf="@+id/tv_cancel"
-            app:wheel_curved="true"/>
+            app:wheel_atmospheric="true"
+            app:wheel_curved="true"
+            app:wheel_item_text_size="16sp"
+            app:wheel_selected_item_text_color="@color/main_red"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

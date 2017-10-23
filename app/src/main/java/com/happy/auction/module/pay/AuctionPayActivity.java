@@ -4,14 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.adapter.DecorationSpace;
-import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.databinding.ActivityAuctionPayBinding;
 import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.entity.item.ItemPayType;
@@ -26,6 +23,12 @@ import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
 
+/**
+ * 出价充值界面<br/>
+ * Created by LiuCongshan on 17-10-23.
+ *
+ * @author LiuCongshan
+ */
 public class AuctionPayActivity extends BasePayActivity {
     private static final String KEY_EXTRA_DATA = "EXTRA_DATA";
     private static final String KEY_EXTRA_COUNT = "EXTRA_COUNT";
@@ -33,7 +36,6 @@ public class AuctionPayActivity extends BasePayActivity {
     private ActivityAuctionPayBinding mBinding;
     private ItemGoods mData;
     private int mCount;
-    private PayTypeAdapter mAdapter;
 
     public static Intent newIntent(Context context, ItemGoods data, int count) {
         Intent intent = new Intent(context, AuctionPayActivity.class);
@@ -56,18 +58,7 @@ public class AuctionPayActivity extends BasePayActivity {
         mBinding.setData(mData);
         mBinding.setPay(new PayData(mCount));
 
-        mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
-        mBinding.vList.addItemDecoration(new DecorationSpace());
-        mAdapter = new PayTypeAdapter();
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                mAdapter.setSelectedPosition(position);
-            }
-        });
-        mBinding.vList.setAdapter(mAdapter);
-
-        loadData(mAdapter);
+        initList(mBinding.vList);
     }
 
     public void onClickPay(View view) {

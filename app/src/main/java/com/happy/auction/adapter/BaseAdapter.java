@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Adapter基类
+ * Adapter基类<br/>
+ * Created by LiuCongshan on 17-09-23.
+ *
+ * @author LiuCongshan
  */
 public abstract class BaseAdapter<T, B extends ViewDataBinding> extends RecyclerView.Adapter<CustomViewHolder<B>> {
     private List<T> data;
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener<T> onListener;
 
     public BaseAdapter() {}
 
@@ -68,21 +71,20 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
     public abstract B getBinding(ViewGroup parent, LayoutInflater inflater);
 
     @Override
-    public void onBindViewHolder(final CustomViewHolder<B> holder, int position) {
+    public void onBindViewHolder(final CustomViewHolder<B> holder, final int position) {
         final T item = getItem(position);
         if (item != null) {
             bindItem(holder.getBinding(), item, position);
-        }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (item == null || onItemClickListener == null) {
-                    return;
-                }
-                onItemClickListener.onItemClick(view, holder.getAdapterPosition());
+            if (onListener != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onListener.onItemClick(view, item, holder.getAdapterPosition());
+                    }
+                });
             }
-        });
+        }
     }
 
     public abstract void bindItem(B binding, T item, int position);
@@ -92,8 +94,8 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
         return data == null ? 0 : data.size();
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
+    public void setOnItemClickListener(OnItemClickListener<T> listener) {
+        this.onListener = listener;
     }
 
     public void addItem(T item) {

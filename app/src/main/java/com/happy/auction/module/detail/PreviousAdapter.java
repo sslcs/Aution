@@ -8,6 +8,7 @@ import com.happy.auction.databinding.ItemPreviousBinding;
 import com.happy.auction.entity.item.ItemPrevious;
 
 /**
+ * Created by LiuCongshan on 17-9-26.<br/>
  * 往期成交Adapter
  */
 public class PreviousAdapter extends BaseCustomAdapter<ItemPrevious, ItemPreviousBinding> {

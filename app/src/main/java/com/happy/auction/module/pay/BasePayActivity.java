@@ -1,13 +1,16 @@
 package com.happy.auction.module.pay;
 
 import android.content.Intent;
-import android.databinding.ViewDataBinding;
 import android.net.Uri;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.R;
-import com.happy.auction.adapter.BaseAdapter;
+import com.happy.auction.adapter.DecorationSpace;
+import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.entity.item.ItemPayType;
 import com.happy.auction.entity.param.BaseRequest;
@@ -23,8 +26,30 @@ import com.happy.auction.utils.ToastUtil;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+/**
+ * 选择支付方式的基类
+ *
+ * @author cs
+ */
 public abstract class BasePayActivity extends BaseActivity {
-    protected <B extends ViewDataBinding> void loadData(final BaseAdapter<ItemPayType, B> adapter) {
+    protected PayTypeAdapter mAdapter;
+
+    protected void initList(RecyclerView vList) {
+        vList.setLayoutManager(new LinearLayoutManager(this));
+        vList.addItemDecoration(new DecorationSpace());
+        mAdapter = new PayTypeAdapter();
+        mAdapter.setOnItemClickListener(new OnItemClickListener<ItemPayType>() {
+            @Override
+            public void onItemClick(View view, ItemPayType item, int position) {
+                mAdapter.setSelectedPosition(position);
+            }
+        });
+        vList.setAdapter(mAdapter);
+
+        loadData();
+    }
+
+    private void loadData() {
         PayOptionsParam param = new PayOptionsParam();
         BaseRequest<PayOptionsParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
@@ -32,7 +57,7 @@ public abstract class BasePayActivity extends BaseActivity {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<ArrayList<ItemPayType>>>() {}.getType();
                 DataResponse<ArrayList<ItemPayType>> obj = GsonSingleton.get().fromJson(response, type);
-                adapter.addAll(obj.data);
+                mAdapter.addAll(obj.data);
             }
         });
     }
@@ -43,7 +68,9 @@ public abstract class BasePayActivity extends BaseActivity {
                 ToastUtil.show(R.string.error_alipay);
                 return;
             }
-            if (TextUtils.isEmpty(response.params)) return;
+            if (TextUtils.isEmpty(response.params)) {
+                return;
+            }
             Uri uri = Uri.parse(response.params);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);

@@ -2,6 +2,8 @@ package com.happy.auction.entity.item;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 /**
  * Created by LiuCongshan on 17-9-12.
  * 晒单分享item
@@ -43,9 +45,9 @@ public class ItemBask {
     /**
      * 晒单缩略图
      */
-    public String s_img;
+    public ArrayList<String> s_img;
     /**
      * 晒单图片
      */
-    public String img;
+    public ArrayList<String> img;
 }

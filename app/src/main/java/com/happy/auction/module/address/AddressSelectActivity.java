@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class AddressSelectActivity extends BaseAddressSelectActivity {
     public static final String EXTRA_ADDRESS = "address";
     public static final String EXTRA_ID = "aid";
-    private AddressSelectAdapter adapter;
+    private AddressSelectAdapter mAdapter;
 
     public static Intent newIntent(int aid) {
         Intent intent = new Intent(AppInstance.getInstance(), AddressSelectActivity.class);
@@ -35,14 +35,14 @@ public class AddressSelectActivity extends BaseAddressSelectActivity {
     @Override
     protected void initChildLayout() {
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
-        adapter = new AddressSelectAdapter(id);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        mAdapter = new AddressSelectAdapter(id);
+        mAdapter.setOnItemClickListener(new OnItemClickListener<Address>() {
             @Override
-            public void onItemClick(View view, int position) {
-                adapter.setSelectPosition(position);
+            public void onItemClick(View view, Address item, int position) {
+                mAdapter.setSelectPosition(position);
             }
         });
-        mBinding.vList.setAdapter(adapter);
+        mBinding.vList.setAdapter(mAdapter);
     }
 
     @Override
@@ -52,19 +52,19 @@ public class AddressSelectActivity extends BaseAddressSelectActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.setLoaded();
+                mAdapter.setLoaded();
                 Type type = new TypeToken<DataResponse<ArrayList<Address>>>() {}.getType();
                 DataResponse<ArrayList<Address>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null && !obj.data.isEmpty()) {
-                    adapter.clear();
-                    adapter.addAll(obj.data);
+                    mAdapter.clear();
+                    mAdapter.addAll(obj.data);
                 }
             }
 
             @Override
             public void onError(int code, String message) {
                 super.onError(code, message);
-                adapter.setLoaded();
+                mAdapter.setLoaded();
             }
         });
     }
@@ -76,6 +76,6 @@ public class AddressSelectActivity extends BaseAddressSelectActivity {
 
     @Override
     protected void putIntentData(Intent intent) {
-        intent.putExtra(EXTRA_ADDRESS, adapter.getItem(adapter.getSelectPosition()));
+        intent.putExtra(EXTRA_ADDRESS, mAdapter.getItem(mAdapter.getSelectPosition()));
     }
 }

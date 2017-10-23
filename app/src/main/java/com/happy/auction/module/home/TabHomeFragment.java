@@ -82,11 +82,10 @@ public class TabHomeFragment extends BaseFragment {
                 mBinding.vList.stopScroll();
             }
         });
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new OnItemClickListener<ItemGoods>() {
             @Override
-            public void onItemClick(View view, int position) {
-                ItemGoods goods = mAdapter.getItem(position);
-                startActivity(AuctionDetailActivity.newIntent(goods));
+            public void onItemClick(View view, ItemGoods item, int position) {
+                startActivity(AuctionDetailActivity.newIntent(item));
             }
         });
         mBinding.vList.setAdapter(mAdapter);

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white">
         <ImageView
-            android:id="@+id/iv_icon"
+            android:id="@+id/iv_avatar"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_marginLeft="10dp"
@@ -32,9 +32,9 @@
             android:text='@{data.username}'
             android:textColor="@color/main_blue"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
-            app:layout_constraintLeft_toRightOf="@+id/iv_icon"
-            app:layout_constraintTop_toTopOf="@+id/iv_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+            app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
+            app:layout_constraintTop_toTopOf="@+id/iv_avatar"
             tools:text="9爱吃芒果"/>
 
         <TextView
@@ -45,9 +45,9 @@
             android:text="@{StringUtil.formatDateTime(data.bask_time)}"
             android:textColor="@color/text_light"
             android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_avatar"
             tools:text="2017-09-22 18:38:34"/>
 
         <TextView
@@ -62,14 +62,14 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_username"
-            app:layout_constraintTop_toBottomOf="@+id/iv_icon"
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
             tools:text="测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试"/>
 
         <ImageView
             android:id="@+id/iv_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:image_url="@{data.s_img}"
+            android:src="@drawable/pic_default"
             app:layout_constraintStart_toStartOf="@+id/tv_username"
             app:layout_constraintTop_toBottomOf="@+id/tv_content"/>
 
@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="竞拍商品"
+            android:text="@string/auction_good"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_username"
             app:layout_constraintTop_toBottomOf="@+id/iv_img"/>

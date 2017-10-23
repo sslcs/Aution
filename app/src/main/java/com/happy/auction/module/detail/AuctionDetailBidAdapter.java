@@ -13,6 +13,8 @@ import com.happy.auction.entity.item.BidRecord;
  */
 
 public class AuctionDetailBidAdapter extends BaseAdapter<BidRecord, ItemBidRecordBinding> {
+    private final static int MAX_SIZE = 3;
+
     @Override
     public ItemBidRecordBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
         return ItemBidRecordBinding.inflate(inflater, parent, false);
@@ -26,8 +28,8 @@ public class AuctionDetailBidAdapter extends BaseAdapter<BidRecord, ItemBidRecor
 
     @Override
     public void addItem(BidRecord item) {
-        if (super.getItemCount() >= 4) {
-            removeItem(3);
+        if (getItemCount() >= MAX_SIZE) {
+            removeItem(MAX_SIZE);
         }
         addItem(0, item);
     }

@@ -1,5 +1,6 @@
 package com.happy.auction.module.me;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -14,6 +15,9 @@ import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.RxBus;
 
 public class SettingActivity extends BaseActivity {
+    public static Intent newIntent() {
+        return new Intent(AppInstance.getInstance(), SettingActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

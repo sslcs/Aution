@@ -37,6 +37,7 @@
         <activity android:name=".module.address.ContactSelectActivity"/>
         <activity android:name=".module.address.AddressSelectActivity"/>
         <activity android:name=".module.login.ChangePasswordActivity"/>
+        <activity android:name=".module.me.CardActivity"/>
     </application>
 
 </manifest>

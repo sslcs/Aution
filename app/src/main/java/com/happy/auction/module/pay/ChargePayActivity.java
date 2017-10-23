@@ -1,19 +1,15 @@
 package com.happy.auction.module.pay;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableInt;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.adapter.DecorationSpace;
-import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.databinding.ActivityChargePayBinding;
 import com.happy.auction.entity.item.ItemPayType;
 import com.happy.auction.entity.param.BaseRequest;
@@ -27,10 +23,15 @@ import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
 
+/**
+ * 充值支付界面<br/>
+ * Created by LiuCongshan on 17-10-23.
+ *
+ * @author LiuCongshan
+ */
 public class ChargePayActivity extends BasePayActivity {
     private final ObservableInt mAmount = new ObservableInt(10);
     private ActivityChargePayBinding mBinding;
-    private PayTypeAdapter mAdapter;
     private View vCurrentAmount;
 
     public static Intent newIntent() {
@@ -53,18 +54,7 @@ public class ChargePayActivity extends BasePayActivity {
         vCurrentAmount.requestFocus();
         vCurrentAmount.setSelected(true);
 
-        mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
-        mBinding.vList.addItemDecoration(new DecorationSpace());
-        mAdapter = new PayTypeAdapter();
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                mAdapter.setSelectedPosition(position);
-            }
-        });
-        mBinding.vList.setAdapter(mAdapter);
-
-        loadData(mAdapter);
+        initList(mBinding.vList);
     }
 
     public void onClickPay(View view) {

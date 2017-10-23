@@ -41,6 +41,13 @@ public class BidRecordActivity extends BaseActivity {
     private BidRecordAdapter adapter;
     private int index = 0;
 
+    /**
+     * 返回竞拍记录页面的intent
+     *
+     * @param sid    商品id
+     * @param status 商品状态 0:已结束，1：未开始，2：正在进行
+     * @return intent for this activity
+     */
     public static Intent newIntent(int sid, int status) {
         Intent intent = new Intent(AppInstance.getInstance(), BidRecordActivity.class);
         intent.putExtra(KEY_SID, sid);

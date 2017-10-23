@@ -71,21 +71,22 @@ public class OrderFragment extends BaseFragment {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, "v_info").toBundle();
                 }
-                startActivity(OrderDetailActivity.newIntent(item),bundle);
+                startActivity(OrderDetailActivity.newIntent(item), bundle);
             }
         });
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener<ItemOrder>() {
             @Override
-            public void onItemClick(View view, int position) {
-                ItemOrder order = adapter.getItem(position);
-                startActivity(AuctionDetailActivity.newIntent(order));
+            public void onItemClick(View view, ItemOrder item, int position) {
+                startActivity(AuctionDetailActivity.newIntent(item));
             }
         });
         adapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 ItemOrder item = adapter.getLast();
-                if (item != null) loadData(item.pid);
+                if (item != null) {
+                    loadData(item.pid);
+                }
             }
         });
         mBinding.vList.setAdapter(adapter);

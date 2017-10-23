@@ -1,6 +1,5 @@
 package com.happy.auction.module.me;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -72,12 +71,12 @@ public class TabMeFragment extends BaseFragment {
         if (AppInstance.getInstance().isLogin()) {
             return true;
         }
-        startActivity(new Intent(getActivity(), LoginActivity.class));
+        startActivity(LoginActivity.newIntent());
         return false;
     }
 
     public void onClickSetting(View view) {
-        startActivity(new Intent(view.getContext(), SettingActivity.class));
+        startActivity(SettingActivity.newIntent());
     }
 
     public void onClickAvatar(View view) {
@@ -141,7 +140,10 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickMyCard(View view) {
-        DebugLog.e("onClickView");
+        if (!isLogin()) {
+            return;
+        }
+        startActivity(CardActivity.newIntent());
     }
 
     public void onClickMyPublish(View view) {

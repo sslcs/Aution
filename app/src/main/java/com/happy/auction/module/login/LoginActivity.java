@@ -1,9 +1,11 @@
 package com.happy.auction.module.login;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
+import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.ViewPagerAdapter;
 import com.happy.auction.base.BaseActivity;
@@ -16,6 +18,10 @@ import io.reactivex.functions.Consumer;
 public class LoginActivity extends BaseActivity {
     private ActivityTabPagerBinding binding;
     private String phone;
+
+    public static Intent newIntent() {
+        return new Intent(AppInstance.getInstance(), LoginActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

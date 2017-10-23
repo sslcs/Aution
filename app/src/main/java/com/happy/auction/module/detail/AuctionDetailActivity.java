@@ -44,6 +44,7 @@ import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.pay.AuctionPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
@@ -212,18 +213,24 @@ public class AuctionDetailActivity extends BaseActivity {
         RxBus.getDefault().subscribe(this, BidEvent.class, new Consumer<BidEvent>() {
             @Override
             public void accept(BidEvent event) throws Exception {
-                if (event.sid != mData.sid) return;
+                if (event.sid != mData.sid || event.current_price <= mData.current_price) {
+                    return;
+                }
                 mData.setCurrentPrice(event.current_price);
                 mBinding.tvAuctionStatus.setExpireTime(event.bid_expire_time);
                 mBinding.tvAuctionStatus.setRepeat(false);
 
                 BidRecord record = new BidRecord(event);
-                if (TextUtils.isEmpty(record.uid)) return;
+                if (TextUtils.isEmpty(record.uid)) {
+                    return;
+                }
                 mAdapter.addItem(record);
                 mBinding.setNewBid(record);
                 setBtnMoreVisibility();
 
-                if (!record.uid.equals(AppInstance.getInstance().uid)) return;
+                if (!record.uid.equals(AppInstance.getInstance().uid)) {
+                    return;
+                }
                 if (mAuctionCoin.current_bid_coins > 0) {
                     int progress = mAuctionCoin.current_bidden_coins + 1;
                     if (progress == mAuctionCoin.current_bid_coins) {
@@ -239,7 +246,9 @@ public class AuctionDetailActivity extends BaseActivity {
         RxBus.getDefault().subscribe(this, AuctionEndEvent.class, new Consumer<AuctionEndEvent>() {
             @Override
             public void accept(AuctionEndEvent event) throws Exception {
-                if (event.sid != mData.sid) return;
+                if (event.sid != mData.sid) {
+                    return;
+                }
                 mData.setStatus(0);
                 mBinding.tvAuctionStatus.finish();
                 loadAuctionCoin();
@@ -296,8 +305,7 @@ public class AuctionDetailActivity extends BaseActivity {
 
     public void onClickBid(View view) {
         if (!AppInstance.getInstance().isLogin()) {
-            Intent login = new Intent(this, LoginActivity.class);
-            startActivityForResult(login, REQUEST_CODE_LOGIN);
+            startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN);
             return;
         }
 
@@ -305,7 +313,9 @@ public class AuctionDetailActivity extends BaseActivity {
     }
 
     private void bid() {
-        if (mTimes.get() == 0) mTimes.set(1);
+        if (mTimes.get() == 0) {
+            mTimes.set(1);
+        }
         final int count = mTimes.get();
         if (AppInstance.getInstance().getBalance() < count) {
             Intent pay = AuctionPayActivity.newIntent(this, mData.getItemGoods(), count);
@@ -364,7 +374,9 @@ public class AuctionDetailActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) return;
+        if (resultCode != RESULT_OK) {
+            return;
+        }
 
         if (REQUEST_CODE_LOGIN == requestCode) {
             getBalance();
@@ -439,6 +451,7 @@ public class AuctionDetailActivity extends BaseActivity {
             public void onSuccess(String response, String message) {
                 adapterBask.setLoaded();
                 Type type = new TypeToken<DataResponse<ArrayList<ItemBask>>>() {}.getType();
+                DebugLog.e("response : " + response);
                 DataResponse<ArrayList<ItemBask>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data != null && !obj.data.isEmpty()) {

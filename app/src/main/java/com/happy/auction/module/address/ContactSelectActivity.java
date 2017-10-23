@@ -19,12 +19,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * Created by LiuCongshan on 17-10-17.<br/>
- * 选择联系人界面
+ * 选择联系人界面<br/>
+ * Created by LiuCongshan on 17-10-17.
+ *
+ * @author LiuCongshan
  */
 public class ContactSelectActivity extends BaseAddressSelectActivity {
     public static final String EXTRA_CONTACT_ID = "contact_id";
-    private ContactSelectAdapter adapter;
+    private ContactSelectAdapter mAdapter;
 
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), ContactSelectActivity.class);
@@ -34,14 +36,14 @@ public class ContactSelectActivity extends BaseAddressSelectActivity {
     protected void initChildLayout() {
         mBinding.tvToolbarTitle.setText(R.string.select_contact);
 
-        adapter = new ContactSelectAdapter();
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        mAdapter = new ContactSelectAdapter();
+        mAdapter.setOnItemClickListener(new OnItemClickListener<Contact>() {
             @Override
-            public void onItemClick(View view, int position) {
-                adapter.setSelectPosition(position);
+            public void onItemClick(View view, Contact item, int position) {
+                mAdapter.setSelectPosition(position);
             }
         });
-        mBinding.vList.setAdapter(adapter);
+        mBinding.vList.setAdapter(mAdapter);
     }
 
     @Override
@@ -51,19 +53,19 @@ public class ContactSelectActivity extends BaseAddressSelectActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.setLoaded();
+                mAdapter.setLoaded();
                 Type type = new TypeToken<DataResponse<ArrayList<Contact>>>() {}.getType();
                 DataResponse<ArrayList<Contact>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null && !obj.data.isEmpty()) {
-                    adapter.clear();
-                    adapter.addAll(obj.data);
+                    mAdapter.clear();
+                    mAdapter.addAll(obj.data);
                 }
             }
 
             @Override
             public void onError(int code, String message) {
                 super.onError(code, message);
-                adapter.setLoaded();
+                mAdapter.setLoaded();
             }
         });
     }
@@ -75,6 +77,6 @@ public class ContactSelectActivity extends BaseAddressSelectActivity {
 
     @Override
     protected void putIntentData(Intent intent) {
-        intent.putExtra(EXTRA_CONTACT_ID, adapter.getItem(adapter.getSelectPosition()).vaid);
+        intent.putExtra(EXTRA_CONTACT_ID, mAdapter.getItem(mAdapter.getSelectPosition()).vaid);
     }
 }

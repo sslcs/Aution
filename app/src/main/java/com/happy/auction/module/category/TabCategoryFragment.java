@@ -64,14 +64,14 @@ public class TabCategoryFragment extends Fragment {
 
     private void initLayout() {
         adapterCategory = new CategoryAdapter();
-        adapterCategory.setOnItemClickListener(new OnItemClickListener() {
+        adapterCategory.setOnItemClickListener(new OnItemClickListener<ItemCategory>() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(View view, ItemCategory item, int position) {
                 if (position == adapterCategory.getSelectedPosition()) {
                     return;
                 }
                 adapterCategory.setSelectedPosition(position);
-                currentCategory = adapterCategory.getItem(position);
+                currentCategory = item;
                 refresh();
             }
         });
@@ -80,10 +80,9 @@ public class TabCategoryFragment extends Fragment {
         binding.vCategory.addItemDecoration(new DecorationColor());
 
         adapterGoods = new CategoryGoodsAdapter();
-        adapterGoods.setOnItemClickListener(new OnItemClickListener() {
+        adapterGoods.setOnItemClickListener(new OnItemClickListener<ItemGoods>() {
             @Override
-            public void onItemClick(View view, int position) {
-                ItemGoods item = adapterGoods.getItem(position);
+            public void onItemClick(View view, ItemGoods item, int position) {
                 startActivity(AuctionDetailActivity.newIntent(item));
             }
         });
