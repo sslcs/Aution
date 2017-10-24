@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.happy.auction.utils.StringUtil"/>
+        <variable
+            name="data"
+            type="com.happy.auction.entity.response.MessageDetail"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.happy.auction.module.me.SettingActivity">
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            style="@style/TextTitle"
+            android:text="@string/message_detail"/>
+
+        <ImageView
+            style="@style/IconBack"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_toolbar_title"
+            app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
+
+        <View
+            android:id="@+id/v_background"
+            android:layout_width="0dp"
+            android:layout_height="241dp"
+            android:background="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_toolbar_title"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:ellipsize="end"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:singleLine="true"
+            android:text="@{data.title}"
+            android:textColor="@color/text_dark"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/v_background"
+            app:layout_constraintStart_toStartOf="@+id/v_background"
+            app:layout_constraintTop_toTopOf="@+id/v_background"
+            tools:text="名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@{StringUtil.formatTimeMinute(data.create_time)}"
+            android:textColor="@color/text_light"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/v_background"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            tools:text="2017-10-23 10:32"/>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="13dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@{data.content}"
+            android:scrollbars="vertical"
+            android:scrollbarFadeDuration="5"
+            android:textColor="@color/text_normal"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/v_background"
+            app:layout_constraintEnd_toEndOf="@+id/v_background"
+            app:layout_constraintStart_toStartOf="@+id/v_background"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time"
+            tools:text="名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

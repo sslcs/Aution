@@ -25,10 +25,10 @@
             app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
 
         <TextView
-            android:id="@+id/tv_service_contract"
+            android:id="@+id/tv_service_protocol"
             style="@style/TextItemSetting"
-            android:onClick="onClickServiceContract"
-            android:text="@string/service_contract"
+            android:onClick="onClickServiceProtocol"
+            android:text="@string/service_protocol"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title"/>
@@ -41,7 +41,7 @@
             android:text="@string/about_us"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_service_contract"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_service_protocol"/>
 
         <Button
             style="@style/ButtonCorner"

@@ -38,10 +38,19 @@
     <string name="easy_copy">一键复制</string>
     <string name="select_all">全选(已选择%1$d个)</string>
     <string name="tip_clipboard">已成功复制到粘帖版</string>
+    <string name="title_about">关于我们</string>
+    <string name="version">版本：V%1$s</string>
+
+    <!-- message -->
+    <string name="title_message">消息中心</string>
+    <string name="message_detail">消息详情</string>
+    <string name="message_auction">竞拍消息</string>
+    <string name="message_delivery">物流消息</string>
+    <string name="message_notice">系统公告</string>
 
     <!-- setting -->
     <string name="setting">设置</string>
-    <string name="service_contract">服务协议</string>
+    <string name="service_protocol">服务协议</string>
     <string name="about_us">关于我们</string>
     <string name="logout">退出登录</string>
     <string name="tip_logout">是否确认退出该账号</string>

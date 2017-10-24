@@ -45,7 +45,7 @@ import okhttp3.WebSocketListener;
  */
 public class MainActivity extends AppCompatActivity {
     private final MessageHandler mMessageHandler = new MessageHandler();
-    private ActivityMainBinding binding;
+    private ActivityMainBinding mBinding;
     private WebSocket mSocket = null;
     private boolean isDestroyed = false;
     private long mLastBackPressedTime;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         init();
         initWebSocket();
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initLayout() {
-        if (binding.viewPager.getAdapter() != null) {
+        if (mBinding.viewPager.getAdapter() != null) {
             return;
         }
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -85,22 +85,22 @@ public class MainActivity extends AppCompatActivity {
         adapter.add(TabLatestFragment.newInstance());
         adapter.add(TabCategoryFragment.newInstance());
         adapter.add(TabMeFragment.newInstance());
-        binding.viewPager.setOffscreenPageLimit(4);
-        binding.viewPager.setAdapter(adapter);
-        binding.tabLayout.setupWithViewPager(binding.viewPager);
-        TabLayout.Tab tab = binding.tabLayout.getTabAt(0);
+        mBinding.viewPager.setOffscreenPageLimit(4);
+        mBinding.viewPager.setAdapter(adapter);
+        mBinding.tabLayout.setupWithViewPager(mBinding.viewPager);
+        TabLayout.Tab tab = mBinding.tabLayout.getTabAt(0);
         if (tab != null) {
             tab.setCustomView(R.layout.tab_home);
         }
-        tab = binding.tabLayout.getTabAt(1);
+        tab = mBinding.tabLayout.getTabAt(1);
         if (tab != null) {
             tab.setCustomView(R.layout.tab_latest);
         }
-        tab = binding.tabLayout.getTabAt(2);
+        tab = mBinding.tabLayout.getTabAt(2);
         if (tab != null) {
             tab.setCustomView(R.layout.tab_category);
         }
-        tab = binding.tabLayout.getTabAt(3);
+        tab = mBinding.tabLayout.getTabAt(3);
         if (tab != null) {
             tab.setCustomView(R.layout.tab_me);
         }

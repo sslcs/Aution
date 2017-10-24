@@ -30,6 +30,11 @@ import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
 
+/**
+ * 订单详情页面
+ *
+ * @author LiuCongshan
+ */
 public class OrderDetailActivity extends BaseActivity {
     private static final String KEY_ITEM = "KEY_ITEM";
     private static final int REQUEST_CODE_PAY = 100;

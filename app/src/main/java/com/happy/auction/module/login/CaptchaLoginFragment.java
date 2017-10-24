@@ -30,8 +30,8 @@ import java.lang.reflect.Type;
  * 免密登录
  */
 public class CaptchaLoginFragment extends BaseFragment {
-    private FragmentCaptchaLoginBinding binding;
-    private CountDownTimer timer;
+    private FragmentCaptchaLoginBinding mBinding;
+    private CountDownTimer mTimer;
 
     public CaptchaLoginFragment() {
         // Required empty public constructor
@@ -43,10 +43,10 @@ public class CaptchaLoginFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        binding = FragmentCaptchaLoginBinding.inflate(inflater, container, false);
-        binding.btnCaptcha.setTransformationMethod(null);
-        binding.setFragment(this);
-        return binding.getRoot();
+        mBinding = FragmentCaptchaLoginBinding.inflate(inflater, container, false);
+        mBinding.btnCaptcha.setTransformationMethod(null);
+        mBinding.setFragment(this);
+        return mBinding.getRoot();
     }
 
     public void afterPhoneChanged(Editable s) {
@@ -54,52 +54,52 @@ public class CaptchaLoginFragment extends BaseFragment {
         parent.setPhone(s.toString());
 
         if (validPhone()) {
-            if (timer == null) {
-                binding.btnCaptcha.setEnabled(true);
+            if (mTimer == null) {
+                mBinding.btnCaptcha.setEnabled(true);
             }
 
             if (validCaptcha()) {
-                binding.btnOK.setEnabled(true);
+                mBinding.btnOK.setEnabled(true);
             }
         } else {
-            binding.btnCaptcha.setEnabled(false);
-            binding.btnOK.setEnabled(false);
+            mBinding.btnCaptcha.setEnabled(false);
+            mBinding.btnOK.setEnabled(false);
         }
     }
 
     public void afterCaptchaChanged(Editable s) {
-        binding.btnOK.setEnabled(validCaptcha() && validPhone());
+        mBinding.btnOK.setEnabled(validCaptcha() && validPhone());
     }
 
     private boolean validPhone() {
-        return Validation.phone(binding.etPhone.getText());
+        return Validation.phone(mBinding.etPhone.getText());
     }
 
     private boolean validCaptcha() {
-        return binding.etCaptcha.getText().length() > 3;
+        return mBinding.etCaptcha.getText().length() > 3;
     }
 
     public void onClickCaptcha(View view) {
-        binding.btnCaptcha.setEnabled(false);
-        timer = new CountDownTimer(60000, 1000) {
+        mBinding.btnCaptcha.setEnabled(false);
+        mTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long l) {
-                binding.btnCaptcha.setText((int) (l / 1000) + "s");
+                mBinding.btnCaptcha.setText((int) (l / 1000) + "s");
             }
 
             @Override
             public void onFinish() {
-                binding.btnCaptcha.setText(R.string.get_captcha);
+                mBinding.btnCaptcha.setText(R.string.get_captcha);
                 if (validPhone()) {
-                    binding.btnCaptcha.setEnabled(true);
+                    mBinding.btnCaptcha.setEnabled(true);
                 }
-                timer = null;
+                mTimer = null;
             }
         }.start();
 
         CaptchaParam param = new CaptchaParam();
         param.forgetPwd = 3;
-        param.phone = binding.etPhone.getText().toString();
+        param.phone = mBinding.etPhone.getText().toString();
         BaseRequest<CaptchaParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
@@ -111,8 +111,8 @@ public class CaptchaLoginFragment extends BaseFragment {
 
     public void onClickLogin(View view) {
         LoginParam param = new LoginParam();
-        param.phone = binding.etPhone.getText().toString();
-        param.code = binding.etCaptcha.getText().toString();
+        param.phone = mBinding.etPhone.getText().toString();
+        param.code = mBinding.etCaptcha.getText().toString();
         param.login_type = LoginParam.TYPE_CAPTCHA;
 
         BaseRequest<LoginParam> request = new BaseRequest<>(param);
@@ -132,8 +132,8 @@ public class CaptchaLoginFragment extends BaseFragment {
         if (!hasCreatedView || !isVisibleToUser) return;
 
         LoginActivity parent = (LoginActivity) getActivity();
-        binding.etPhone.setText(parent.getPhone());
-        Editable text = binding.etPhone.getText();
-        binding.etPhone.setSelection(text.length());
+        mBinding.etPhone.setText(parent.getPhone());
+        Editable text = mBinding.etPhone.getText();
+        mBinding.etPhone.setSelection(text.length());
     }
 }

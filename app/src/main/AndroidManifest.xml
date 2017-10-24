@@ -45,6 +45,9 @@
         <activity android:name=".module.me.CardActivity"/>
         <activity android:name=".module.me.BaskActivity"/>
         <activity android:name=".module.WebActivity"/>
+        <activity android:name=".module.me.MessageActivity"/>
+        <activity android:name=".module.me.MessageDetailActivity"/>
+        <activity android:name=".module.me.AboutActivity"/>
     </application>
 
 </manifest>

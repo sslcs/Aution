@@ -7,15 +7,15 @@ package com.happy.auction.entity.param;
  * @author LiuCongshan
  */
 
-public class OrderParam extends BaseParam {
+public class MessageParam extends BaseParam {
     /**
-     * 记录类型，0：全部，1：正在拍，2：已拍中，3：待付款
+     * 消息类型， 1 竞拍消息， 2 物流信息， 3 系统公告， 不传时为获取所有
      */
-    public int record_type;
+    public int type;
     public int start;
     public int limit = DEFAULT_LIMIT;
 
-    public OrderParam() {
-        action = "purchase_my_records";
+    public MessageParam() {
+        action = "message_list";
     }
 }

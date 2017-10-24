@@ -14,6 +14,7 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentTabMeBinding;
+import com.happy.auction.entity.event.LogoutEvent;
 import com.happy.auction.entity.param.BalanceParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.response.DataResponse;
@@ -27,6 +28,7 @@ import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
+import com.happy.auction.utils.StringUtil;
 
 import java.lang.reflect.Type;
 
@@ -38,7 +40,7 @@ import io.reactivex.functions.Consumer;
  * @author cs
  */
 public class TabMeFragment extends BaseFragment {
-    private FragmentTabMeBinding binding;
+    private FragmentTabMeBinding mBinding;
 
     public static TabMeFragment newInstance() {
         return new TabMeFragment();
@@ -46,26 +48,26 @@ public class TabMeFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle bundle) {
-        binding = FragmentTabMeBinding.inflate(inflater);
+        mBinding = FragmentTabMeBinding.inflate(inflater);
         initLayout();
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     private void initLayout() {
-        binding.setUser(AppInstance.getInstance().getUser());
-        binding.setFragment(this);
+        mBinding.setUser(AppInstance.getInstance().getUser());
+        mBinding.setFragment(this);
 
         RxBus.getDefault().subscribe(this, LogoutEvent.class, new Consumer<LogoutEvent>() {
             @Override
             public void accept(LogoutEvent event) throws Exception {
-                binding.setUser(null);
+                mBinding.setUser(null);
             }
         });
 
         RxBus.getDefault().subscribe(this, UserInfo.class, new Consumer<UserInfo>() {
             @Override
             public void accept(UserInfo user) throws Exception {
-                binding.setUser(user);
+                mBinding.setUser(user);
             }
         });
     }
@@ -93,14 +95,14 @@ public class TabMeFragment extends BaseFragment {
         if (!isLogin()) {
             return;
         }
-        startActivity(BalanceActivity.newIntent(getActivity(), 0));
+        startActivity(BalanceActivity.newIntent(0));
     }
 
     public void onClickFreeCoin(View view) {
         if (!isLogin()) {
             return;
         }
-        startActivity(BalanceActivity.newIntent(getActivity(), 1));
+        startActivity(BalanceActivity.newIntent(1));
     }
 
     public void onClickPoint(View view) {
@@ -118,28 +120,28 @@ public class TabMeFragment extends BaseFragment {
         if (!isLogin()) {
             return;
         }
-        startActivity(OrderActivity.newIntent(getActivity(), 0));
+        startActivity(OrderActivity.newIntent(0));
     }
 
     public void onClickAuctionGoing(View view) {
         if (!isLogin()) {
             return;
         }
-        startActivity(OrderActivity.newIntent(getActivity(), 1));
+        startActivity(OrderActivity.newIntent(1));
     }
 
     public void onClickAuctionWin(View view) {
         if (!isLogin()) {
             return;
         }
-        startActivity(OrderActivity.newIntent(getActivity(), 2));
+        startActivity(OrderActivity.newIntent(2));
     }
 
     public void onClickAuctionUnpaid(View view) {
         if (!isLogin()) {
             return;
         }
-        startActivity(OrderActivity.newIntent(getActivity(), 3));
+        startActivity(OrderActivity.newIntent(3));
     }
 
     public void onClickMyCard(View view) {
@@ -158,12 +160,14 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickMyService(View view) {
         String title = getString(R.string.my_service);
-        String url = "http://106.75.177.248/service_center/index.html";
-        startActivity(WebActivity.newIntent(title, url));
+        startActivity(WebActivity.newIntent(title, StringUtil.URL_SERVICE_CENTER));
     }
 
     public void onClickMyMessage(View view) {
-        DebugLog.e("onClickView");
+        if (!isLogin()) {
+            return;
+        }
+        startActivity(MessageActivity.newIntent());
     }
 
     @Override
@@ -200,8 +204,8 @@ public class TabMeFragment extends BaseFragment {
                     return;
                 }
                 AppInstance.getInstance().setBalance(obj.data);
-                if (binding != null) {
-                    binding.setUser(AppInstance.getInstance().getUser());
+                if (mBinding != null) {
+                    mBinding.setUser(AppInstance.getInstance().getUser());
                 }
             }
         });

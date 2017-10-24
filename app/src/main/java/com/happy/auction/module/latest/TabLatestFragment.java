@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * 最新成交
  */
 public class TabLatestFragment extends Fragment {
-    private FragmentTabLatestBinding binding;
+    private FragmentTabLatestBinding mBinding;
     private TabLatestAdapter adapter;
     private int start;
 
@@ -42,14 +42,14 @@ public class TabLatestFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle bundle) {
-        binding = FragmentTabLatestBinding.inflate(inflater);
+        mBinding = FragmentTabLatestBinding.inflate(inflater);
         initLayout();
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     private void initLayout() {
-        binding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.vList.addItemDecoration(new DecorationSpace());
+        mBinding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.vList.addItemDecoration(new DecorationSpace());
         adapter = new TabLatestAdapter();
         adapter.setOnItemClickListener(new OnItemClickListener<ItemLatest>() {
             @Override
@@ -63,7 +63,7 @@ public class TabLatestFragment extends Fragment {
                 loadData(start);
             }
         });
-        binding.vList.setAdapter(this.adapter);
+        mBinding.vList.setAdapter(this.adapter);
 
         loadData(0);
     }

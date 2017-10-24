@@ -10,6 +10,8 @@ import com.happy.auction.entity.item.ItemOrder;
 
 /**
  * 订单记录Adapter
+ *
+ * @author LiuCongshan
  */
 public class OrderAdapter extends BaseCustomAdapter<ItemOrder, ItemOrderBinding> {
     private OnButtonClickListener listener;

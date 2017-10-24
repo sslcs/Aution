@@ -41,7 +41,7 @@ import io.reactivex.functions.Consumer;
  * 商品分类
  */
 public class TabCategoryFragment extends Fragment {
-    private FragmentTabCategoryBinding binding;
+    private FragmentTabCategoryBinding mBinding;
     private CategoryAdapter adapterCategory;
     private CategoryGoodsAdapter adapterGoods;
     private int currentIndex;
@@ -57,9 +57,9 @@ public class TabCategoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle bundle) {
-        binding = FragmentTabCategoryBinding.inflate(inflater);
+        mBinding = FragmentTabCategoryBinding.inflate(inflater);
         initLayout();
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     private void initLayout() {
@@ -75,9 +75,9 @@ public class TabCategoryFragment extends Fragment {
                 refresh();
             }
         });
-        binding.vCategory.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.vCategory.setAdapter(adapterCategory);
-        binding.vCategory.addItemDecoration(new DecorationColor());
+        mBinding.vCategory.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.vCategory.setAdapter(adapterCategory);
+        mBinding.vCategory.addItemDecoration(new DecorationColor());
 
         adapterGoods = new CategoryGoodsAdapter();
         adapterGoods.setOnItemClickListener(new OnItemClickListener<ItemGoods>() {
@@ -92,9 +92,9 @@ public class TabCategoryFragment extends Fragment {
                 loadData();
             }
         });
-        binding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.vList.setAdapter(adapterGoods);
-        binding.vList.addItemDecoration(new DecorationColor());
+        mBinding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.vList.setAdapter(adapterGoods);
+        mBinding.vList.addItemDecoration(new DecorationColor());
 
         loadCategory();
         listenEvents();

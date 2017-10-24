@@ -10,10 +10,17 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivitySettingBinding;
+import com.happy.auction.entity.event.LogoutEvent;
+import com.happy.auction.module.WebActivity;
 import com.happy.auction.ui.CustomDialog;
-import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.RxBus;
+import com.happy.auction.utils.StringUtil;
 
+/**
+ * 设置页面
+ *
+ * @author LiuCongshan
+ */
 public class SettingActivity extends BaseActivity {
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), SettingActivity.class);
@@ -26,12 +33,13 @@ public class SettingActivity extends BaseActivity {
         binding.setUser(AppInstance.getInstance().getUser());
     }
 
-    public void onClickServiceContract(View view) {
-        DebugLog.e("onClickView");
+    public void onClickServiceProtocol(View view) {
+        String title = getString(R.string.service_protocol);
+        startActivity(WebActivity.newIntent(title, StringUtil.URL_SERVICE_PROTOCOL));
     }
 
     public void onClickAboutUs(View view) {
-        DebugLog.e("onClickView");
+        startActivity(AboutActivity.newIntent());
     }
 
     public void onClickLogout(View view) {
