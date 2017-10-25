@@ -10,7 +10,7 @@ import com.happy.auction.base.BaseTabActivity;
 /**
  * 余额页面
  *
- * @author cs
+ * @author LiuCongshan
  */
 public class BalanceActivity extends BaseTabActivity {
     /**

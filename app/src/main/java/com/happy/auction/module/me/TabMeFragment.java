@@ -22,10 +22,12 @@ import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.WebActivity;
 import com.happy.auction.module.login.LoginActivity;
+import com.happy.auction.module.message.MessageActivity;
+import com.happy.auction.module.order.OrderActivity;
 import com.happy.auction.module.pay.ChargePayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
-import com.happy.auction.utils.DebugLog;
+import com.happy.auction.ui.CustomDialog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.StringUtil;
@@ -37,7 +39,7 @@ import io.reactivex.functions.Consumer;
 /**
  * 个人中心界面
  *
- * @author cs
+ * @author LiuCongshan
  */
 public class TabMeFragment extends BaseFragment {
     private FragmentTabMeBinding mBinding;
@@ -106,7 +108,10 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickPoint(View view) {
-        DebugLog.e("onClickView");
+        new CustomDialog.Builder()
+                .content(getString(R.string.tip_coming))
+                .textRight(getString(R.string.ok))
+                .show(getChildFragmentManager(), "dialog_coming");
     }
 
     public void onClickCharge(View view) {
@@ -155,7 +160,7 @@ public class TabMeFragment extends BaseFragment {
         if (!isLogin()) {
             return;
         }
-        startActivity(BaskActivity.newIntent());
+        startActivity(BaskListActivity.newIntent());
     }
 
     public void onClickMyService(View view) {

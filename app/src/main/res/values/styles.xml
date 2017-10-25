@@ -92,7 +92,7 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/selector_title_right</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -190,5 +190,10 @@
         <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
         <item name="android:textColor">@color/text_light</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Album">
+        <item name="colorPrimary">@color/main_red</item>
+        <item name="colorPrimaryDark">@color/main_red</item>
     </style>
 </resources>

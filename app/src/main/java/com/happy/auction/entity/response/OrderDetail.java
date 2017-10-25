@@ -46,6 +46,9 @@ public class OrderDetail extends ItemOrder {
             return;
         }
 
+        icon = item.icon;
+        title = item.title;
+        period = item.period;
         pid = item.pid;
         order_num = item.order_num;
         buy = item.buy;

@@ -11,17 +11,17 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.utils.DebugLog;
 
 /**
- * Created by LiuCongshan on 17-8-16.
  * 图片加载类
+ *
+ * @author LiuCongshan
+ * @date 17-8-16
  */
 public class ImageLoader {
     public static void displayImage(String url, ImageView view, @DrawableRes int resId) {
         GlideApp.with(AppInstance.getInstance())
                 .load(url)
-                .placeholder(resId)
                 .error(resId)
                 .into(view);
     }
@@ -34,20 +34,6 @@ public class ImageLoader {
         GlideApp.with(AppInstance.getInstance())
                 .load(url)
                 .into(view);
-    }
-
-    public static void displayOriginal(String url, final ImageView view) {
-        GlideApp.with(AppInstance.getInstance())
-                .asBitmap()
-                .load(url)
-//                .placeholder(R.drawable.pic_default)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                        DebugLog.e("width: " + resource.getWidth() + " height: " + resource.getHeight());
-                        view.setImageBitmap(resource);
-                    }
-                });
     }
 
     @BindingAdapter("avatar")
@@ -66,7 +52,9 @@ public class ImageLoader {
 
     @BindingAdapter("banner")
     public static void loadBanner(final ImageView imageView, String url) {
-        if (TextUtils.isEmpty(url)) return;
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
         GlideApp.with(imageView.getContext())
                 .asBitmap()
                 .load(url)
@@ -91,7 +79,7 @@ public class ImageLoader {
     }
 
     @BindingAdapter(value = {"image_url", "image_width", "image_height"})
-    public static void loadImage2(final ImageView imageView, String url, int width, int height) {
+    public static void loadImageFix(final ImageView imageView, String url, int width, int height) {
         if (TextUtils.isEmpty(url)) {
             imageView.setImageResource(R.drawable.pic_default);
             return;

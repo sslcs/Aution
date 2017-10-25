@@ -13,10 +13,12 @@ import com.happy.auction.adapter.ViewPagerAdapter;
 import com.happy.auction.databinding.ActivityMainBinding;
 import com.happy.auction.entity.event.RequestEvent;
 import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.param.MessageCountParam;
 import com.happy.auction.entity.param.SyncParam;
 import com.happy.auction.entity.param.UserInfoParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.LoginResponse;
+import com.happy.auction.entity.response.MessageCount;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.category.TabCategoryFragment;
 import com.happy.auction.module.home.TabHomeFragment;
@@ -186,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 initLayout();
                 if (AppInstance.getInstance().isLogin()) {
                     getUserInfo();
+                    getMessageCount();
                 }
             }
 
@@ -228,6 +231,21 @@ public class MainActivity extends AppCompatActivity {
                 DataResponse<UserInfo> obj = GsonSingleton.get().fromJson(response, type);
                 AppInstance.getInstance().setUser(obj.data);
                 RxBus.getDefault().post(obj.data);
+            }
+        });
+    }
+
+    private void getMessageCount() {
+        MessageCountParam param = new MessageCountParam();
+        BaseRequest<MessageCountParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<MessageCount>>() {}.getType();
+                DataResponse<MessageCount> obj = GsonSingleton.get().fromJson(response, type);
+                if (obj.data != null) {
+                    AppInstance.getInstance().mMessageCount.set(obj.data.count);
+                }
             }
         });
     }

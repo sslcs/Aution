@@ -35,16 +35,18 @@ import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.BidParam;
 import com.happy.auction.entity.param.DetailBaskParam;
+import com.happy.auction.entity.param.GoodsDetailParam;
 import com.happy.auction.entity.param.PreviousParam;
 import com.happy.auction.entity.response.AuctionCoin;
 import com.happy.auction.entity.response.AuctionDetail;
 import com.happy.auction.entity.response.DataResponse;
+import com.happy.auction.entity.response.GoodsDetail;
 import com.happy.auction.entity.response.UserBalance;
+import com.happy.auction.module.WebActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.pay.AuctionPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
-import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
@@ -55,7 +57,9 @@ import java.util.ArrayList;
 import io.reactivex.functions.Consumer;
 
 /**
- * 竞拍详情
+ * 竞拍详情页面
+ *
+ * @author LiuCongshan
  */
 public class AuctionDetailActivity extends BaseActivity {
     private static final String KEY_GOODS = "GOODS";
@@ -206,7 +210,9 @@ public class AuctionDetailActivity extends BaseActivity {
     }
 
     private void setBtnMoreVisibility() {
-        mBinding.tvMore.setVisibility(mAdapter.getRealCount() > 3 ? View.VISIBLE : View.GONE);
+        int visible = mAdapter.getRealCount() > 3 ? View.VISIBLE : View.GONE;
+        mBinding.tvMore.setVisibility(visible);
+        mBinding.bgMore.setVisibility(visible);
     }
 
     private void listenEvents() {
@@ -451,7 +457,6 @@ public class AuctionDetailActivity extends BaseActivity {
             public void onSuccess(String response, String message) {
                 adapterBask.setLoaded();
                 Type type = new TypeToken<DataResponse<ArrayList<ItemBask>>>() {}.getType();
-                DebugLog.e("response : " + response);
                 DataResponse<ArrayList<ItemBask>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data != null && !obj.data.isEmpty()) {
@@ -468,6 +473,22 @@ public class AuctionDetailActivity extends BaseActivity {
         startActivity(BidRecordActivity.newIntent(mData.sid, mData.status));
     }
 
+    public void onClickDetail(View view) {
+        GoodsDetailParam param = new GoodsDetailParam();
+        param.gid = mData.gid;
+        BaseRequest<GoodsDetailParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                adapterBask.setLoaded();
+                Type type = new TypeToken<DataResponse<GoodsDetail>>() {}.getType();
+                DataResponse<GoodsDetail> obj = GsonSingleton.get().fromJson(response, type);
+                String title = getString(R.string.goods_detail);
+                startActivity(WebActivity.newIntent(title, obj.data.detail));
+            }
+        });
+    }
+
     private void getBalance() {
         BalanceParam data = new BalanceParam();
         BaseRequest<BalanceParam> request = new BaseRequest<>(data);
@@ -482,5 +503,9 @@ public class AuctionDetailActivity extends BaseActivity {
                 bid();
             }
         });
+    }
+
+    public void onClickRule(View view) {
+        RuleDialog.newInstance().show(getSupportFragmentManager(), "rule");
     }
 }

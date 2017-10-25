@@ -16,7 +16,7 @@ import com.happy.auction.databinding.ActivityListBinding;
 import com.happy.auction.entity.item.ItemBask;
 import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
-import com.happy.auction.entity.param.BaskParam;
+import com.happy.auction.entity.param.BaskMyParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.module.detail.BaskAdapter;
 import com.happy.auction.net.NetCallback;
@@ -33,14 +33,14 @@ import java.util.ArrayList;
  * @author LiuCongshan
  */
 
-public class BaskActivity extends BaseActivity {
+public class BaskListActivity extends BaseActivity {
     private ActivityListBinding mBinding;
 
     private BaskAdapter mAdapter;
     private int mIndex = 0;
 
     public static Intent newIntent() {
-        return new Intent(AppInstance.getInstance(), BaskActivity.class);
+        return new Intent(AppInstance.getInstance(), BaskListActivity.class);
     }
 
     @Override
@@ -67,9 +67,9 @@ public class BaskActivity extends BaseActivity {
     }
 
     private void loadData() {
-        BaskParam param = new BaskParam();
+        BaskMyParam param = new BaskMyParam();
         param.start = mIndex;
-        BaseRequest<BaskParam> request = new BaseRequest<>(param);
+        BaseRequest<BaskMyParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {

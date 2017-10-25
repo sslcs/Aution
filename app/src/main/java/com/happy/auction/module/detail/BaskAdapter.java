@@ -10,6 +10,8 @@ import com.happy.auction.glide.ImageLoader;
 
 /**
  * 详情晒单分享Adapter
+ *
+ * @author LiuCongshan
  */
 public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBinding> {
     @Override
@@ -21,5 +23,8 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
     public void bindItem(ItemBaskDetailBinding binding, ItemBask item, int position) {
         binding.setData(item);
         ImageLoader.displayImage(item.s_img.get(0), binding.ivImg);
+        if (item.s_img.size() > 1) {
+            ImageLoader.displayImage(item.s_img.get(1), binding.ivImg1);
+        }
     }
 }

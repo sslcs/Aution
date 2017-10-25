@@ -8,8 +8,6 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.utils.StringUtil;
 
-import java.util.Locale;
-
 /**
  * Created by LiuCongshan on 17-9-12.
  * 订单item

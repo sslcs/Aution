@@ -12,7 +12,7 @@ import com.happy.auction.BuildConfig;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseActivity;
 import com.happy.auction.databinding.ActivityWebBinding;
-import com.happy.auction.module.me.BaskActivity;
+import com.happy.auction.module.me.BaskListActivity;
 import com.happy.auction.module.pay.ChargePayActivity;
 import com.happy.auction.utils.DebugLog;
 
@@ -56,7 +56,7 @@ public class WebActivity extends BaseActivity {
         if ("recharge".equalsIgnoreCase(pageLink)) {
             return ChargePayActivity.newIntent();
         } else if ("bask".equalsIgnoreCase(pageLink)) {
-            return BaskActivity.newIntent();
+            return BaskListActivity.newIntent();
         } else {
             return null;
         }

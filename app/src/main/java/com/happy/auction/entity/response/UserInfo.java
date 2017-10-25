@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class UserInfo {
     public String username;
     public String phone;
-    @SerializedName("avatar")
+    @SerializedName("headimg")
     public String avatar;
     /**
      * 拍币

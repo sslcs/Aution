@@ -14,8 +14,11 @@ import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.entity.item.ItemPayType;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.BidParam;
+import com.happy.auction.entity.param.ConfigParam;
+import com.happy.auction.entity.response.ConfigInfo;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.PayConfirmResponse;
+import com.happy.auction.module.WebActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
@@ -35,6 +38,7 @@ public class AuctionPayActivity extends BasePayActivity {
 
     private ActivityAuctionPayBinding mBinding;
     private ItemGoods mData;
+    private ConfigInfo mConfigInfo;
     private int mCount;
 
     public static Intent newIntent(Context context, ItemGoods data, int count) {
@@ -59,6 +63,8 @@ public class AuctionPayActivity extends BasePayActivity {
         mBinding.setPay(new PayData(mCount));
 
         initList(mBinding.vList);
+
+        getConfig();
     }
 
     public void onClickPay(View view) {
@@ -83,5 +89,26 @@ public class AuctionPayActivity extends BasePayActivity {
                 ToastUtil.show(message);
             }
         });
+    }
+
+    private void getConfig() {
+        ConfigParam param = new ConfigParam();
+        BaseRequest<ConfigParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<ConfigInfo>>() {}.getType();
+                DataResponse<ConfigInfo> obj = GsonSingleton.get().fromJson(response, type);
+                if (obj.data != null) {
+                    mConfigInfo = obj.data;
+                    mBinding.tvInvite.setVisibility(View.VISIBLE);
+                    mBinding.tvInvite.setText(mConfigInfo.title);
+                }
+            }
+        });
+    }
+
+    public void onClickInvite(View view) {
+        startActivity(WebActivity.newIntent(mConfigInfo.title, mConfigInfo.link));
     }
 }

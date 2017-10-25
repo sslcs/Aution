@@ -1,6 +1,7 @@
 package com.happy.auction;
 
 import android.app.Application;
+import android.databinding.ObservableInt;
 import android.text.TextUtils;
 
 import com.happy.auction.entity.response.LoginResponse;
@@ -9,24 +10,26 @@ import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.utils.PreferenceUtil;
 
 /**
- * Created by LiuCongshan on 17-8-16.
- * AppInstance
+ * Application instance
+ *
+ * @author LiuCongshan
+ * @date 17-8-16
  */
-
 public class AppInstance extends Application {
-    private static AppInstance instance;
+    private static AppInstance mInstance;
+    public final ObservableInt mMessageCount = new ObservableInt();
     public String uid;
     public String token;
     private UserInfo user;
 
     public static AppInstance getInstance() {
-        return instance;
+        return mInstance;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
+        mInstance = this;
         uid = PreferenceUtil.getUid();
         token = PreferenceUtil.getToken();
     }
@@ -95,5 +98,9 @@ public class AppInstance extends Application {
 
     public int getResColor(int resId) {
         return getResources().getColor(resId);
+    }
+
+    public void minusMessageCount() {
+        mMessageCount.set(mMessageCount.get() - 1);
     }
 }

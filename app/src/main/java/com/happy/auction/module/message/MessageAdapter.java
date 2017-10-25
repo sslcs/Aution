@@ -1,4 +1,4 @@
-package com.happy.auction.module.me;
+package com.happy.auction.module.message;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

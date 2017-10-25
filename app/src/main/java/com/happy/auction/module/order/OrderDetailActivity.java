@@ -1,4 +1,4 @@
-package com.happy.auction.module.me;
+package com.happy.auction.module.order;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -21,6 +21,8 @@ import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.OrderDetail;
 import com.happy.auction.module.address.AddressSelectActivity;
 import com.happy.auction.module.address.ContactSelectActivity;
+import com.happy.auction.module.me.BaskListActivity;
+import com.happy.auction.module.me.CardActivity;
 import com.happy.auction.module.pay.OrderPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
@@ -40,6 +42,7 @@ public class OrderDetailActivity extends BaseActivity {
     private static final int REQUEST_CODE_PAY = 100;
     private static final int REQUEST_CODE_CONTACT = 101;
     private static final int REQUEST_CODE_ADDRESS = 102;
+    private static final int REQUEST_CODE_BASK = 103;
 
     private ActivityOrderDetailBinding mBinding;
     private OrderDetail mData;
@@ -64,10 +67,15 @@ public class OrderDetailActivity extends BaseActivity {
     private void initLayout() {
         mOrder = (ItemOrder) getIntent().getSerializableExtra(KEY_ITEM);
         mData = new OrderDetail(mOrder);
-        mBinding.setData(mData);
-        setProgress();
+        setData();
 
         loadData();
+    }
+
+    private void setData() {
+        mBinding.setData(mData);
+        setProgress();
+        setBottom();
     }
 
     private void setProgress() {
@@ -100,10 +108,10 @@ public class OrderDetailActivity extends BaseActivity {
             public void onSuccess(String response, String message) {
                 Type type = new TypeToken<DataResponse<OrderDetail>>() {}.getType();
                 DataResponse<OrderDetail> obj = GsonSingleton.get().fromJson(response, type);
-                mData = obj.data;
-                mBinding.setData(obj.data);
-                setProgress();
-                setBottom();
+                if (obj.data != null) {
+                    mData = obj.data;
+                    setData();
+                }
             }
         });
     }
@@ -130,11 +138,13 @@ public class OrderDetailActivity extends BaseActivity {
     public void onClickBtnBottom(View view) {
         if (mData.status == OrderDetail.STATUS_CONFIRM) {
             // 已确认
+            startActivityForResult(BaskActivity.newIntent(mOrder.sid), REQUEST_CODE_BASK);
         } else if (mData.status >= OrderDetail.STATUS_BASK) {
             // 已晒单
+            startActivity(BaskListActivity.newIntent());
         } else if (mData.status == OrderDetail.STATUS_WIN) {
             // 已拍中
-            Intent intent = OrderPayActivity.newIntent(this, mOrder);
+            Intent intent = OrderPayActivity.newIntent(mOrder);
             startActivityForResult(intent, REQUEST_CODE_PAY);
         } else if (mData.type == 1) {
             // 已付款-实物
@@ -165,6 +175,10 @@ public class OrderDetailActivity extends BaseActivity {
         } else if (REQUEST_CODE_ADDRESS == requestCode) {
             mData.address = (Address) data.getSerializableExtra(AddressSelectActivity.EXTRA_ADDRESS);
             mBinding.setData(mData);
+        } else if (REQUEST_CODE_BASK == requestCode) {
+            mData.status = 5;
+            mOrder.status = 5;
+            setData();
         }
     }
 
@@ -190,5 +204,9 @@ public class OrderDetailActivity extends BaseActivity {
     public void onClickChangeAddress(View view) {
         Intent intent = AddressSelectActivity.newIntent(mData.address.aid);
         startActivityForResult(intent, REQUEST_CODE_ADDRESS);
+    }
+
+    public void onClickCardPassword(View view) {
+        startActivity(CardActivity.newIntent());
     }
 }

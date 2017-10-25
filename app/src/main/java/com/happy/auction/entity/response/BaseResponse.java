@@ -1,10 +1,11 @@
 package com.happy.auction.entity.response;
 
 /**
- * Created by LiuCongshan on 17-8-21.
- * 接收数据基类
+ * 接收数据基类<br/>
+ *
+ * @author LiuCongshan
+ * @date 17-8-21
  */
-
 public class BaseResponse extends BaseEvent {
     /**
      * 状态码: 0为正常， 其他为各种错误,

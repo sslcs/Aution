@@ -1,17 +1,29 @@
 package com.happy.auction.entity.param;
 
+import java.util.ArrayList;
+
 /**
- * 获取最新成交参数<br/>
- * Created by LiuCongshan on 17-10-23.
+ * 新增晒单参数
  *
  * @author LiuCongshan
+ * @date 17-10-25
  */
 
 public class BaskParam extends BaseParam {
-    public int start;
-    public int limit = DEFAULT_LIMIT;
+    /**
+     * 对应商品编号id
+     */
+    public int sid;
+    /**
+     * 评论内容
+     */
+    public String content;
+    /**
+     * 晒单图片
+     */
+    public ArrayList<String> images;
 
     public BaskParam() {
-        action = "bask_my";
+        action = "bask_new";
     }
 }

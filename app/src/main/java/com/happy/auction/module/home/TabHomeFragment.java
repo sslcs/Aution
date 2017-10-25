@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
+import com.happy.auction.AppInstance;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.base.BaseFragment;
@@ -33,6 +34,7 @@ import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.module.WebActivity;
 import com.happy.auction.module.detail.AuctionDetailActivity;
+import com.happy.auction.module.message.MessageActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
@@ -72,6 +74,9 @@ public class TabHomeFragment extends BaseFragment {
     }
 
     private void initLayout() {
+        mBinding.setCount(AppInstance.getInstance().mMessageCount);
+        mBinding.setFragment(this);
+
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mBinding.rvBanner.setLayoutManager(llm);
 
@@ -299,6 +304,10 @@ public class TabHomeFragment extends BaseFragment {
                 ToastUtil.show(message);
             }
         });
+    }
+
+    public void onClickMessage(View view) {
+        startActivity(MessageActivity.newIntent());
     }
 
     @Override

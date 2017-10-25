@@ -100,6 +100,15 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:onClick="onClickDetail"
+                        android:src="@drawable/ic_check_detail"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_goods_image"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
                     <TextView
                         android:id="@+id/tv_goods_name"
                         android:layout_width="0dp"
@@ -305,39 +314,51 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_current_address"/>
 
-
-                    <TextView
-                        android:id="@+id/tv_more"
+                    <View
+                        android:id="@+id/bg_more"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="44dp"
                         android:background="@android:color/white"
-                        android:gravity="center"
-                        android:maxLines="2"
                         android:onClick="onClickMore"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:paddingTop="10dp"
-                        android:text="@string/more_record"
-                        android:textColor="@color/text_dark"
-                        android:textSize="16sp"
                         android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/list_record"/>
 
                     <TextView
-                        android:id="@+id/tv_rules"
+                        android:id="@+id/tv_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:drawablePadding="5dp"
+                        android:drawableRight="@drawable/ic_arrow_right"
+                        android:gravity="center"
+                        android:text="@string/more_record"
+                        android:textColor="@color/text_light"
+                        android:textSize="16sp"
+                        android:visibility="gone"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/list_record"/>
+
+                    <View
+                        android:id="@+id/bg_rule"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="44dp"
                         android:layout_marginTop="10dp"
                         android:background="@android:color/white"
+                        android:onClick="onClickRule"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_more"/>
+
+                    <TextView
+                        android:id="@+id/tv_rules"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="10dp"
+                        android:drawablePadding="5dp"
+                        android:drawableRight="@drawable/ic_arrow_dark"
                         android:gravity="center"
-                        android:maxLines="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:paddingTop="10dp"
                         android:text="@string/auction_rules"
                         android:textColor="@color/text_dark"
                         android:textSize="16sp"

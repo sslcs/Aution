@@ -29,7 +29,7 @@ import java.util.ArrayList;
 /**
  * 选择支付方式的基类
  *
- * @author cs
+ * @author LiuCongshan
  */
 public abstract class BasePayActivity extends BaseActivity {
     protected PayTypeAdapter mAdapter;

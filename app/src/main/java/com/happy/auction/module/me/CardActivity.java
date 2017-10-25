@@ -37,10 +37,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * 我的卡密界面<br/>
- * Created by LiuCongshan on 17-10-20.
+ * 我的卡密界面
  *
  * @author LiuCongshan
+ * @date 17-10-20
  */
 
 public class CardActivity extends BaseActivity {

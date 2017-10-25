@@ -12,7 +12,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.happy.auction.module.me.SettingActivity">
+        tools:context="com.happy.auction.module.message.MessageActivity">
         <TextView
             android:id="@+id/tv_toolbar_title"
             style="@style/TextTitle"

@@ -128,13 +128,30 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/v_list"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_bottom"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_pay_label"
+            tools:layout_height="100dp"
             tools:listitem="@layout/item_pay_type"/>
+
+        <TextView
+            android:id="@+id/tv_invite"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="20dp"
+            android:onClick="onClickInvite"
+            android:background="@android:color/white"
+            android:drawableRight="@drawable/ic_arrow_dark"
+            android:gravity="center"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v_list"/>
 
         <TextView
             android:id="@+id/btn_bottom"

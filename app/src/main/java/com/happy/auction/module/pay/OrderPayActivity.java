@@ -1,12 +1,12 @@
 package com.happy.auction.module.pay;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
+import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.databinding.ActivityOrderPayBinding;
 import com.happy.auction.entity.item.ItemOrder;
@@ -35,8 +35,8 @@ public class OrderPayActivity extends BasePayActivity {
     private ActivityOrderPayBinding mBinding;
     private ItemOrder mData;
 
-    public static Intent newIntent(Context context, ItemOrder data) {
-        Intent intent = new Intent(context, OrderPayActivity.class);
+    public static Intent newIntent(ItemOrder data) {
+        Intent intent = new Intent(AppInstance.getInstance(), OrderPayActivity.class);
         intent.putExtra(KEY_EXTRA, data);
         return intent;
     }

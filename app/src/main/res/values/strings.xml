@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">欢乐竞拍</string>
     <string name="tip_exit">别按了，再按就退出了呀！</string>
+    <string name="tip_empty">没有数据～</string>
+    <string name="tip_coming">敬请期待</string>
 
     <!-- tab -->
     <string name="tab_home">首页</string>
@@ -99,11 +101,12 @@
 
     <!-- auction detail -->
     <string name="auction_detail">竞拍详情</string>
+    <string name="goods_detail">商品详情</string>
     <string name="no_person">暂无出价人</string>
     <string name="price_start">起拍价</string>
     <string name="price_step">加价幅度</string>
-    <string name="more_record"><![CDATA[查看更多出价记录 >]]></string>
-    <string name="auction_rules"><![CDATA[竞拍规则 >]]></string>
+    <string name="more_record">查看更多出价记录</string>
+    <string name="auction_rules">竞拍规则</string>
     <string name="fee">手续费</string>
     <string name="format_fee">%1$d币/次</string>
     <string name="countdown_time">竞拍倒计时</string>
@@ -125,6 +128,13 @@
     <string name="auto_bid_progress">已出价 %1$d/%2$d</string>
     <string name="save">节省</string>
     <string name="auction_good">竞拍商品</string>
+    <string name="know">了解</string>
+    <string name="rule">
+        1、所有商品以0元起拍，每次出价消耗一定数量的拍币，同时商品价格以0.1元递增。\n\n
+        2、在初始倒计时内即可出价，进入竞拍倒计时后，当用户对某件商品进行出价的同时，该商品将被自动充值倒计时，期间直至计时器归零，如没有其他用户对该商品出价您便成功拍得该商品。\n\n
+        3、若成功拍得商品，请尽快以成交价购买竞拍商品，购买后即可获得商品。\n\n
+        4、若竞拍失败，将返还消耗拍币的30%（比例视商品而定），赠币不返还。
+    </string>
 
     <!-- order detail -->
     <string name="order_detail">订单详情</string>
@@ -145,6 +155,9 @@
     <string name="check_card">查看卡密</string>
     <string name="check_bask">查看晒单</string>
     <string name="go_bask">去晒单</string>
+    <string name="bask">晒单</string>
+    <string name="send">发送</string>
+    <string name="tip_bask">说点什么…</string>
 
     <!-- order pay -->
     <string name="order_pay">拍品购买</string>

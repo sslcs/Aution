@@ -290,6 +290,7 @@
                     android:layout_marginRight="24dp"
                     android:background="@drawable/bg_circle"
                     android:text="@string/check_card"
+                    android:onClick="onClickCardPassword"
                     android:textColor="@android:color/white"
                     android:textSize="13sp"
                     android:visibility="@{(data.showVirtualAddress() &amp;&amp; data.type==3) ? View.VISIBLE : View.GONE}"

@@ -15,7 +15,7 @@ import io.reactivex.functions.Consumer;
 /**
  * 登录界面
  *
- * @author cs
+ * @author LiuCongshan
  */
 public class LoginActivity extends BaseTabActivity {
     private String phone;

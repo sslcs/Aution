@@ -12,10 +12,10 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentCaptchaLoginBinding;
-import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.CaptchaParam;
 import com.happy.auction.entity.param.LoginParam;
+import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
@@ -28,6 +28,8 @@ import java.lang.reflect.Type;
 
 /**
  * 免密登录
+ *
+ * @author LiuCongshan
  */
 public class CaptchaLoginFragment extends BaseFragment {
     private FragmentCaptchaLoginBinding mBinding;
@@ -129,7 +131,9 @@ public class CaptchaLoginFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (!hasCreatedView || !isVisibleToUser) return;
+        if (!hasCreatedView || !isVisibleToUser) {
+            return;
+        }
 
         LoginActivity parent = (LoginActivity) getActivity();
         mBinding.etPhone.setText(parent.getPhone());
