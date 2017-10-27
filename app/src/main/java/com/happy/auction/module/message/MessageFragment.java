@@ -1,6 +1,7 @@
 package com.happy.auction.module.message;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ public class MessageFragment extends BaseFragment {
 
     private FragmentListBinding mBinding;
     private MessageAdapter mAdapter;
-    private int mIndex = 0;
+    private int mStart = 0;
 
     /**
      * 消息类型， 1 竞拍消息， 2 物流信息， 3 系统公告， 不传时为获取所有
@@ -63,6 +64,14 @@ public class MessageFragment extends BaseFragment {
     }
 
     private void initLayout() {
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mStart = 0;
+                mAdapter.clear();
+                loadData();
+            }
+        });
         mBinding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
         DecorationSpace decoration = new DecorationSpace(5);
         decoration.enableHeader();
@@ -94,22 +103,23 @@ public class MessageFragment extends BaseFragment {
 
     private void loadData() {
         MessageParam param = new MessageParam();
-        param.start = mIndex;
+        param.start = mStart;
         param.type = getArguments().getInt(KEY_TYPE);
         BaseRequest<MessageParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mAdapter.setLoaded();
+                mBinding.refreshView.setRefreshing(false);
                 Type type = new TypeToken<DataResponse<ArrayList<ItemMessage>>>() {}.getType();
                 DataResponse<ArrayList<ItemMessage>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data != null && !obj.data.isEmpty()) {
                     mAdapter.addAll(obj.data);
                     size = obj.data.size();
-                    mIndex = mAdapter.getLast().mid;
+                    mStart = mAdapter.getLast().mid;
                 }
                 mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapter.setLoaded();
             }
         });
     }
