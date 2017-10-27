@@ -11,12 +11,17 @@
             android:id="@+id/tv_toolbar_title"
             style="@style/TextTitle"
             android:text="@string/tab_latest"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/v_list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/tv_toolbar_title"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_latest"/>
+            android:layout_below="@id/tv_toolbar_title">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/v_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="LinearLayoutManager"
+                tools:listitem="@layout/item_latest"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>
 </layout>

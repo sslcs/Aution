@@ -45,6 +45,7 @@
                 android:layout_height="70dp"
                 android:onClick="@{fragment.onClickAvatar}"
                 android:padding="9dp"
+                android:src="@drawable/ic_avatar"
                 app:avatar="@{user == null ? null : user.avatar}"
                 app:layout_constraintBottom_toTopOf="@+id/tv_username"
                 app:layout_constraintLeft_toLeftOf="@+id/bg_header"

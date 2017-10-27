@@ -46,6 +46,7 @@ public class OrderDetail extends ItemOrder {
             return;
         }
 
+        current_price = item.current_price;
         icon = item.icon;
         title = item.title;
         period = item.period;

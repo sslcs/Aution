@@ -21,6 +21,7 @@ import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.OrderDetail;
 import com.happy.auction.module.address.AddressSelectActivity;
 import com.happy.auction.module.address.ContactSelectActivity;
+import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.module.me.BaskListActivity;
 import com.happy.auction.module.me.CardActivity;
 import com.happy.auction.module.pay.OrderPayActivity;
@@ -208,5 +209,9 @@ public class OrderDetailActivity extends BaseActivity {
 
     public void onClickCardPassword(View view) {
         startActivity(CardActivity.newIntent());
+    }
+
+    public void onClickDetail(View view) {
+        startActivity(AuctionDetailActivity.newIntent(mOrder));
     }
 }

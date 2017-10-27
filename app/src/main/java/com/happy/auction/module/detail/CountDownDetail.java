@@ -67,7 +67,7 @@ public class CountDownDetail extends android.support.v7.widget.AppCompatTextView
         this.tvSync = tvSync;
     }
 
-    public void setExpireTime(int expireTime) {
+    public void setExpireTime(long expireTime) {
         cancel();
         timer = new CountDownTimer(expireTime, 10) {
             @Override

@@ -14,8 +14,6 @@ import com.happy.auction.entity.item.ItemOrder;
  * @author LiuCongshan
  */
 public class OrderAdapter extends BaseCustomAdapter<ItemOrder, ItemOrderBinding> {
-    private OnButtonClickListener listener;
-
     @Override
     public ItemOrderBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
         return ItemOrderBinding.inflate(inflater, parent, false);
@@ -27,20 +25,9 @@ public class OrderAdapter extends BaseCustomAdapter<ItemOrder, ItemOrderBinding>
         binding.btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (item.status == 1) {
-                    binding.getRoot().performClick();
-                } else if (listener != null) {
-                    listener.go(binding.getRoot(), item);
-                }
+                binding.getRoot().callOnClick();
             }
         });
-    }
 
-    public void setOnButtonClickListener(OnButtonClickListener listener) {
-        this.listener = listener;
-    }
-
-    public interface OnButtonClickListener {
-        void go(View view, ItemOrder item);
     }
 }

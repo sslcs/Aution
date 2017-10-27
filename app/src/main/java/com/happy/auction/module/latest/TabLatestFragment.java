@@ -1,7 +1,7 @@
 package com.happy.auction.module.latest;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
+import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentTabLatestBinding;
 import com.happy.auction.entity.item.ItemLatest;
 import com.happy.auction.entity.param.BaseParam;
@@ -27,11 +28,13 @@ import java.util.ArrayList;
 
 /**
  * 最新成交
+ *
+ * @author LiuCongshan
  */
-public class TabLatestFragment extends Fragment {
+public class TabLatestFragment extends BaseFragment {
     private FragmentTabLatestBinding mBinding;
-    private TabLatestAdapter adapter;
-    private int start;
+    private TabLatestAdapter mAdapter;
+    private int mStart = 0;
 
     public TabLatestFragment() {
     }
@@ -50,40 +53,63 @@ public class TabLatestFragment extends Fragment {
     private void initLayout() {
         mBinding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.vList.addItemDecoration(new DecorationSpace());
-        adapter = new TabLatestAdapter();
-        adapter.setOnItemClickListener(new OnItemClickListener<ItemLatest>() {
+        mAdapter = new TabLatestAdapter();
+        mAdapter.setOnItemClickListener(new OnItemClickListener<ItemLatest>() {
             @Override
             public void onItemClick(View view, ItemLatest item, int position) {
                 startActivity(AuctionDetailActivity.newIntent(item));
             }
         });
-        adapter.setLoadMoreListener(new LoadMoreListener() {
+        mAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
-                loadData(start);
+                loadData();
             }
         });
-        mBinding.vList.setAdapter(this.adapter);
+        mBinding.vList.setAdapter(this.mAdapter);
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
 
-        loadData(0);
+        loadData();
     }
 
-    private void loadData(int start) {
-        this.start = start;
+    private void loadData() {
         LatestParam param = new LatestParam();
-        param.start = start;
+        param.start = mStart;
         BaseRequest<LatestParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
+                mBinding.refreshView.setRefreshing(false);
                 Type type = new TypeToken<DataResponse<ArrayList<ItemLatest>>>() {}.getType();
                 DataResponse<ArrayList<ItemLatest>> obj = GsonSingleton.get().fromJson(response, type);
-                if (obj.data == null || obj.data.isEmpty()) return;
-                adapter.addAll(obj.data);
-                int size = obj.data.size();
-                adapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
-                TabLatestFragment.this.start += size;
+                int size = 0;
+                if (obj.data != null && !obj.data.isEmpty()) {
+                    mAdapter.addAll(obj.data);
+                    size = obj.data.size();
+                    mStart += size;
+                }
+                mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapter.setLoaded();
             }
         });
+    }
+
+    private void refresh() {
+        mStart = 0;
+        mAdapter.clear();
+        loadData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (hasCreatedView && isVisibleToUser) {
+            refresh();
+        }
     }
 }

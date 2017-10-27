@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onFailure(webSocket, t, response);
                 DebugLog.e("onFailure");
                 mMessageHandler.clear();
+                mSocket = null;
                 if (isDestroyed) {
                     return;
                 }

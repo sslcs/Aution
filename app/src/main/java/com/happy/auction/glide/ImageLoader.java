@@ -27,7 +27,7 @@ public class ImageLoader {
     }
 
     public static void displayImage(String url, ImageView view) {
-        displayImage(url, view, R.drawable.pic_default);
+        displayImage(url, view, R.drawable.ic_default);
     }
 
     public static void displayMenu(String url, ImageView view) {
@@ -39,14 +39,13 @@ public class ImageLoader {
     @BindingAdapter("avatar")
     public static void loadAvatar(ImageView imageView, String url) {
         if (TextUtils.isEmpty(url)) {
-            imageView.setImageResource(R.drawable.pic_default);
             return;
         }
         GlideApp.with(imageView.getContext())
                 .load(url)
                 .circleCrop()
-                .placeholder(R.drawable.pic_default)
-                .error(R.drawable.pic_default)
+                .placeholder(R.drawable.ic_default)
+                .error(R.drawable.ic_default)
                 .into(imageView);
     }
 
@@ -69,19 +68,19 @@ public class ImageLoader {
     @BindingAdapter("image_url")
     public static void loadImage(ImageView imageView, String url) {
         if (TextUtils.isEmpty(url)) {
-            imageView.setImageResource(R.drawable.pic_default);
+            imageView.setImageResource(R.drawable.ic_default);
             return;
         }
         GlideApp.with(imageView.getContext())
                 .load(url)
-                .error(R.drawable.pic_default)
+                .error(R.drawable.ic_default)
                 .into(imageView);
     }
 
     @BindingAdapter(value = {"image_url", "image_width", "image_height"})
     public static void loadImageFix(final ImageView imageView, String url, int width, int height) {
         if (TextUtils.isEmpty(url)) {
-            imageView.setImageResource(R.drawable.pic_default);
+            imageView.setImageResource(R.drawable.ic_default);
             return;
         }
         final int viewWidth = AppInstance.getInstance().dp2px(width);
@@ -90,7 +89,7 @@ public class ImageLoader {
                 .asBitmap()
                 .load(url)
                 .transform(new OriginalTransform(viewWidth, viewHeight))
-                .error(R.drawable.pic_default)
+                .error(R.drawable.ic_default)
                 .into(imageView);
     }
 }

@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -47,7 +48,7 @@ public class CardActivity extends BaseActivity {
     private final ObservableInt mSelectedCount = new ObservableInt();
     private ActivityCardBinding mBinding;
     private CardAdapter mAdapter;
-    private int index = 0;
+    private int mStart = 0;
     private ArrayList<ItemCardPassword> mSelectedList = new ArrayList<>();
     private ArrayList<ItemCard> mData = new ArrayList<>(10);
 
@@ -66,6 +67,17 @@ public class CardActivity extends BaseActivity {
         mBinding.setActivity(this);
         mBinding.setCount(mSelectedCount);
 
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mStart = 0;
+                mAdapter.clear();
+                mData.clear();
+                mSelectedCount.set(0);
+                mSelectedList.clear();
+                loadData();
+            }
+        });
         mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.vList.addItemDecoration(new DecorationSpace(10));
         mAdapter = new CardAdapter();
@@ -105,12 +117,12 @@ public class CardActivity extends BaseActivity {
 
     private void loadData() {
         CardParam param = new CardParam();
-        param.start = index;
+        param.start = mStart;
         BaseRequest<CardParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mAdapter.setLoaded();
+                mBinding.refreshView.setRefreshing(false);
                 Type type = new TypeToken<DataResponse<ArrayList<ItemCard>>>() {}.getType();
                 DataResponse<ArrayList<ItemCard>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
@@ -118,9 +130,10 @@ public class CardActivity extends BaseActivity {
                     size = obj.data.size();
                     mData.addAll(obj.data);
                     mAdapter.addAll(obj.data);
-                    index += size;
+                    mStart += size;
                 }
                 mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapter.setLoaded();
             }
 
             @Override

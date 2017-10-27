@@ -2,6 +2,7 @@ package com.happy.auction.module.order;
 
 import android.app.ActivityOptions;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,25 +59,31 @@ public class OrderFragment extends BaseFragment {
     }
 
     private void initLayout() {
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mAdapter.clear();
+                loadData(0);
+            }
+        });
+
         mBinding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
         DecorationSpace decoration = new DecorationSpace(5);
         decoration.enableHeader();
         mBinding.vList.addItemDecoration(decoration);
         mAdapter = new OrderAdapter();
-        mAdapter.setOnButtonClickListener(new OrderAdapter.OnButtonClickListener() {
-            @Override
-            public void go(View view, ItemOrder item) {
-                Bundle bundle = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, "v_info").toBundle();
-                }
-                startActivity(OrderDetailActivity.newIntent(item), bundle);
-            }
-        });
         mAdapter.setOnItemClickListener(new OnItemClickListener<ItemOrder>() {
             @Override
             public void onItemClick(View view, ItemOrder item, int position) {
-                startActivity(AuctionDetailActivity.newIntent(item));
+                if (item.status == 1 || item.status == 6) {
+                    startActivity(AuctionDetailActivity.newIntent(item));
+                } else {
+                    Bundle bundle = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, "v_info").toBundle();
+                    }
+                    startActivity(OrderDetailActivity.newIntent(item), bundle);
+                }
             }
         });
         mAdapter.setLoadMoreListener(new LoadMoreListener() {
@@ -95,7 +102,7 @@ public class OrderFragment extends BaseFragment {
         }
     }
 
-    private void loadData(int start) {
+    private void loadData(final int start) {
         OrderParam param = new OrderParam();
         param.start = start;
         param.record_type = getArguments().getInt(KEY_TYPE);
@@ -103,7 +110,7 @@ public class OrderFragment extends BaseFragment {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mAdapter.setLoaded();
+                mBinding.refreshView.setRefreshing(false);
                 Type type = new TypeToken<DataResponse<ArrayList<ItemOrder>>>() {}.getType();
                 DataResponse<ArrayList<ItemOrder>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
@@ -112,6 +119,7 @@ public class OrderFragment extends BaseFragment {
                     size = obj.data.size();
                 }
                 mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapter.setLoaded();
             }
         });
     }

@@ -50,7 +50,7 @@ public class CountDownHome extends android.support.v7.widget.AppCompatTextView {
         setText(getResources().getString(R.string.auction_finish));
     }
 
-    public void setExpireTime(int expireTime) {
+    public void setExpireTime(long expireTime) {
         cancel();
         timer = new CountDownTimer(expireTime, 1000) {
             @Override

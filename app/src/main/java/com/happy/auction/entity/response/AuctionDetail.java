@@ -59,13 +59,17 @@ public class AuctionDetail extends ItemGoods {
 
     public AuctionDetail(ItemGoods goods) {
         this((BaseGoods) goods);
-        if (goods == null) return;
+        if (goods == null) {
+            return;
+        }
         this.bid_expire_time = goods.bid_expire_time;
         this.status = goods.status;
     }
 
     public AuctionDetail(BaseGoods goods) {
-        if (goods == null) return;
+        if (goods == null) {
+            return;
+        }
 
         this.sid = goods.sid;
         this.gid = goods.gid;

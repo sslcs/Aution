@@ -20,6 +20,7 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
+import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.module.WebActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.message.MessageActivity;

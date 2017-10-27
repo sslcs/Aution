@@ -168,6 +168,9 @@ public class TabCategoryFragment extends Fragment {
     }
 
     private void loadData() {
+        if (currentIndex == 0) {
+            adapterGoods.clear();
+        }
         GoodsParam param = new GoodsParam();
         param.tid = currentCategory.tid;
         param.start = currentIndex;
@@ -178,10 +181,6 @@ public class TabCategoryFragment extends Fragment {
                 adapterGoods.setLoaded();
                 Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
                 DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
-                if (currentIndex == 0) {
-                    adapterGoods.clear();
-                }
-
                 int size = 0;
                 if (obj.data.goods != null && !obj.data.goods.isEmpty()) {
                     adapterGoods.addAll(obj.data.goods);

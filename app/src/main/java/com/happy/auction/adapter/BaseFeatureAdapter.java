@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 /**
- * Created by LiuCongshan on 17-9-4.<br/>
- * Display empty view while the data is empty;<br/>
+ * Display empty view while the data is empty;
+ *
+ * @author LiuCongshan
+ * @date 17-9-4
  */
 
 public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends BaseAdapter<T, B> {
@@ -75,10 +77,31 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
         return new CustomViewHolder<>(getBinding(parent, inflater));
     }
 
+    /**
+     * 获取空数据ViewHolder
+     *
+     * @param parent   父布局
+     * @param inflater 布局填充类
+     * @return 空数据ViewHolder
+     */
     public abstract CustomViewHolder getBindingEmpty(ViewGroup parent, LayoutInflater inflater);
 
+    /**
+     * 获取加载更多ViewHolder
+     *
+     * @param parent   父布局
+     * @param inflater 布局填充类
+     * @return 加载更多ViewHolder
+     */
     public abstract CustomViewHolder getBindingMore(ViewGroup parent, LayoutInflater inflater);
 
+    /**
+     * 获取加载中ViewHolder
+     *
+     * @param parent   父布局
+     * @param inflater 布局填充类
+     * @return 加载中ViewHolder
+     */
     public abstract CustomViewHolder getBindingLoading(ViewGroup parent, LayoutInflater inflater);
 
     @Override
@@ -99,41 +122,49 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof GridLayoutManager) {
+            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+            final GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
 
-        WrapperUtils.onAttachedToRecyclerView(recyclerView, new WrapperUtils.SpanSizeCallback() {
-            @Override
-            public int getSpanSize(GridLayoutManager layoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position) {
-                layoutManager.setAutoMeasureEnabled(false);
-                if (isShowLoading() || isShowEmpty() || isShowLoadMore(position)) {
-                    return layoutManager.getSpanCount();
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return computeSpanSize(gridLayoutManager, spanSizeLookup, position);
                 }
-
-                if (oldLookup != null) {
-                    return oldLookup.getSpanSize(position);
-                }
-                return 1;
-            }
-        });
-    }
-
-    @Override
-    public void onViewAttachedToWindow(CustomViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-        if (isShowLoading() || isShowEmpty() || isShowLoadMore(holder.getLayoutPosition())) {
-            setFullSpan(holder);
+            });
+            gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
         }
     }
 
-    private void setFullSpan(RecyclerView.ViewHolder holder) {
-        ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-        if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
-            ((StaggeredGridLayoutManager.LayoutParams) lp).setFullSpan(true);
+    private int computeSpanSize(GridLayoutManager layoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position) {
+        layoutManager.setAutoMeasureEnabled(false);
+        if (isShowLoading() || isShowEmpty() || isShowLoadMore(position)) {
+            return layoutManager.getSpanCount();
+        }
+
+        if (oldLookup != null) {
+            return oldLookup.getSpanSize(position);
+        }
+        return 1;
+    }
+
+    @Override
+    public void onViewAttachedToWindow(CustomViewHolder<B> holder) {
+        super.onViewAttachedToWindow(holder);
+        if (isShowLoading() || isShowEmpty() || isShowLoadMore(holder.getLayoutPosition())) {
+            ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+            if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+                ((StaggeredGridLayoutManager.LayoutParams) lp).setFullSpan(true);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        if (isShowEmpty() || isShowLoading()) return 1;
+        if (isShowEmpty() || isShowLoading()) {
+            return 1;
+        }
         return getRealCount() + (hasLoadMore() ? 1 : 0);
     }
 
@@ -163,7 +194,9 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
     }
 
     public void setLoaded() {
-        isLoaded = true;
-        notifyDataSetChanged();
+        if (!isLoaded) {
+            isLoaded = true;
+            notifyDataSetChanged();
+        }
     }
 }

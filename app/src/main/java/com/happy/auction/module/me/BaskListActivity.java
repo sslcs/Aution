@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.google.gson.reflect.TypeToken;
@@ -37,7 +38,6 @@ public class BaskListActivity extends BaseActivity {
     private ActivityListBinding mBinding;
 
     private BaskAdapter mAdapter;
-    private int mIndex = 0;
 
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), BaskListActivity.class);
@@ -51,6 +51,13 @@ public class BaskListActivity extends BaseActivity {
     }
 
     private void initLayout() {
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mAdapter.clear();
+                loadData(0);
+            }
+        });
         mBinding.tvToolbarTitle.setText(R.string.my_bask);
         mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.vList.addItemDecoration(new DecorationSpace());
@@ -58,31 +65,31 @@ public class BaskListActivity extends BaseActivity {
         mAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
-                loadData();
+                loadData(mAdapter.getLast().bid);
             }
         });
         mBinding.vList.setAdapter(mAdapter);
 
-        loadData();
+        loadData(0);
     }
 
-    private void loadData() {
+    private void loadData(int start) {
         BaskMyParam param = new BaskMyParam();
-        param.start = mIndex;
+        param.start = start;
         BaseRequest<BaskMyParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mAdapter.setLoaded();
+                mBinding.refreshView.setRefreshing(false);
                 Type type = new TypeToken<DataResponse<ArrayList<ItemBask>>>() {}.getType();
                 DataResponse<ArrayList<ItemBask>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data != null && !obj.data.isEmpty()) {
                     size = obj.data.size();
                     mAdapter.addAll(obj.data);
-                    mIndex = mAdapter.getLast().bid;
                 }
                 mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapter.setLoaded();
             }
         });
     }

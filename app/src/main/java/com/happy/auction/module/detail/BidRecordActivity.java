@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.google.gson.reflect.TypeToken;
@@ -26,20 +27,21 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * Created by LiuCongshan on 17-9-29.
  * 竞拍记录界面
+ *
+ * @author LiuCongshan
+ * @date 17-9-29
  */
 
 public class BidRecordActivity extends BaseActivity {
     private static final String KEY_SID = "SID";
     private static final String KEY_STATUS = "STATUS";
 
-    private ActivityListBinding binding;
-    private int sid;
-    private int status;
+    private ActivityListBinding mBinding;
+    private int mSid;
 
-    private BidRecordAdapter adapter;
-    private int index = 0;
+    private BidRecordAdapter mAdapter;
+    private int mStart = 0;
 
     /**
      * 返回竞拍记录页面的intent
@@ -58,46 +60,58 @@ public class BidRecordActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_list);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_list);
         initLayout();
     }
 
     private void initLayout() {
-        binding.vList.setLayoutManager(new LinearLayoutManager(this));
-        binding.vList.addItemDecoration(new DecorationSpace());
-        adapter = new BidRecordAdapter();
-        adapter.setLoadMoreListener(new LoadMoreListener() {
+        mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
+        mBinding.vList.addItemDecoration(new DecorationSpace());
+        mAdapter = new BidRecordAdapter();
+        mAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 loadData();
             }
         });
-        binding.vList.setAdapter(adapter);
+        mBinding.vList.setAdapter(mAdapter);
 
-        sid = getIntent().getIntExtra(KEY_SID, 0);
-        status = getIntent().getIntExtra(KEY_STATUS, 0);
-        adapter.setStatus(status);
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mStart = 0;
+                loadData();
+            }
+        });
+
+        mSid = getIntent().getIntExtra(KEY_SID, 0);
+        int status = getIntent().getIntExtra(KEY_STATUS, 0);
+        mAdapter.setStatus(status);
         loadData();
     }
 
     private void loadData() {
         BidRecordParam param = new BidRecordParam();
-        param.sid = sid;
-        param.start = index;
+        param.sid = mSid;
+        param.start = mStart;
         BaseRequest<BidRecordParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.setLoaded();
+                mBinding.refreshView.setRefreshing(false);
+                if (mStart == 0) {
+                    mAdapter.clear();
+                }
                 Type type = new TypeToken<DataResponse<ArrayList<BidRecord>>>() {}.getType();
                 DataResponse<ArrayList<BidRecord>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data != null && !obj.data.isEmpty()) {
                     size = obj.data.size();
-                    adapter.addAll(obj.data);
-                    index = adapter.getLast().bid;
+                    mAdapter.addAll(obj.data);
+                    mStart = mAdapter.getLast().bid;
                 }
-                adapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapter.setLoaded();
             }
         });
     }

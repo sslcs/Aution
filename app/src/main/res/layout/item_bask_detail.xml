@@ -22,7 +22,7 @@
             app:avatar="@{data.avatar}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/pic_default"/>
+            tools:src="@drawable/ic_default"/>
 
         <TextView
             android:id="@+id/tv_username"

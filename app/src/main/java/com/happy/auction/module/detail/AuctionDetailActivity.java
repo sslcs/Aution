@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -72,10 +73,10 @@ public class AuctionDetailActivity extends BaseActivity {
     private AuctionDetail mData;
     private AuctionCoin mAuctionCoin;
 
-    private int indexPrevious = 0;
-    private int indexBask = 0;
-    private PreviousAdapter adapterPrevious;
-    private BaskAdapter adapterBask;
+    private int mIndexPrevious = 0;
+    private int mIndexBask = 0;
+    private PreviousAdapter mAdapterPrevious;
+    private BaskAdapter mAdapterBask;
 
     public static Intent newIntent(BaseGoods goods) {
         Intent intent = new Intent(AppInstance.getInstance(), AuctionDetailActivity.class);
@@ -97,6 +98,13 @@ public class AuctionDetailActivity extends BaseActivity {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 showBlackTitle(verticalOffset);
+                mBinding.refreshView.setEnabled(verticalOffset >= 0);
+            }
+        });
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
             }
         });
 
@@ -108,22 +116,22 @@ public class AuctionDetailActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mBinding.listRecord.setLayoutManager(manager);
 
-        adapterPrevious = new PreviousAdapter();
-        adapterPrevious.setLoadMoreListener(new LoadMoreListener() {
+        mAdapterPrevious = new PreviousAdapter();
+        mAdapterPrevious.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 loadPrevious();
             }
         });
-        adapterBask = new BaskAdapter();
-        adapterBask.setLoadMoreListener(new LoadMoreListener() {
+        mAdapterBask = new BaskAdapter();
+        mAdapterBask.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 loadBask();
             }
         });
         mBinding.vList.addItemDecoration(decoration);
-        mBinding.vList.setAdapter(adapterPrevious);
+        mBinding.vList.setAdapter(mAdapterPrevious);
 
         BaseGoods goods = (BaseGoods) getIntent().getSerializableExtra(KEY_GOODS);
         if (goods instanceof ItemGoods) {
@@ -136,13 +144,13 @@ public class AuctionDetailActivity extends BaseActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
-                    mBinding.vList.setAdapter(adapterBask);
-                    if (adapterBask.isEmpty()) {
+                    mBinding.vList.setAdapter(mAdapterBask);
+                    if (mAdapterBask.isEmpty()) {
                         loadBask();
                     }
                 } else {
-                    mBinding.vList.setAdapter(adapterPrevious);
-                    if (adapterPrevious.isEmpty()) {
+                    mBinding.vList.setAdapter(mAdapterPrevious);
+                    if (mAdapterPrevious.isEmpty()) {
                         loadPrevious();
                     }
                 }
@@ -269,11 +277,19 @@ public class AuctionDetailActivity extends BaseActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
+                mBinding.refreshView.setRefreshing(false);
                 Type type = new TypeToken<DataResponse<AuctionDetail>>() {}.getType();
                 DataResponse<AuctionDetail> obj = GsonSingleton.get().fromJson(response, type);
                 mData = obj.data;
                 initData();
-                loadPrevious();
+
+                if (mBinding.tabLayout.getSelectedTabPosition() == 0) {
+                    mIndexPrevious = 0;
+                    loadPrevious();
+                } else {
+                    mIndexBask = 0;
+                    loadBask();
+                }
             }
         });
     }
@@ -428,21 +444,24 @@ public class AuctionDetailActivity extends BaseActivity {
     private void loadPrevious() {
         PreviousParam param = new PreviousParam();
         param.gid = mData.gid;
-        param.start = indexPrevious;
+        param.start = mIndexPrevious;
         BaseRequest<PreviousParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapterPrevious.setLoaded();
+                if (mIndexPrevious == 0) {
+                    mAdapterPrevious.clear();
+                }
                 Type type = new TypeToken<DataResponse<ArrayList<ItemPrevious>>>() {}.getType();
                 DataResponse<ArrayList<ItemPrevious>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data != null && !obj.data.isEmpty()) {
                     size = obj.data.size();
-                    adapterPrevious.addAll(obj.data);
-                    indexPrevious += size;
+                    mAdapterPrevious.addAll(obj.data);
+                    mIndexPrevious = mAdapterPrevious.getLast().sid;
                 }
-                adapterPrevious.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapterPrevious.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapterPrevious.setLoaded();
             }
         });
     }
@@ -450,21 +469,24 @@ public class AuctionDetailActivity extends BaseActivity {
     private void loadBask() {
         DetailBaskParam param = new DetailBaskParam();
         param.gid = mData.gid;
-        param.start = indexBask;
+        param.start = mIndexBask;
         BaseRequest<DetailBaskParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapterBask.setLoaded();
+                if (mIndexBask == 0) {
+                    mAdapterBask.clear();
+                }
                 Type type = new TypeToken<DataResponse<ArrayList<ItemBask>>>() {}.getType();
                 DataResponse<ArrayList<ItemBask>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data != null && !obj.data.isEmpty()) {
-                    adapterBask.addAll(obj.data);
+                    mAdapterBask.addAll(obj.data);
                     size = obj.data.size();
-                    indexBask += size;
+                    mIndexBask = mAdapterBask.getLast().bid;
                 }
-                adapterBask.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapterBask.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapterBask.setLoaded();
             }
         });
     }
@@ -480,7 +502,7 @@ public class AuctionDetailActivity extends BaseActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapterBask.setLoaded();
+                mAdapterBask.setLoaded();
                 Type type = new TypeToken<DataResponse<GoodsDetail>>() {}.getType();
                 DataResponse<GoodsDetail> obj = GsonSingleton.get().fromJson(response, type);
                 String title = getString(R.string.goods_detail);

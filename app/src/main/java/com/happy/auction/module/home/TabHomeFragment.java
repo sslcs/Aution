@@ -2,7 +2,9 @@ package com.happy.auction.module.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -34,6 +36,7 @@ import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.module.WebActivity;
 import com.happy.auction.module.detail.AuctionDetailActivity;
+import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.message.MessageActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
@@ -76,6 +79,19 @@ public class TabHomeFragment extends BaseFragment {
     private void initLayout() {
         mBinding.setCount(AppInstance.getInstance().mMessageCount);
         mBinding.setFragment(this);
+
+        mBinding.appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                mBinding.refreshView.setEnabled(verticalOffset >= 0);
+            }
+        });
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mBinding.rvBanner.setLayoutManager(llm);
@@ -140,7 +156,10 @@ public class TabHomeFragment extends BaseFragment {
 
     private void refresh() {
         mStart = 0;
+
         loadGoods();
+
+        loadAnnounce();
     }
 
     private void listenEvents() {
@@ -195,8 +214,9 @@ public class TabHomeFragment extends BaseFragment {
 
         loadAnnounce();
 
-        refresh();
+        loadGoods();
     }
+
 
     private void loadAnnounce() {
         AnnounceParam param = new AnnounceParam();
@@ -282,20 +302,20 @@ public class TabHomeFragment extends BaseFragment {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mAdapter.setLoaded();
+                mBinding.refreshView.setRefreshing(false);
                 Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
                 DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
                 if (mStart == 0) {
                     mAdapter.clear();
                 }
-                if (obj.data.goods != null) {
-                    int size = obj.data.goods.size();
-                    mStart += size;
+                int size = 0;
+                if (obj.data != null && obj.data.goods != null && !obj.data.goods.isEmpty()) {
+                    size = obj.data.goods.size();
                     mAdapter.addAll(obj.data.goods);
-                    mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
-                } else {
-                    mAdapter.setHasMore(false);
+                    mStart += size;
                 }
+                mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapter.setLoaded();
             }
 
             @Override
@@ -307,7 +327,11 @@ public class TabHomeFragment extends BaseFragment {
     }
 
     public void onClickMessage(View view) {
-        startActivity(MessageActivity.newIntent());
+        if (AppInstance.getInstance().isLogin()) {
+            startActivity(MessageActivity.newIntent());
+        } else {
+            startActivity(LoginActivity.newIntent());
+        }
     }
 
     @Override
