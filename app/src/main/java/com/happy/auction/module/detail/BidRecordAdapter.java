@@ -9,8 +9,10 @@ import com.happy.auction.databinding.ItemBidRecordBinding;
 import com.happy.auction.entity.item.BidRecord;
 
 /**
- * Created by LiuCongshan on 17-8-18.<br/>
  * 竞拍记录Adapter
+ *
+ * @author LiuCongshan
+ * @date 17-8-18
  */
 
 public class BidRecordAdapter extends BaseCustomAdapter<BidRecord, ItemBidRecordBinding> {
@@ -33,12 +35,11 @@ public class BidRecordAdapter extends BaseCustomAdapter<BidRecord, ItemBidRecord
     @Override
     public void bindItem(ItemBidRecordBinding binding, BidRecord item, int position) {
         binding.setData(item);
+        binding.setPosition(position);
         if (position == 0) {
             binding.tvStatus.setText(status == 0 ? R.string.bid_deal : R.string.bid_first);
-            binding.tvStatus.setTextColor(R.color.main_red);
         } else {
             binding.tvStatus.setText(R.string.bid_out);
-            binding.tvStatus.setTextColor(R.color.text_normal);
         }
     }
 }

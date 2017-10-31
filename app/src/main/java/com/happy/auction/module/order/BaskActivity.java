@@ -9,7 +9,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityBaskBinding;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.BaskParam;
@@ -19,6 +19,7 @@ import com.happy.auction.entity.response.UploadInfo;
 import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.ui.LoadingDialog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.ToastUtil;
 import com.qiniu.android.http.ResponseInfo;
@@ -39,10 +40,11 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
  *
  * @author LiuCongshan
  */
-public class BaskActivity extends BaseActivity {
+public class BaskActivity extends BaseBackActivity {
     private static final String KEY_SID = "KEY_SID";
     private static final int REQUEST_CODE_CHOOSE = 100;
 
+    private LoadingDialog mLoadingDialog;
     private ActivityBaskBinding mBinding;
     private int mSID;
     private ArrayList<String> mUploadImages = new ArrayList<>(2);
@@ -101,7 +103,54 @@ public class BaskActivity extends BaseActivity {
         }
     }
 
-    private void getUploadInfo() {
+    private void upload(final UploadInfo info, final String path) {
+        UploadManager manager = new UploadManager();
+        manager.put(path, info.key, info.token, new UpCompletionHandler() {
+            @Override
+            public void complete(String key, ResponseInfo result, JSONObject response) {
+                if (result.isOK()) {
+                    mUploadImages.add(info.domain + "/" + info.key);
+                    if (mUploadImages.size() == mSelectImages.size()) {
+                        bask();
+                    }
+                } else {
+                    ToastUtil.show(result.error);
+                    dismissDialog();
+                }
+            }
+        }, null);
+    }
+
+    private void bask() {
+        BaskParam param = new BaskParam();
+        param.sid = mSID;
+        param.content = mBinding.etContent.getText().toString();
+        param.images = mUploadImages;
+        BaseRequest<BaskParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                dismissDialog();
+                setResult(RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                super.onError(code, message);
+                ToastUtil.show(message);
+                dismissDialog();
+            }
+        });
+    }
+
+    public void onClickSend(View view) {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog();
+        }
+        mLoadingDialog.show(getSupportFragmentManager(), "loading");
+
+        mUploadImages.clear();
         UploadParam param = new UploadParam();
         param.amount = mSelectImages.size();
         param.type = UploadParam.TYPE_BASK;
@@ -120,51 +169,14 @@ public class BaskActivity extends BaseActivity {
                     upload(obj.data.get(i), mSelectImages.get(i));
                 }
             }
-        });
-    }
-
-    private void upload(final UploadInfo info, final String path) {
-        ToastUtil.show("uploading : " + path);
-        UploadManager manager = new UploadManager();
-        manager.put(path, info.key, info.token, new UpCompletionHandler() {
-            @Override
-            public void complete(String key, ResponseInfo result, JSONObject response) {
-                if (result.isOK()) {
-                    ToastUtil.show("uploaded : " + path);
-                    mUploadImages.add(info.domain + "/" + info.key);
-                    if (mUploadImages.size() == mSelectImages.size()) {
-                        bask();
-                    }
-                } else {
-                    ToastUtil.show(result.error);
-                }
-            }
-        }, null);
-    }
-
-    private void bask() {
-        BaskParam param = new BaskParam();
-        param.sid = mSID;
-        param.content = mBinding.etContent.getText().toString();
-        param.images = mUploadImages;
-        BaseRequest<BaskParam> request = new BaseRequest<>(param);
-        NetClient.query(request, new NetCallback() {
-            @Override
-            public void onSuccess(String response, String message) {
-                setResult(RESULT_OK);
-                finish();
-            }
 
             @Override
             public void onError(int code, String message) {
                 super.onError(code, message);
                 ToastUtil.show(message);
+                dismissDialog();
             }
         });
-    }
-
-    public void onClickSend(View view) {
-        getUploadInfo();
     }
 
     public void onClickDelete(View view) {
@@ -198,5 +210,11 @@ public class BaskActivity extends BaseActivity {
         }
 
         mBinding.tvTitleRight.setEnabled(true);
+    }
+
+    private void dismissDialog() {
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+        }
     }
 }

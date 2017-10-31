@@ -1,5 +1,7 @@
 package com.happy.auction.entity.param;
 
+import android.os.Build;
+
 import com.happy.auction.AppInstance;
 import com.happy.auction.BuildConfig;
 
@@ -9,12 +11,10 @@ import com.happy.auction.BuildConfig;
  */
 
 public class SyncParam extends BaseParam {
-    public String sys_ver;
-    public String virtual_ip;
-    public String jpush_regid;
+    public String sys_ver = Build.VERSION.RELEASE;
     public String net_type;
     public String net_info;
-    public String model;
+    public String model = Build.MODEL;
     public String imei;
     public String imsi;
     public String android_id;

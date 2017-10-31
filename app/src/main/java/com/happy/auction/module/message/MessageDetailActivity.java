@@ -8,7 +8,7 @@ import android.text.method.ScrollingMovementMethod;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityMessageDetailBinding;
 import com.happy.auction.entity.item.ItemMessage;
 import com.happy.auction.entity.param.BaseRequest;
@@ -26,7 +26,7 @@ import java.lang.reflect.Type;
  *
  * @author LiuCongshan
  */
-public class MessageDetailActivity extends BaseActivity {
+public class MessageDetailActivity extends BaseBackActivity {
     private static final String KEY_ITEM = "KEY_ITEM";
 
     private ActivityMessageDetailBinding mBinding;

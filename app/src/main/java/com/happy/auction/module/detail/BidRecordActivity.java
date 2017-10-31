@@ -12,7 +12,7 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityListBinding;
 import com.happy.auction.entity.item.BidRecord;
 import com.happy.auction.entity.param.BaseParam;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * @date 17-9-29
  */
 
-public class BidRecordActivity extends BaseActivity {
+public class BidRecordActivity extends BaseBackActivity {
     private static final String KEY_SID = "SID";
     private static final String KEY_STATUS = "STATUS";
 
@@ -65,6 +65,8 @@ public class BidRecordActivity extends BaseActivity {
     }
 
     private void initLayout() {
+        mBinding.tvToolbarTitle.setText(R.string.bid_record);
+
         mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.vList.addItemDecoration(new DecorationSpace());
         mAdapter = new BidRecordAdapter();

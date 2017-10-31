@@ -10,7 +10,7 @@ import android.view.Window;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityOrderDetailBinding;
 import com.happy.auction.entity.item.Address;
 import com.happy.auction.entity.item.ItemOrder;
@@ -38,7 +38,7 @@ import java.lang.reflect.Type;
  *
  * @author LiuCongshan
  */
-public class OrderDetailActivity extends BaseActivity {
+public class OrderDetailActivity extends BaseBackActivity {
     private static final String KEY_ITEM = "KEY_ITEM";
     private static final int REQUEST_CODE_PAY = 100;
     private static final int REQUEST_CODE_CONTACT = 101;
@@ -111,6 +111,8 @@ public class OrderDetailActivity extends BaseActivity {
                 DataResponse<OrderDetail> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null) {
                     mData = obj.data;
+                    // FIXME
+                    mData.status = 4;
                     setData();
                 }
             }

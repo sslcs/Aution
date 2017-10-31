@@ -12,7 +12,7 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityListBinding;
 import com.happy.auction.entity.item.ItemBask;
 import com.happy.auction.entity.param.BaseParam;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
  * @author LiuCongshan
  */
 
-public class BaskListActivity extends BaseActivity {
+public class BaskListActivity extends BaseBackActivity {
     private ActivityListBinding mBinding;
 
     private BaskAdapter mAdapter;

@@ -91,8 +91,10 @@ public class CardAdapter extends BaseCustomAdapter<ItemCard, ItemCardBinding> {
 
         mListener.onSelectionChanged(parent, selected);
         for (ItemCardPassword item : parent.card) {
-            item.isSelected = selected;
-            mListener.onChildSelectionChanged(item, selected);
+            if (item.isSelected != selected) {
+                item.isSelected = selected;
+                mListener.onChildSelectionChanged(item, selected);
+            }
         }
     }
 

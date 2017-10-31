@@ -7,17 +7,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
-import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivitySelectAddressBinding;
 
 /**
  * Created by LiuCongshan on 17-10-18.<br/>
  * 选择收货地址或联系人界面基类
  */
-public abstract class BaseAddressSelectActivity extends BaseActivity {
+public abstract class BaseAddressSelectActivity extends BaseBackActivity {
     private final static int REQUEST_CODE = 100;
     protected ActivitySelectAddressBinding mBinding;
 

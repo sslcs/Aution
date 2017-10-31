@@ -1,7 +1,6 @@
 package com.happy.auction.module.category;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.adapter.DecorationColor;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
+import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentTabCategoryBinding;
 import com.happy.auction.entity.event.AuctionEndEvent;
 import com.happy.auction.entity.event.BidEvent;
@@ -39,8 +39,10 @@ import io.reactivex.functions.Consumer;
 
 /**
  * 商品分类
+ *
+ * @author LiuCongshan
  */
-public class TabCategoryFragment extends Fragment {
+public class TabCategoryFragment extends BaseFragment {
     private FragmentTabCategoryBinding mBinding;
     private CategoryAdapter adapterCategory;
     private CategoryGoodsAdapter adapterGoods;

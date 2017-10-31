@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title"/>
 
-        <Button
+        <com.happy.auction.ui.TimerButton
             android:id="@+id/btn_captcha"
             style="@style/ButtonCorner"
             android:layout_width="100dp"
@@ -70,7 +70,7 @@
             android:afterTextChanged="@{activity.afterTextChanged}"
             android:hint="@string/hint_password"
             android:inputType="textPassword"
-            android:maxLength="18"
+            android:maxLength="20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -95,7 +95,7 @@
             android:afterTextChanged="@{activity.afterTextChanged}"
             android:hint="@string/hint_password_confirm"
             android:inputType="textPassword"
-            android:maxLength="18"
+            android:maxLength="20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

@@ -12,7 +12,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityChangePasswordBinding;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.ChangePasswordParam;
@@ -27,7 +27,12 @@ import com.happy.auction.utils.Validation;
 
 import java.lang.reflect.Type;
 
-public class ChangePasswordActivity extends BaseActivity {
+/**
+ * 修改密码界面
+ *
+ * @author LiuCongshan
+ */
+public class ChangePasswordActivity extends BaseBackActivity {
     private ActivityChangePasswordBinding mBinding;
 
     public static Intent newIntent() {

@@ -34,18 +34,23 @@
 
         <TextView
             android:id="@+id/tv_message"
-            android:layout_width="14dp"
+            android:layout_width="wrap_content"
             android:layout_height="14dp"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:background="@drawable/dot_yellow"
             android:gravity="center"
-            android:text="@{String.valueOf(count.get()>9 ? 9 : count.get())}"
+            android:minWidth="14dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text='@{count.get()>99 ? "99+" : String.valueOf(count.get())}'
             android:textColor="@color/main_red"
             android:textSize="10sp"
             android:visibility="@{count.get()>0 ? View.VISIBLE : View.GONE, default=gone}"
             app:layout_constraintBottom_toBottomOf="@+id/iv_message"
-            app:layout_constraintStart_toStartOf="@+id/iv_message"/>
+            app:layout_constraintStart_toStartOf="@+id/iv_message"
+            tools:text="99+"
+            tools:visibility="visible"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh_view"

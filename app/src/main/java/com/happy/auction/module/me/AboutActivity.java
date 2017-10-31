@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.happy.auction.AppInstance;
 import com.happy.auction.BuildConfig;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityAboutBinding;
 
 /**
@@ -15,7 +15,7 @@ import com.happy.auction.databinding.ActivityAboutBinding;
  *
  * @author LiuCongshan
  */
-public class AboutActivity extends BaseActivity {
+public class AboutActivity extends BaseBackActivity {
     private ActivityAboutBinding mBinding;
 
     public static Intent newIntent() {

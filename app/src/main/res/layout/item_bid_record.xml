@@ -6,6 +6,9 @@
     <data>
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
+            name="position"
+            type="Integer"/>
+        <variable
             name="data"
             type="com.happy.auction.entity.item.BidRecord"/>
     </data>
@@ -39,7 +42,7 @@
 
         <TextView
             android:id="@+id/tv_address"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
@@ -57,7 +60,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/tv_address"
             android:text="@string/bid_out"
-            android:textColor="@color/text_normal"/>
+            android:textColor="@{position == 0 ? @color/main_red : @color/text_normal}"/>
 
         <TextView
             android:id="@+id/tv_price"
@@ -67,7 +70,7 @@
             android:layout_centerVertical="true"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@{StringUtil.formatSignMoney(data.bid_price)}"
-            android:textColor="@color/main_red"
+            android:textColor="@{position == 0 ? @color/main_red : @color/text_normal}"
             tools:text="￥0.10"/>
     </RelativeLayout>
 </layout>

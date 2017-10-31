@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <Button
+        <com.happy.auction.ui.TimerButton
             android:id="@+id/btn_captcha"
             style="@style/ButtonCorner"
             android:layout_width="100dp"
@@ -33,6 +33,7 @@
             android:onClick="@{fragment.onClickCaptcha}"
             android:text="@string/get_captcha"
             android:textSize="15sp"
+            android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="@+id/et_phone"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/et_phone"/>

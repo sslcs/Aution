@@ -20,7 +20,9 @@ import com.happy.auction.databinding.FragmentDialogBuilderBinding;
 
 /**
  * 自定义对话框
- * Created by LiuCongshan on 17-8-14.
+ *
+ * @author LiuCongshan
+ * @date 17-8-14
  */
 public class CustomDialog extends DialogFragment {
     private static final String EXTRA_TITLE = "extra_title";
@@ -41,11 +43,11 @@ public class CustomDialog extends DialogFragment {
     private OnClickListener mRightListener;
 
     private int mGravity;
-    private int textColorRight;
-    private int textColorLeft;
-    private int rightTextBgColor;
+    private int mTextColorRight;
+    private int mTextColorLeft;
+    private int mBackgroundColorRight;
 
-    private FragmentDialogBuilderBinding binging;
+    private FragmentDialogBuilderBinding mBinging;
 
     public void setLeftOnClickListener(OnClickListener listener) {
         mLeftListener = listener;
@@ -70,9 +72,9 @@ public class CustomDialog extends DialogFragment {
             mTextLeft = getArguments().getString(EXTRA_LEFT_TEXT);
             mTextRight = getArguments().getString(EXTRA_RIGHT_TEXT);
             mGravity = getArguments().getInt(EXTRA_GRAVITY, Gravity.CENTER);
-            textColorLeft = getArguments().getInt(EXTRA_LEFT_TEXT_COLOR, 0);
-            textColorRight = getArguments().getInt(EXTRA_RIGHT_TEXT_COLOR, 0);
-            rightTextBgColor = getArguments().getInt(EXTRA_RIGHT_BACKGROUND, 0);
+            mTextColorLeft = getArguments().getInt(EXTRA_LEFT_TEXT_COLOR, 0);
+            mTextColorRight = getArguments().getInt(EXTRA_RIGHT_TEXT_COLOR, 0);
+            mBackgroundColorRight = getArguments().getInt(EXTRA_RIGHT_BACKGROUND, 0);
         }
     }
 
@@ -80,37 +82,37 @@ public class CustomDialog extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binging.tvContent.setGravity(mGravity);
+        mBinging.tvContent.setGravity(mGravity);
         if (!TextUtils.isEmpty(mContent)) {
             if (mContent.contains("<br/>") || mContent.contains("</font>")) {
-                binging.tvContent.setText(Html.fromHtml(mContent));
+                mBinging.tvContent.setText(Html.fromHtml(mContent));
             } else {
-                binging.tvContent.setText(mContent);
+                mBinging.tvContent.setText(mContent);
             }
         }
 
         if (!TextUtils.isEmpty(mTitle)) {
-            binging.tvTitle.setVisibility(View.VISIBLE);
-            binging.tvTitle.setText(mTitle);
+            mBinging.tvTitle.setVisibility(View.VISIBLE);
+            mBinging.tvTitle.setText(mTitle);
         }
 
         if (!TextUtils.isEmpty(mTextLeft)) {
-            binging.btnLeft.setText(mTextLeft);
-            binging.btnLeft.setVisibility(View.VISIBLE);
+            mBinging.btnLeft.setText(mTextLeft);
+            mBinging.btnLeft.setVisibility(View.VISIBLE);
             if (TextUtils.isEmpty(mTextRight)) {
-                binging.divider.setVisibility(View.GONE);
+                mBinging.divider.setVisibility(View.GONE);
             }
         }
 
         if (!TextUtils.isEmpty(mTextRight)) {
-            binging.btnRight.setText(mTextRight);
-            binging.btnRight.setVisibility(View.VISIBLE);
+            mBinging.btnRight.setText(mTextRight);
+            mBinging.btnRight.setVisibility(View.VISIBLE);
             if (TextUtils.isEmpty(mTextLeft)) {
-                binging.divider.setVisibility(View.GONE);
+                mBinging.divider.setVisibility(View.GONE);
             }
         }
 
-        binging.btnLeft.setOnClickListener(new View.OnClickListener() {
+        mBinging.btnLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mLeftListener == null) {
@@ -120,7 +122,7 @@ public class CustomDialog extends DialogFragment {
                 mLeftListener.onClick(CustomDialog.this);
             }
         });
-        binging.btnRight.setOnClickListener(new View.OnClickListener() {
+        mBinging.btnRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mRightListener == null) {
@@ -131,15 +133,15 @@ public class CustomDialog extends DialogFragment {
             }
         });
 
-        if (textColorRight > 0) {
-            binging.btnRight.setTextColor(getResources().getColor(textColorRight));
+        if (mTextColorRight > 0) {
+            mBinging.btnRight.setTextColor(getResources().getColor(mTextColorRight));
         }
-        if (textColorLeft > 0) {
-            binging.btnLeft.setTextColor(getResources().getColor(textColorLeft));
+        if (mTextColorLeft > 0) {
+            mBinging.btnLeft.setTextColor(getResources().getColor(mTextColorLeft));
         }
-        if (rightTextBgColor > 0) {
-            binging.divider.setVisibility(View.GONE);
-            binging.btnRight.setBackgroundColor(getResources().getColor(rightTextBgColor));
+        if (mBackgroundColorRight > 0) {
+            mBinging.divider.setVisibility(View.GONE);
+            mBinging.btnRight.setBackgroundColor(getResources().getColor(mBackgroundColorRight));
         }
     }
 
@@ -161,8 +163,8 @@ public class CustomDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binging = FragmentDialogBuilderBinding.inflate(inflater);
-        return binging.getRoot();
+        mBinging = FragmentDialogBuilderBinding.inflate(inflater);
+        return mBinging.getRoot();
     }
 
     @Override
@@ -175,10 +177,16 @@ public class CustomDialog extends DialogFragment {
         mRightListener = null;
     }
 
+    @Override
     public void show(FragmentManager manager, String tag) {
-        if (isAdded()) return;
-        if (getParentFragment() != null && (getParentFragment().isHidden()
-                || !getParentFragment().isVisible())) return;
+        if (isAdded()) {
+            return;
+        }
+        if (getParentFragment() != null) {
+            if (getParentFragment().isHidden() || !getParentFragment().isVisible()) {
+                return;
+            }
+        }
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);
         ft.commitAllowingStateLoss();

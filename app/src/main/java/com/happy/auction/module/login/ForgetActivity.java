@@ -2,87 +2,111 @@ package com.happy.auction.module.login;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityForgetBinding;
+import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.param.CaptchaParam;
+import com.happy.auction.entity.param.FindPasswordParam;
+import com.happy.auction.entity.response.DataResponse;
+import com.happy.auction.entity.response.LoginResponse;
+import com.happy.auction.net.NetCallback;
+import com.happy.auction.net.NetClient;
+import com.happy.auction.ui.TimerButton;
+import com.happy.auction.utils.GsonSingleton;
+import com.happy.auction.utils.RxBus;
+import com.happy.auction.utils.ToastUtil;
 import com.happy.auction.utils.Validation;
 
-public class ForgetActivity extends BaseActivity {
-    private ActivityForgetBinding binding;
-    private CountDownTimer timer;
+import java.lang.reflect.Type;
+
+/**
+ * 忘记密码页面
+ *
+ * @author LiuCongshan
+ */
+public class ForgetActivity extends BaseBackActivity {
+    private ActivityForgetBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_forget);
-        binding.setActivity(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_forget);
+        initLayout();
+    }
+
+    private void initLayout() {
+        mBinding.setActivity(this);
+        mBinding.btnCaptcha.setOnFinishListener(new TimerButton.OnFinishListener() {
+            @Override
+            public void onFinish() {
+                if (validPhone()) {
+                    mBinding.btnCaptcha.setEnabled(true);
+                }
+            }
+        });
     }
 
     public void afterPhoneChanged(Editable s) {
-        if (timer == null) {
-            binding.btnCaptcha.setEnabled(validPhone());
-        }
-        binding.btnOK.setEnabled(checkValid());
+        mBinding.btnCaptcha.setEnabled(validPhone());
+        mBinding.btnOK.setEnabled(checkValid());
     }
 
     public void afterTextChanged(Editable s) {
-        binding.btnOK.setEnabled(checkValid());
+        mBinding.btnOK.setEnabled(checkValid());
     }
 
     private boolean validPhone() {
-        return Validation.phone(binding.etPhone.getText());
+        return Validation.phone(mBinding.etPhone.getText());
     }
 
     private boolean validCaptcha() {
-        return binding.etCaptcha.getText().length() > 3;
+        return mBinding.etCaptcha.getText().length() > 3;
     }
 
     private boolean validPassword() {
-        return Validation.password(binding.etPassword.getText());
+        return Validation.password(mBinding.etPassword.getText());
     }
 
     private boolean checkValid() {
         boolean valid = validPhone() && validCaptcha() && validPassword();
         if (valid) {
-            String password = binding.etPassword.getText().toString();
-            String confirm = binding.etPasswordConfirm.getText().toString();
+            String password = mBinding.etPassword.getText().toString();
+            String confirm = mBinding.etPasswordConfirm.getText().toString();
             return password.equals(confirm);
         }
         return false;
     }
 
     public void onClickCaptcha(View view) {
-        binding.btnCaptcha.setEnabled(false);
-        timer = new CountDownTimer(60000, 1000) {
-            @Override
-            public void onTick(long l) {
-                binding.btnCaptcha.setText((int) (l / 1000) + "s");
-            }
+        mBinding.btnCaptcha.setEnabled(false);
+        mBinding.btnCaptcha.start();
 
+        CaptchaParam param = new CaptchaParam();
+        param.forgetPwd = 1;
+        param.phone = mBinding.etPhone.getText().toString();
+        BaseRequest<CaptchaParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
             @Override
-            public void onFinish() {
-                binding.btnCaptcha.setText(R.string.get_captcha);
-                if (validPhone()) {
-                    binding.btnCaptcha.setEnabled(true);
-                }
-                timer = null;
+            public void onSuccess(String response, String message) {
+                ToastUtil.show(message);
             }
-        }.start();
+        });
     }
 
     public void onClickEye(View view) {
         boolean selected = view.isSelected();
         view.setSelected(!selected);
         if (selected) {
-            binding.etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            mBinding.etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
         } else {
-            binding.etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            mBinding.etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
         }
     }
 
@@ -90,14 +114,40 @@ public class ForgetActivity extends BaseActivity {
         boolean selected = view.isSelected();
         view.setSelected(!selected);
         if (selected) {
-            binding.etPasswordConfirm.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            mBinding.etPasswordConfirm.setTransformationMethod(PasswordTransformationMethod.getInstance());
         } else {
-            binding.etPasswordConfirm.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            mBinding.etPasswordConfirm.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
         }
     }
 
     public void onClickConfirm(View view) {
-        setResult(RESULT_OK);
-        finish();
+        FindPasswordParam param = new FindPasswordParam();
+        param.phone = mBinding.etPhone.getText().toString();
+        param.code = mBinding.etCaptcha.getText().toString();
+        param.pwd = mBinding.etPassword.getText().toString();
+        BaseRequest<FindPasswordParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<LoginResponse>>() {}.getType();
+                DataResponse<LoginResponse> obj = GsonSingleton.get().fromJson(response, type);
+                RxBus.getDefault().post(obj.data);
+
+                setResult(RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                super.onError(code, message);
+                ToastUtil.show(message);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBinding.btnCaptcha.cancel();
     }
 }

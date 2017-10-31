@@ -9,7 +9,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityAddressEditBinding;
 import com.happy.auction.entity.item.Address;
 import com.happy.auction.entity.param.AddressEditParam;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * 收货地址编辑界面
  */
 
-public class AddressEditActivity extends BaseActivity {
+public class AddressEditActivity extends BaseBackActivity {
     private static final String KEY_DATA = "DATA";
     private ActivityAddressEditBinding mBinding;
     private String mProvince, mCity, mDistrict, mTown;

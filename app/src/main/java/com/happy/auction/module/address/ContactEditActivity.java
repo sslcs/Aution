@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityContactEditBinding;
 import com.happy.auction.entity.item.Contact;
 import com.happy.auction.entity.param.BaseRequest;
@@ -22,7 +22,7 @@ import com.happy.auction.utils.ToastUtil;
  * 联系人编辑界面
  */
 
-public class ContactEditActivity extends BaseActivity {
+public class ContactEditActivity extends BaseBackActivity {
     private static final String KEY_DATA = "DATA";
     private ActivityContactEditBinding mBinding;
     private Contact mData;

@@ -1,10 +1,9 @@
 package com.happy.auction.base;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.view.View;
 
-import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.databinding.ActivityTabPagerBinding;
 
@@ -13,9 +12,13 @@ import com.happy.auction.databinding.ActivityTabPagerBinding;
  *
  * @author LiuCongshan
  */
-public abstract class BaseTabActivity extends BaseActivity {
+public abstract class BaseTabActivity extends BaseTimeActivity {
     protected static final String KEY_SELECTION = "selection";
     protected ActivityTabPagerBinding mBinding;
+
+    public void onClickBack(View view) {
+        onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

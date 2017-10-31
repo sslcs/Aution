@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.OnItemClickListener;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.entity.item.ItemPayType;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.PayOptionsParam;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
  *
  * @author LiuCongshan
  */
-public abstract class BasePayActivity extends BaseActivity {
+public abstract class BasePayActivity extends BaseBackActivity {
     protected PayTypeAdapter mAdapter;
 
     protected void initList(RecyclerView vList) {

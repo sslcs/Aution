@@ -9,7 +9,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityManagerBinding;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.UpdateUserInfoParam;
@@ -42,7 +42,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
  *
  * @author LiuCongshan
  */
-public class ManagerActivity extends BaseActivity {
+public class ManagerActivity extends BaseBackActivity {
     private static final int REQUEST_USER_INFO = 100;
     private static final int REQUEST_CODE_CHOOSE = 101;
 

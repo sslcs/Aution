@@ -1,6 +1,7 @@
 package com.happy.auction.module.home;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -45,6 +46,8 @@ import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -255,10 +258,7 @@ public class TabHomeFragment extends BaseFragment {
                     View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = WebActivity.newIntent(menu.title, menu.url);
-                            if (intent != null) {
-                                startActivity(intent);
-                            }
+                            openMenu(menu.title, menu.url);
                         }
                     };
                     tvMenu[i].setOnClickListener(listener);
@@ -266,6 +266,13 @@ public class TabHomeFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    private void openMenu(String title, String url) {
+        Intent intent = WebActivity.newIntent(title, url);
+        if (intent != null) {
+            startActivity(intent);
+        }
     }
 
     private void loadBanner() {
@@ -280,10 +287,7 @@ public class TabHomeFragment extends BaseFragment {
                 adapter.setOnItemClickListener(new OnItemClickListener<ItemBanner>() {
                     @Override
                     public void onItemClick(View view, ItemBanner item, int position) {
-                        Intent intent = WebActivity.newIntent(item.title, item.url);
-                        if (intent != null) {
-                            startActivity(intent);
-                        }
+                        openMenu(item.title, item.url);
                     }
                 });
                 mBinding.rvBanner.setAdapter(adapter);

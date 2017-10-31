@@ -16,6 +16,7 @@
     <string name="join_auction">参与竞拍</string>
     <string name="auction_finish">竞拍已结束</string>
     <string name="format_announce">%1$s以%2$s拍得%3$s</string>
+    <string name="error_qq">请检查QQ客户端是否正常!</string>
 
     <!-- tab latest -->
     <string name="format_deal_person">成交人： %1$s</string>
@@ -102,7 +103,7 @@
     <!-- auction detail -->
     <string name="auction_detail">竞拍详情</string>
     <string name="goods_detail">商品详情</string>
-    <string name="no_person">暂无出价人</string>
+    <string name="no_person">暂无人出价</string>
     <string name="price_start">起拍价</string>
     <string name="price_step">加价幅度</string>
     <string name="more_record">查看更多出价记录</string>
@@ -135,6 +136,8 @@
         3、若成功拍得商品，请尽快以成交价购买竞拍商品，购买后即可获得商品。\n\n
         4、若竞拍失败，将返还消耗拍币的30%（比例视商品而定），赠币不返还。
     </string>
+    <string name="bid_record">出价记录</string>
+    <string name="not_login">您还未登录</string>
 
     <!-- order detail -->
     <string name="order_detail">订单详情</string>
@@ -202,4 +205,5 @@
     <string name="tip_address">实物收货地址用于实物奖品中奖后的发货，最多可添加3个</string>
     <string name="tip_contact">手机号码的填写用于手机话费等虚拟奖品的充值及转让时对方注册号码的选择，最多添加5个</string>
     <string name="select">选择</string>
+    <string name="strategy">攻略</string>
 </resources>

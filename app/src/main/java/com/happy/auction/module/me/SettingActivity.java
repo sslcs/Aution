@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivitySettingBinding;
 import com.happy.auction.entity.event.LogoutEvent;
 import com.happy.auction.module.WebActivity;
@@ -21,7 +21,7 @@ import com.happy.auction.utils.StringUtil;
  *
  * @author LiuCongshan
  */
-public class SettingActivity extends BaseActivity {
+public class SettingActivity extends BaseBackActivity {
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), SettingActivity.class);
     }

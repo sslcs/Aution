@@ -1,6 +1,7 @@
 package com.happy.auction.module.me;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -17,10 +18,10 @@ import com.happy.auction.databinding.FragmentTabMeBinding;
 import com.happy.auction.entity.event.LogoutEvent;
 import com.happy.auction.entity.param.BalanceParam;
 import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.param.UserInfoParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
-import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.module.WebActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.message.MessageActivity;
@@ -57,6 +58,13 @@ public class TabMeFragment extends BaseFragment {
     }
 
     private void initLayout() {
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUserInfo();
+            }
+        });
+
         mBinding.setUser(AppInstance.getInstance().getUser());
         mBinding.setFragment(this);
 
@@ -64,6 +72,7 @@ public class TabMeFragment extends BaseFragment {
             @Override
             public void accept(LogoutEvent event) throws Exception {
                 mBinding.setUser(null);
+                mBinding.ivAvatar.setImageResource(R.drawable.ic_avatar);
             }
         });
 
@@ -155,6 +164,7 @@ public class TabMeFragment extends BaseFragment {
             return;
         }
         startActivity(CardActivity.newIntent());
+        mBinding.vFlagNewCard.setVisibility(View.GONE);
     }
 
     public void onClickMyPublish(View view) {
@@ -243,5 +253,25 @@ public class TabMeFragment extends BaseFragment {
         int number = user == null ? 0 : user.points;
         String text = getString(R.string.point, number);
         return getSpannable(text, 2);
+    }
+
+    private void getUserInfo() {
+        if (!AppInstance.getInstance().isLogin()) {
+            mBinding.refreshView.setRefreshing(false);
+            return;
+        }
+
+        UserInfoParam param = new UserInfoParam();
+        BaseRequest<UserInfoParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                mBinding.refreshView.setRefreshing(false);
+                Type type = new TypeToken<DataResponse<UserInfo>>() {}.getType();
+                DataResponse<UserInfo> obj = GsonSingleton.get().fromJson(response, type);
+                AppInstance.getInstance().setUser(obj.data);
+                mBinding.setUser(obj.data);
+            }
+        });
     }
 }

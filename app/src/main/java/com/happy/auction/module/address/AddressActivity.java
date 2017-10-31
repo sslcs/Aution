@@ -12,7 +12,7 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.OnViewClickListener;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityAddressBinding;
 import com.happy.auction.entity.item.Address;
 import com.happy.auction.entity.param.AddressDefaultParam;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * Created by LiuCongshan on 17-10-16.
  * 收货地址界面
  */
-public class AddressActivity extends BaseActivity implements OnViewClickListener<Address> {
+public class AddressActivity extends BaseBackActivity implements OnViewClickListener<Address> {
     private final static int REQUEST_ADD = 100;
     private final static int REQUEST_EDIT = 101;
 

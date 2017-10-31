@@ -28,7 +28,19 @@ public class UserInfo {
     public int points;
 
     public String uid_unique;
-
+    /**
+     * 待付款订单数量
+     */
+    @SerializedName("unpay_amount")
+    public int amountUnpaid;
+    /**
+     * 是否有新的卡密 1:有， 0：没有
+     */
+    @SerializedName("has_card")
+    public boolean hasCard;
+    /**
+     * 是否已设置密码
+     */
     private int is_pwd_set;
 
     public boolean noPassword() {

@@ -104,6 +104,7 @@
                             android:layout_width="0dp"
                             android:layout_height="160dp"
                             android:background="@android:color/white"
+                            android:onClick="onClickDetail"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
@@ -112,7 +113,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="20dp"
-                            android:onClick="onClickDetail"
                             android:src="@drawable/ic_check_detail"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_goods_image"
                             app:layout_constraintEnd_toEndOf="parent"/>
@@ -128,13 +128,13 @@
                             android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingRight="@dimen/activity_horizontal_margin"
                             android:paddingTop="10dp"
-                            android:text="@{data.title}"
+                            android:text="@{@string/format_title(data.period,data.title)}"
                             android:textColor="@color/text_dark"
                             android:textSize="16sp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/iv_goods_image"
-                            tools:text="商品名称"/>
+                            tools:text="(第10904期)商品名称"/>
 
                         <View
                             android:id="@+id/bg_status"
@@ -485,6 +485,7 @@
             android:paddingBottom="10dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="10dp"
+            android:onClick="onClickNotLogin"
             android:text="@{coin.getBidTimes(coin.bid_coin,coin.bid_gift_coin)}"
             android:textColor="@color/text_dark"
             app:layout_constraintBottom_toTopOf="@+id/btn_bottom"

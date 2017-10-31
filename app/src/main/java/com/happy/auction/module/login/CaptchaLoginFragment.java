@@ -2,14 +2,12 @@ package com.happy.auction.module.login;
 
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
-import com.happy.auction.R;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentCaptchaLoginBinding;
 import com.happy.auction.entity.param.BaseRequest;
@@ -19,6 +17,7 @@ import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.ui.TimerButton;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
@@ -33,7 +32,6 @@ import java.lang.reflect.Type;
  */
 public class CaptchaLoginFragment extends BaseFragment {
     private FragmentCaptchaLoginBinding mBinding;
-    private CountDownTimer mTimer;
 
     public CaptchaLoginFragment() {
         // Required empty public constructor
@@ -46,9 +44,20 @@ public class CaptchaLoginFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         mBinding = FragmentCaptchaLoginBinding.inflate(inflater, container, false);
-        mBinding.btnCaptcha.setTransformationMethod(null);
-        mBinding.setFragment(this);
+        initLayout();
         return mBinding.getRoot();
+    }
+
+    private void initLayout() {
+        mBinding.btnCaptcha.setOnFinishListener(new TimerButton.OnFinishListener() {
+            @Override
+            public void onFinish() {
+                if (validPhone()) {
+                    mBinding.btnCaptcha.setEnabled(true);
+                }
+            }
+        });
+        mBinding.setFragment(this);
     }
 
     public void afterPhoneChanged(Editable s) {
@@ -56,10 +65,7 @@ public class CaptchaLoginFragment extends BaseFragment {
         parent.setPhone(s.toString());
 
         if (validPhone()) {
-            if (mTimer == null) {
-                mBinding.btnCaptcha.setEnabled(true);
-            }
-
+            mBinding.btnCaptcha.setEnabled(true);
             if (validCaptcha()) {
                 mBinding.btnOK.setEnabled(true);
             }
@@ -83,21 +89,7 @@ public class CaptchaLoginFragment extends BaseFragment {
 
     public void onClickCaptcha(View view) {
         mBinding.btnCaptcha.setEnabled(false);
-        mTimer = new CountDownTimer(60000, 1000) {
-            @Override
-            public void onTick(long l) {
-                mBinding.btnCaptcha.setText((int) (l / 1000) + "s");
-            }
-
-            @Override
-            public void onFinish() {
-                mBinding.btnCaptcha.setText(R.string.get_captcha);
-                if (validPhone()) {
-                    mBinding.btnCaptcha.setEnabled(true);
-                }
-                mTimer = null;
-            }
-        }.start();
+        mBinding.btnCaptcha.start();
 
         CaptchaParam param = new CaptchaParam();
         param.forgetPwd = 3;
@@ -139,5 +131,11 @@ public class CaptchaLoginFragment extends BaseFragment {
         mBinding.etPhone.setText(parent.getPhone());
         Editable text = mBinding.etPhone.getText();
         mBinding.etPhone.setSelection(text.length());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBinding.btnCaptcha.cancel();
     }
 }

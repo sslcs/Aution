@@ -4,12 +4,13 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
+import com.happy.auction.BuildConfig;
 import com.happy.auction.R;
 import com.happy.auction.adapter.ViewPagerAdapter;
+import com.happy.auction.base.BaseTimeActivity;
 import com.happy.auction.databinding.ActivityMainBinding;
 import com.happy.auction.entity.event.RequestEvent;
 import com.happy.auction.entity.param.BaseRequest;
@@ -44,8 +45,10 @@ import okhttp3.WebSocketListener;
 
 /**
  * 主界面
+ *
+ * @author LiuCongshan
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseTimeActivity {
     private final MessageHandler mMessageHandler = new MessageHandler();
     private ActivityMainBinding mBinding;
     private WebSocket mSocket = null;
@@ -111,10 +114,7 @@ public class MainActivity extends AppCompatActivity {
     private void initWebSocket() {
         OkHttpClient httpClient = new OkHttpClient.Builder().build();
         Request request = new Request.Builder()
-//                .url("ws://192.168.1.64:9999/v1/ws")
-//                .url("ws://192.168.1.225:8888/v1/ws")
-                .url("ws://192.168.1.250:80/v1/ws")
-//                .url("ws://118.190.74.25/v1/ws")
+                .url("ws://" + BuildConfig.HOST + "/ws")
                 .build();
         httpClient.newWebSocket(request, new WebSocketListener() {
             @Override
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         if (mSocket == null) {
             return;
         }
-        DebugLog.e("sendMessage: " + event.message);
+        DebugLog.e(event.message);
         mMessageHandler.addHandler(event.callback);
         mSocket.send(event.message);
     }

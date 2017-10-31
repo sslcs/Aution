@@ -12,7 +12,7 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.OnViewClickListener;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityAddressBinding;
 import com.happy.auction.entity.item.Contact;
 import com.happy.auction.entity.param.BaseRequest;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * Created by LiuCongshan on 17-10-17.<br/>
  * 联系人界面
  */
-public class ContactActivity extends BaseActivity implements OnViewClickListener<Contact> {
+public class ContactActivity extends BaseBackActivity implements OnViewClickListener<Contact> {
     private final static int REQUEST_ADD = 100;
     private final static int REQUEST_EDIT = 101;
 

@@ -1,8 +1,10 @@
 package com.happy.auction.entity.param;
 
 /**
- * Created by LiuCongshan on 17-10-19.<br/>
  * 修改密码参数
+ *
+ * @author LiuCongshan
+ * @date 17-10-19
  */
 
 public class ChangePasswordParam extends BaseParam {

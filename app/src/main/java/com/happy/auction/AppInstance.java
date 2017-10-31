@@ -69,7 +69,7 @@ public class AppInstance extends Application {
 
     public void setBalance(UserBalance data) {
         if (user == null) {
-            return;
+            user = new UserInfo();
         }
         user.free_coin = data.free_coin;
         user.auction_coin = data.auction_coin;

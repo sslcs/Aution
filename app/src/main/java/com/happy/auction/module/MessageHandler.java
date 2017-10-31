@@ -1,8 +1,10 @@
 package com.happy.auction.module;
 
 import com.google.gson.reflect.TypeToken;
+import com.happy.auction.AppInstance;
 import com.happy.auction.entity.event.AuctionEndEvent;
 import com.happy.auction.entity.event.BidEvent;
+import com.happy.auction.entity.event.LogoutEvent;
 import com.happy.auction.entity.response.BaseEvent;
 import com.happy.auction.entity.response.BaseResponse;
 import com.happy.auction.entity.response.DataResponse;
@@ -18,8 +20,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by LiuCongshan on 17-9-8.
  * 处理接收到的消息
+ *
+ * @author LiuCongshan
+ * @date 17-9-8
  */
 
 public class MessageHandler {
@@ -49,7 +53,9 @@ public class MessageHandler {
             DataResponse<AuctionEndEvent> response = GsonSingleton.get().fromJson(message, type);
             onEvent(response.data);
         } else if (BaseEvent.EVENT_OFFLINE.equals(base.event)) {
-            ToastUtil.show(message);
+            ToastUtil.show(base.msg);
+            AppInstance.getInstance().logout();
+            RxBus.getDefault().post(new LogoutEvent());
         } else {
             DebugLog.e("onMessage : " + message);
             handleResponse(base, message);

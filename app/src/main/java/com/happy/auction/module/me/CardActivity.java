@@ -21,7 +21,7 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityCardBinding;
 import com.happy.auction.entity.item.ItemCard;
 import com.happy.auction.entity.item.ItemCardPassword;
@@ -44,7 +44,7 @@ import java.util.ArrayList;
  * @date 17-10-20
  */
 
-public class CardActivity extends BaseActivity {
+public class CardActivity extends BaseBackActivity {
     private final ObservableInt mSelectedCount = new ObservableInt();
     private ActivityCardBinding mBinding;
     private CardAdapter mAdapter;

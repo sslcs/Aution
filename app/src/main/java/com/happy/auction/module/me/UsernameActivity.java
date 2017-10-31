@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityUsernameBinding;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.UpdateUserInfoParam;
@@ -17,7 +17,7 @@ import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.ToastUtil;
 
-public class UsernameActivity extends BaseActivity {
+public class UsernameActivity extends BaseBackActivity {
     private ActivityUsernameBinding mBinding;
 
     public static Intent newIntent(Context context) {

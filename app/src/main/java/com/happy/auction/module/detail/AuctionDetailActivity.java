@@ -16,10 +16,11 @@ import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
+import com.happy.auction.BuildConfig;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
-import com.happy.auction.base.BaseActivity;
+import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityAuctionDetailBinding;
 import com.happy.auction.entity.event.AuctionEndEvent;
 import com.happy.auction.entity.event.BidEvent;
@@ -36,12 +37,10 @@ import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.BidParam;
 import com.happy.auction.entity.param.DetailBaskParam;
-import com.happy.auction.entity.param.GoodsDetailParam;
 import com.happy.auction.entity.param.PreviousParam;
 import com.happy.auction.entity.response.AuctionCoin;
 import com.happy.auction.entity.response.AuctionDetail;
 import com.happy.auction.entity.response.DataResponse;
-import com.happy.auction.entity.response.GoodsDetail;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.module.WebActivity;
 import com.happy.auction.module.login.LoginActivity;
@@ -62,10 +61,11 @@ import io.reactivex.functions.Consumer;
  *
  * @author LiuCongshan
  */
-public class AuctionDetailActivity extends BaseActivity {
+public class AuctionDetailActivity extends BaseBackActivity {
     private static final String KEY_GOODS = "GOODS";
-    private static final int REQUEST_CODE_LOGIN = 100;
+    private static final int REQUEST_CODE_LOGIN_BID = 100;
     private static final int REQUEST_CODE_PAY = 101;
+    private static final int REQUEST_CODE_LOGIN = 102;
 
     private final ObservableInt mTimes = new ObservableInt(1);
     private ActivityAuctionDetailBinding mBinding;
@@ -311,6 +311,11 @@ public class AuctionDetailActivity extends BaseActivity {
     }
 
     private void loadAuctionCoin() {
+        if (!AppInstance.getInstance().isLogin()) {
+            mBinding.tvBidTimes.setText(R.string.not_login);
+            return;
+        }
+
         AuctionCoinParam param = new AuctionCoinParam();
         param.sid = mData.sid;
         BaseRequest<AuctionCoinParam> request = new BaseRequest<>(param);
@@ -327,11 +332,27 @@ public class AuctionDetailActivity extends BaseActivity {
 
     public void onClickBid(View view) {
         if (!AppInstance.getInstance().isLogin()) {
-            startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN);
+            startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN_BID);
             return;
         }
 
         getBalance();
+    }
+
+    private void getBalance() {
+        BalanceParam data = new BalanceParam();
+        BaseRequest<BalanceParam> request = new BaseRequest<>(data);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<UserBalance>>() {}.getType();
+                DataResponse<UserBalance> obj = GsonSingleton.get().fromJson(response, type);
+                if (obj.data != null) {
+                    AppInstance.getInstance().setBalance(obj.data);
+                }
+                bid();
+            }
+        });
     }
 
     private void bid() {
@@ -339,7 +360,8 @@ public class AuctionDetailActivity extends BaseActivity {
             mTimes.set(1);
         }
         final int count = mTimes.get();
-        if (AppInstance.getInstance().getBalance() < count) {
+//        if (AppInstance.getInstance().getBalance() < count) {
+        if (count > 100) {
             Intent pay = AuctionPayActivity.newIntent(this, mData.getItemGoods(), count);
             startActivityForResult(pay, REQUEST_CODE_PAY);
             return;
@@ -347,7 +369,7 @@ public class AuctionDetailActivity extends BaseActivity {
 
         BidParam param = new BidParam();
         param.sid = mData.sid;
-        param.buy = mTimes.get();
+        param.buy = count;
         param.take_coin = param.buy;
         BaseRequest<BidParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
@@ -400,10 +422,13 @@ public class AuctionDetailActivity extends BaseActivity {
             return;
         }
 
-        if (REQUEST_CODE_LOGIN == requestCode) {
+        if (REQUEST_CODE_LOGIN_BID == requestCode) {
             getBalance();
+            loadAuctionCoin();
         } else if (REQUEST_CODE_PAY == requestCode) {
             onPaySuccess(mTimes.get());
+        } else if (REQUEST_CODE_LOGIN == requestCode) {
+            loadAuctionCoin();
         }
     }
 
@@ -496,38 +521,18 @@ public class AuctionDetailActivity extends BaseActivity {
     }
 
     public void onClickDetail(View view) {
-        GoodsDetailParam param = new GoodsDetailParam();
-        param.gid = mData.gid;
-        BaseRequest<GoodsDetailParam> request = new BaseRequest<>(param);
-        NetClient.query(request, new NetCallback() {
-            @Override
-            public void onSuccess(String response, String message) {
-                mAdapterBask.setLoaded();
-                Type type = new TypeToken<DataResponse<GoodsDetail>>() {}.getType();
-                DataResponse<GoodsDetail> obj = GsonSingleton.get().fromJson(response, type);
-                String title = getString(R.string.goods_detail);
-                startActivity(WebActivity.newIntent(title, obj.data.detail));
-            }
-        });
-    }
-
-    private void getBalance() {
-        BalanceParam data = new BalanceParam();
-        BaseRequest<BalanceParam> request = new BaseRequest<>(data);
-        NetClient.query(request, new NetCallback() {
-            @Override
-            public void onSuccess(String response, String message) {
-                Type type = new TypeToken<DataResponse<UserBalance>>() {}.getType();
-                DataResponse<UserBalance> obj = GsonSingleton.get().fromJson(response, type);
-                if (obj.data != null) {
-                    AppInstance.getInstance().setBalance(obj.data);
-                }
-                bid();
-            }
-        });
+        String title = getString(R.string.goods_detail);
+        String url = "http://" + BuildConfig.HOST + "/web/goods/detail?gid=" + mData.gid;
+        startActivity(WebActivity.newIntent(title, url));
     }
 
     public void onClickRule(View view) {
         RuleDialog.newInstance().show(getSupportFragmentManager(), "rule");
+    }
+
+    public void onClickNotLogin(View view) {
+        if (!AppInstance.getInstance().isLogin()) {
+            startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN);
+        }
     }
 }
