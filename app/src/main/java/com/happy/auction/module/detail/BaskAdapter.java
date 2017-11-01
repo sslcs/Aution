@@ -3,7 +3,10 @@ package com.happy.auction.module.detail;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.happy.auction.R;
 import com.happy.auction.adapter.BaseCustomAdapter;
+import com.happy.auction.adapter.CustomViewHolder;
+import com.happy.auction.databinding.EmptyViewBinding;
 import com.happy.auction.databinding.ItemBaskDetailBinding;
 import com.happy.auction.entity.item.ItemBask;
 import com.happy.auction.glide.ImageLoader;
@@ -14,6 +17,13 @@ import com.happy.auction.glide.ImageLoader;
  * @author LiuCongshan
  */
 public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBinding> {
+    @Override
+    public CustomViewHolder getBindingEmpty(ViewGroup parent, LayoutInflater inflater) {
+        EmptyViewBinding binding = EmptyViewBinding.inflate(inflater, parent, false);
+        binding.ivImage.setImageResource(R.drawable.ic_empty_bask);
+        return new CustomViewHolder<>(binding);
+    }
+
     @Override
     public ItemBaskDetailBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
         return ItemBaskDetailBinding.inflate(inflater, parent, false);

@@ -8,8 +8,10 @@ import com.happy.auction.databinding.EmptyViewBinding;
 import com.happy.auction.databinding.ItemLoadMoreBinding;
 
 /**
- * Created by LiuCongshan on 17-9-12.
  * 为adapter设置默认EmptyView,LoadMoreView.
+ *
+ * @author LiuCongshan
+ * @date 17-9-12
  */
 
 public abstract class BaseCustomAdapter<T, B extends ViewDataBinding> extends BaseFeatureAdapter<T, B> {

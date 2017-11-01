@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="com.happy.auction.utils.StringUtil"/>
+        <variable
+            name="data"
+            type="com.happy.auction.entity.item.BaseGoods"/>
+        <variable
+            name="fragment"
+            type="com.happy.auction.module.detail.WinDialog"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:id="@+id/v_background"
+            android:layout_width="270dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="85dp"
+            android:background="@drawable/btn_corner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_win"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{fragment::onClickClose}"
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="@+id/v_background"
+            app:layout_constraintStart_toEndOf="@+id/v_background"/>
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="30dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{@string/tip_win(StringUtil.formatSignMoney(data.current_price), data.title)}"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/v_background"
+            app:layout_constraintStart_toStartOf="@+id/v_background"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image"/>
+
+        <Button
+            android:id="@+id/btn_check"
+            android:layout_width="193dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_circle_yellow"
+            android:onClick="@{fragment::onClickDetail}"
+            android:text="@string/check_detail"
+            android:textColor="@color/text_normal"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/v_background"
+            app:layout_constraintEnd_toEndOf="@+id/v_background"
+            app:layout_constraintStart_toStartOf="@+id/v_background"
+            app:layout_constraintTop_toBottomOf="@+id/tv_message"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

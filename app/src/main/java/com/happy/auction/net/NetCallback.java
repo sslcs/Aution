@@ -3,8 +3,10 @@ package com.happy.auction.net;
 import com.happy.auction.utils.ToastUtil;
 
 /**
- * Created by LiuCongshan on 17-9-15.
  * 网络请求结果回调
+ *
+ * @author LiuCongshan
+ * @date 17-9-15
  */
 
 public abstract class NetCallback {
@@ -15,5 +17,11 @@ public abstract class NetCallback {
         ToastUtil.show(message);
     }
 
+    /**
+     * 请求成功回调
+     *
+     * @param response 响应结果
+     * @param message  响应消息
+     */
     public abstract void onSuccess(String response, String message);
 }

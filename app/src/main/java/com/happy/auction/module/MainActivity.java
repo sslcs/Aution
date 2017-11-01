@@ -1,5 +1,6 @@
 package com.happy.auction.module;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import com.happy.auction.R;
 import com.happy.auction.adapter.ViewPagerAdapter;
 import com.happy.auction.base.BaseTimeActivity;
 import com.happy.auction.databinding.ActivityMainBinding;
+import com.happy.auction.entity.event.BidNowEvent;
 import com.happy.auction.entity.event.RequestEvent;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.MessageCountParam;
@@ -77,6 +79,17 @@ public class MainActivity extends BaseTimeActivity {
             public void accept(LoginResponse response) throws Exception {
                 AppInstance.getInstance().setLoginResponse(response);
                 syncClient();
+            }
+        });
+
+        RxBus.getDefault().subscribe(this, BidNowEvent.class, new Consumer<BidNowEvent>() {
+            @Override
+            public void accept(BidNowEvent bidNowEvent) throws Exception {
+                mBinding.viewPager.setCurrentItem(0, true);
+                Intent main = new Intent(MainActivity.this, MainActivity.class);
+                main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(main);
             }
         });
     }

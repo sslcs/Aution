@@ -1,6 +1,7 @@
 package com.happy.auction.module.me;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -32,6 +33,8 @@ import java.lang.reflect.Type;
 
 /**
  * 金币记录
+ *
+ * @author LiuCongshan
  */
 public class CoinFragment extends BaseFragment {
     public static final int TYPE_COIN = 1;
@@ -43,6 +46,10 @@ public class CoinFragment extends BaseFragment {
     private int mType;
     private int mIndex;
 
+    /**
+     * @param type 1:拍币， 2：赠币
+     * @return 金币列表fragment
+     */
     public static CoinFragment newInstance(int type) {
         CoinFragment fragment = new CoinFragment();
         Bundle bundle = new Bundle();
@@ -65,7 +72,7 @@ public class CoinFragment extends BaseFragment {
         mBinding.setFragment(this);
         mBinding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.vList.addItemDecoration(new DecorationSpace());
-        mAdapter = new CoinAdapter();
+        mAdapter = new CoinAdapter(mType);
         mAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
@@ -73,6 +80,13 @@ public class CoinFragment extends BaseFragment {
             }
         });
         mBinding.vList.setAdapter(mAdapter);
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mIndex = 0;
+                loadData();
+            }
+        });
 
         loadData();
     }
@@ -84,9 +98,9 @@ public class CoinFragment extends BaseFragment {
     public Spannable getBalance() {
         SpannableStringBuilder ss = new SpannableStringBuilder();
         if (mType == TYPE_COIN) {
-            ss.append(getString(R.string.balance_formatter, AppInstance.getInstance().getUser().auction_coin));
+            ss.append(getString(R.string.format_balance, AppInstance.getInstance().getUser().auction_coin));
         } else {
-            ss.append(getString(R.string.free_balance_formatter, AppInstance.getInstance().getUser().free_coin));
+            ss.append(getString(R.string.format_free_balance, AppInstance.getInstance().getUser().free_coin));
         }
         final int color = getResources().getColor(R.color.main_red);
         ss.setSpan(new ForegroundColorSpan(color), 5, ss.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -112,21 +126,28 @@ public class CoinFragment extends BaseFragment {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mAdapter.setLoaded();
+                if (mIndex == 0) {
+                    mAdapter.clear();
+                    mBinding.refreshView.setRefreshing(false);
+                }
                 Type type = new TypeToken<DataResponse<CoinResponse>>() {}.getType();
                 DataResponse<CoinResponse> obj = GsonSingleton.get().fromJson(response, type);
                 setBalance(obj.data);
 
                 int size = 0;
-                if (mIndex == 0) {
-                    mAdapter.clear();
-                }
                 if (obj.data != null && obj.data.records != null) {
                     mAdapter.addAll(obj.data.records);
                     size = obj.data.records.size();
                     mIndex = mAdapter.getLast().id;
                 }
                 mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapter.setLoaded();
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                super.onError(code, message);
+                mBinding.refreshView.setRefreshing(false);
             }
         });
     }

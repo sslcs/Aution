@@ -5,17 +5,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.happy.auction.adapter.BaseCustomAdapter;
+import com.happy.auction.adapter.CustomViewHolder;
 import com.happy.auction.adapter.OnViewClickListener;
+import com.happy.auction.databinding.EmptyAddressBinding;
 import com.happy.auction.databinding.ItemAddressBinding;
 import com.happy.auction.entity.item.Address;
 
 /**
- * Created by LiuCongshan on 17-10-17.<br/>
  * 收货地址Adapter
+ *
+ * @author LiuCongshan
+ * @date 17-10-17
  */
 public class AddressAdapter extends BaseCustomAdapter<Address, ItemAddressBinding> {
     private OnViewClickListener<Address> mListener;
     private int mPositionDefault = -1;
+
+    @Override
+    public CustomViewHolder getBindingEmpty(ViewGroup parent, LayoutInflater inflater) {
+        EmptyAddressBinding binding = EmptyAddressBinding.inflate(inflater, parent, false);
+        return new CustomViewHolder<>(binding);
+    }
 
     @Override
     public ItemAddressBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
