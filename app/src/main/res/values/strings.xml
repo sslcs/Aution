@@ -138,6 +138,8 @@
     </string>
     <string name="bid_record">出价记录</string>
     <string name="not_login">您还未登录</string>
+    <string name="tip_win">恭喜您！成功以%1$s成交价拍中商品%2$s</string>
+    <string name="check_detail">查看详情</string>
 
     <!-- order detail -->
     <string name="order_detail">订单详情</string>

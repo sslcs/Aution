@@ -5,10 +5,11 @@ import android.databinding.Bindable;
 import com.happy.auction.BR;
 
 /**
- * Created by LiuCongshan on 17-9-12.
  * 商品item
+ *
+ * @author LiuCongshan
+ * @date 17-9-12
  */
-
 public class ItemGoods extends BaseGoods {
     /**
      * 竞拍过期时间戳，单位：毫秒

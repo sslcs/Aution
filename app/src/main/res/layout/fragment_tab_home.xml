@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:onClick="@{fragment.onClickMessage}"
+            android:onClick="@{fragment::onClickMessage}"
             android:src="@drawable/ic_message"
             app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,10 +43,10 @@
             android:minWidth="14dp"
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
-            android:text='@{count.get()>99 ? "99+" : String.valueOf(count.get())}'
+            android:text='@{count>99 ? "99+" : String.valueOf(count)}'
             android:textColor="@color/main_red"
             android:textSize="10sp"
-            android:visibility="@{count.get()>0 ? View.VISIBLE : View.GONE, default=gone}"
+            android:visibility="@{count>0 ? View.VISIBLE : View.GONE, default=gone}"
             app:layout_constraintBottom_toBottomOf="@+id/iv_message"
             app:layout_constraintStart_toStartOf="@+id/iv_message"
             tools:text="99+"

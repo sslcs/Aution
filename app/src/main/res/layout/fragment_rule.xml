@@ -45,7 +45,7 @@
             android:layout_height="50dp"
             android:background="@color/divider"
             android:gravity="center"
-            android:onClick="@{fragment.onClickCancel}"
+            android:onClick="@{fragment::onClickCancel}"
             android:text="@string/know"
             android:textColor="@color/main_red"
             android:textSize="16sp"

@@ -11,7 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.happy.auction.R;
-import com.happy.auction.databinding.FragmentLoadingBinding;
+import com.happy.auction.base.BaseDialog;
+import com.happy.auction.databinding.DialogLoadingBinding;
 
 /**
  * 加载中弹框
@@ -20,19 +21,13 @@ import com.happy.auction.databinding.FragmentLoadingBinding;
  * @date 17-10-31
  */
 
-public class LoadingDialog extends DialogFragment {
-    private FragmentLoadingBinding mBinding;
-
-    @Nullable
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Dialog(getActivity(), R.style.TransparentDialog);
-    }
+public class LoadingDialog extends BaseDialog {
+    private DialogLoadingBinding mBinding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = FragmentLoadingBinding.inflate(inflater, container, false);
+        mBinding = DialogLoadingBinding.inflate(inflater, container, false);
         return mBinding.getRoot();
     }
 
@@ -40,20 +35,5 @@ public class LoadingDialog extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setCancelable(false);
-    }
-
-    @Override
-    public void show(FragmentManager manager, String tag) {
-        if (isAdded()) {
-            return;
-        }
-        if (getParentFragment() != null) {
-            if (getParentFragment().isHidden() || !getParentFragment().isVisible()) {
-                return;
-            }
-        }
-        FragmentTransaction ft = manager.beginTransaction();
-        ft.add(this, tag);
-        ft.commitAllowingStateLoss();
     }
 }

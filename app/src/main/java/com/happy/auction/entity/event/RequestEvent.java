@@ -5,10 +5,11 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.net.NetCallback;
 
 /**
- * Created by LiuCongshan on 17-9-8.
  * 请求事件
+ *
+ * @author LiuCongshan
+ * @date 17-9-8
  */
-
 public class RequestEvent {
     public String message;
 

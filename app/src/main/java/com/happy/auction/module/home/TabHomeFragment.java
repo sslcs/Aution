@@ -1,7 +1,6 @@
 package com.happy.auction.module.home;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -32,6 +31,7 @@ import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.GoodsParam;
 import com.happy.auction.entity.param.MenuParam;
+import com.happy.auction.entity.param.SubscribeParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.glide.ImageLoader;
@@ -46,8 +46,6 @@ import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -326,6 +324,7 @@ public class TabHomeFragment extends BaseFragment {
             public void onError(int code, String message) {
                 super.onError(code, message);
                 ToastUtil.show(message);
+                mBinding.refreshView.setRefreshing(false);
             }
         });
     }
@@ -350,5 +349,17 @@ public class TabHomeFragment extends BaseFragment {
         if (hasCreatedView && isVisibleToUser) {
             refresh();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mAdapter == null || !getUserVisibleHint()) {
+            return;
+        }
+        SubscribeParam param = new SubscribeParam();
+        param.addAll(mAdapter.getData());
+        NetClient.query(new BaseRequest<>(param), null);
     }
 }

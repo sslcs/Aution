@@ -107,7 +107,7 @@
             android:id="@+id/et_amount"
             android:layout_width="100dp"
             android:layout_height="34dp"
-            android:afterTextChanged="@{activity.afterTextChanged}"
+            android:afterTextChanged="@{activity::afterTextChanged}"
             android:background="@drawable/bg_input"
             android:gravity="center"
             android:hint="@string/hint_input_amount"
@@ -147,9 +147,9 @@
         <TextView
             android:id="@+id/btn_bottom"
             style="@style/ButtonBottom"
-            android:enabled="@{amount.get()>0}"
+            android:enabled="@{amount>0}"
             android:onClick="onClickPay"
-            android:text='@{@string/charge_pay(amount.get())}'
+            android:text='@{@string/charge_pay(amount)}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

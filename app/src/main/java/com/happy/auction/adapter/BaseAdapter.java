@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Adapter基类<br/>
- * Created by LiuCongshan on 17-09-23.
+ * Adapter基类
  *
  * @author LiuCongshan
+ * @date 17-09-23
  */
 public abstract class BaseAdapter<T, B extends ViewDataBinding> extends RecyclerView.Adapter<CustomViewHolder<B>> {
     private List<T> data;
@@ -39,6 +39,10 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
         }
         data.addAll(items);
         notifyDataSetChanged();
+    }
+
+    public List<T> getData() {
+        return data;
     }
 
     public T getItem(int position) {

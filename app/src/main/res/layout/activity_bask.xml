@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginTop="13dp"
-            android:afterTextChanged="@{activity.afterTextChanged}"
+            android:afterTextChanged="@{activity::afterTextChanged}"
             android:background="@null"
             android:gravity="top"
             android:hint="@string/tip_bask"

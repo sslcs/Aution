@@ -1,13 +1,10 @@
 package com.happy.auction.ui;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -15,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.happy.auction.R;
-import com.happy.auction.databinding.FragmentDialogBuilderBinding;
+import com.happy.auction.base.BaseDialog;
+import com.happy.auction.databinding.DialogAlertBinding;
 
 /**
  * 自定义对话框
@@ -24,7 +21,7 @@ import com.happy.auction.databinding.FragmentDialogBuilderBinding;
  * @author LiuCongshan
  * @date 17-8-14
  */
-public class CustomDialog extends DialogFragment {
+public class CustomDialog extends BaseDialog {
     private static final String EXTRA_TITLE = "extra_title";
     private static final String EXTRA_CONTENT = "extra_content";
     private static final String EXTRA_LEFT_TEXT = "extra_left_text";
@@ -47,7 +44,7 @@ public class CustomDialog extends DialogFragment {
     private int mTextColorLeft;
     private int mBackgroundColorRight;
 
-    private FragmentDialogBuilderBinding mBinging;
+    private DialogAlertBinding mBinging;
 
     public void setLeftOnClickListener(OnClickListener listener) {
         mLeftListener = listener;
@@ -57,10 +54,10 @@ public class CustomDialog extends DialogFragment {
         mRightListener = listener;
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Dialog(getActivity(), R.style.TransparentDialog);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mBinging = DialogAlertBinding.inflate(inflater);
+        return mBinging.getRoot();
     }
 
     @Override
@@ -162,12 +159,6 @@ public class CustomDialog extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mBinging = FragmentDialogBuilderBinding.inflate(inflater);
-        return mBinging.getRoot();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         mContent = null;
@@ -175,21 +166,6 @@ public class CustomDialog extends DialogFragment {
         mTextRight = null;
         mLeftListener = null;
         mRightListener = null;
-    }
-
-    @Override
-    public void show(FragmentManager manager, String tag) {
-        if (isAdded()) {
-            return;
-        }
-        if (getParentFragment() != null) {
-            if (getParentFragment().isHidden() || !getParentFragment().isVisible()) {
-                return;
-            }
-        }
-        FragmentTransaction ft = manager.beginTransaction();
-        ft.add(this, tag);
-        ft.commitAllowingStateLoss();
     }
 
     public interface OnClickListener {

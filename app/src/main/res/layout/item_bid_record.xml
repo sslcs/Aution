@@ -7,7 +7,7 @@
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
             name="position"
-            type="Integer"/>
+            type="int"/>
         <variable
             name="data"
             type="com.happy.auction.entity.item.BidRecord"/>

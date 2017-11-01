@@ -176,7 +176,9 @@ public class MainActivity extends BaseTimeActivity {
             return;
         }
         DebugLog.e(event.message);
-        mMessageHandler.addHandler(event.callback);
+        if (event.callback != null) {
+            mMessageHandler.addHandler(event.callback);
+        }
         mSocket.send(event.message);
     }
 

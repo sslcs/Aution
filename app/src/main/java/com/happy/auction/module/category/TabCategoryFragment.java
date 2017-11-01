@@ -20,6 +20,7 @@ import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.CategoryParam;
 import com.happy.auction.entity.param.GoodsParam;
+import com.happy.auction.entity.param.SubscribeParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.module.detail.AuctionDetailActivity;
@@ -44,11 +45,11 @@ import io.reactivex.functions.Consumer;
  */
 public class TabCategoryFragment extends BaseFragment {
     private FragmentTabCategoryBinding mBinding;
-    private CategoryAdapter adapterCategory;
-    private CategoryGoodsAdapter adapterGoods;
-    private int currentIndex;
-    private ItemCategory currentCategory;
-    private Disposable disposableRefresh;
+    private CategoryAdapter mAdapterCategory;
+    private CategoryGoodsAdapter mAdapterGoods;
+    private int mStart;
+    private ItemCategory mCurrentCategory;
+    private Disposable mDisposableRefresh;
 
     public TabCategoryFragment() {
     }
@@ -65,37 +66,37 @@ public class TabCategoryFragment extends BaseFragment {
     }
 
     private void initLayout() {
-        adapterCategory = new CategoryAdapter();
-        adapterCategory.setOnItemClickListener(new OnItemClickListener<ItemCategory>() {
+        mAdapterCategory = new CategoryAdapter();
+        mAdapterCategory.setOnItemClickListener(new OnItemClickListener<ItemCategory>() {
             @Override
             public void onItemClick(View view, ItemCategory item, int position) {
-                if (position == adapterCategory.getSelectedPosition()) {
+                if (position == mAdapterCategory.getSelectedPosition()) {
                     return;
                 }
-                adapterCategory.setSelectedPosition(position);
-                currentCategory = item;
+                mAdapterCategory.setSelectedPosition(position);
+                mCurrentCategory = item;
                 refresh();
             }
         });
         mBinding.vCategory.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mBinding.vCategory.setAdapter(adapterCategory);
+        mBinding.vCategory.setAdapter(mAdapterCategory);
         mBinding.vCategory.addItemDecoration(new DecorationColor());
 
-        adapterGoods = new CategoryGoodsAdapter();
-        adapterGoods.setOnItemClickListener(new OnItemClickListener<ItemGoods>() {
+        mAdapterGoods = new CategoryGoodsAdapter();
+        mAdapterGoods.setOnItemClickListener(new OnItemClickListener<ItemGoods>() {
             @Override
             public void onItemClick(View view, ItemGoods item, int position) {
                 startActivity(AuctionDetailActivity.newIntent(item));
             }
         });
-        adapterGoods.setLoadMoreListener(new LoadMoreListener() {
+        mAdapterGoods.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
                 loadData();
             }
         });
         mBinding.vList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mBinding.vList.setAdapter(adapterGoods);
+        mBinding.vList.setAdapter(mAdapterGoods);
         mBinding.vList.addItemDecoration(new DecorationColor());
 
         loadCategory();
@@ -103,7 +104,7 @@ public class TabCategoryFragment extends BaseFragment {
     }
 
     private void refresh() {
-        currentIndex = 0;
+        mStart = 0;
         loadData();
     }
 
@@ -113,14 +114,14 @@ public class TabCategoryFragment extends BaseFragment {
             public void accept(BidEvent event) throws Exception {
                 ItemGoods item = new ItemGoods();
                 item.sid = event.sid;
-                int position = adapterGoods.getPosition(item);
+                int position = mAdapterGoods.getPosition(item);
                 if (position == -1) {
                     return;
                 }
-                item = adapterGoods.getItem(position);
+                item = mAdapterGoods.getItem(position);
                 item.current_price = event.current_price;
                 item.bid_expire_time = event.bid_expire_time;
-                adapterGoods.notifyItemChanged(position);
+                mAdapterGoods.notifyItemChanged(position);
             }
         });
 
@@ -129,16 +130,16 @@ public class TabCategoryFragment extends BaseFragment {
             public void accept(AuctionEndEvent event) throws Exception {
                 ItemGoods item = new ItemGoods();
                 item.sid = event.sid;
-                int position = adapterGoods.getPosition(item);
+                int position = mAdapterGoods.getPosition(item);
                 if (position == -1) {
                     return;
                 }
-                item = adapterGoods.getItem(position);
+                item = mAdapterGoods.getItem(position);
                 item.setStatus(0);
-                adapterGoods.notifyItemChanged(position);
+                mAdapterGoods.notifyItemChanged(position);
 
-                if (disposableRefresh == null || disposableRefresh.isDisposed()) {
-                    disposableRefresh = Observable.timer(10, TimeUnit.SECONDS)
+                if (mDisposableRefresh == null || mDisposableRefresh.isDisposed()) {
+                    mDisposableRefresh = Observable.timer(10, TimeUnit.SECONDS)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Consumer<Long>() {
                                 @Override
@@ -162,35 +163,55 @@ public class TabCategoryFragment extends BaseFragment {
                 if (obj.data == null || obj.data.isEmpty()) {
                     return;
                 }
-                adapterCategory.addAll(obj.data);
-                currentCategory = adapterCategory.getItem(0);
+                mAdapterCategory.addAll(obj.data);
+                mCurrentCategory = mAdapterCategory.getItem(0);
                 refresh();
             }
         });
     }
 
     private void loadData() {
-        if (currentIndex == 0) {
-            adapterGoods.clear();
+        if (mStart == 0) {
+            mAdapterGoods.clear();
         }
         GoodsParam param = new GoodsParam();
-        param.tid = currentCategory.tid;
-        param.start = currentIndex;
+        param.tid = mCurrentCategory.tid;
+        param.start = mStart;
         BaseRequest<GoodsParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapterGoods.setLoaded();
+                mAdapterGoods.setLoaded();
                 Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
                 DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data.goods != null && !obj.data.goods.isEmpty()) {
-                    adapterGoods.addAll(obj.data.goods);
+                    mAdapterGoods.addAll(obj.data.goods);
                     size = obj.data.goods.size();
-                    currentIndex += size;
+                    mStart += size;
                 }
-                adapterGoods.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapterGoods.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
             }
         });
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (hasCreatedView && isVisibleToUser) {
+            refresh();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mAdapterGoods == null || !getUserVisibleHint()) {
+            return;
+        }
+        SubscribeParam param = new SubscribeParam();
+        param.addAll(mAdapterGoods.getData());
+        NetClient.query(new BaseRequest<>(param), null);
     }
 }

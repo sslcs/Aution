@@ -17,7 +17,7 @@ import com.happy.auction.base.BaseTabActivity;
  */
 public class OrderActivity extends BaseTabActivity {
     /**
-     * @param selection 选中标签位置
+     * @param selection 0:全部，1：正在拍，2：已拍中，3：未付款
      * @return Intent for this Activity
      */
     public static Intent newIntent(int selection) {
