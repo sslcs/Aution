@@ -27,8 +27,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * Created by LiuCongshan on 17-10-17.<br/>
  * 联系人界面
+ *
+ * @author LiuCongshan
+ * @date 17-10-17
  */
 public class ContactActivity extends BaseBackActivity implements OnViewClickListener<Contact> {
     private final static int REQUEST_ADD = 100;
@@ -68,13 +70,13 @@ public class ContactActivity extends BaseBackActivity implements OnViewClickList
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.setLoaded();
                 Type type = new TypeToken<DataResponse<ArrayList<Contact>>>() {}.getType();
                 DataResponse<ArrayList<Contact>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null && !obj.data.isEmpty()) {
                     adapter.clear();
                     adapter.addAll(obj.data);
                 }
+                adapter.setLoaded();
             }
 
             @Override

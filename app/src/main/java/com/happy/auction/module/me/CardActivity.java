@@ -43,7 +43,6 @@ import java.util.ArrayList;
  * @author LiuCongshan
  * @date 17-10-20
  */
-
 public class CardActivity extends BaseBackActivity {
     private final ObservableInt mSelectedCount = new ObservableInt();
     private ActivityCardBinding mBinding;
@@ -127,6 +126,8 @@ public class CardActivity extends BaseBackActivity {
                 DataResponse<ArrayList<ItemCard>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data != null && !obj.data.isEmpty()) {
+                    mBinding.tvSelect.setVisibility(View.VISIBLE);
+                    mBinding.btnBottom.setVisibility(View.VISIBLE);
                     size = obj.data.size();
                     mData.addAll(obj.data);
                     mAdapter.addAll(obj.data);

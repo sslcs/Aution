@@ -252,7 +252,7 @@ public class TabHomeFragment extends BaseFragment {
                 for (int i = 0; i < length && i < 4; i++) {
                     final ItemMenu menu = obj.data.get(i);
                     tvMenu[i].setText(menu.title);
-                    ImageLoader.displayMenu(menu.icon, ivMenu[i]);
+                    ImageLoader.displayMenu(ivMenu[i], menu.icon);
                     View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

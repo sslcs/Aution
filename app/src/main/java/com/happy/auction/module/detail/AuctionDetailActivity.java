@@ -359,9 +359,9 @@ public class AuctionDetailActivity extends BaseBackActivity {
         if (mTimes.get() == 0) {
             mTimes.set(1);
         }
-        final int count = mTimes.get();
-//        if (AppInstance.getInstance().getBalance() < count) {
-        if (count > 100) {
+        int count = mTimes.get();
+        final int coin = count * mData.bid_fee;
+        if (AppInstance.getInstance().getBalance() < coin) {
             Intent pay = AuctionPayActivity.newIntent(this, mData.getItemGoods(), count);
             startActivityForResult(pay, REQUEST_CODE_PAY);
             return;
@@ -370,12 +370,12 @@ public class AuctionDetailActivity extends BaseBackActivity {
         BidParam param = new BidParam();
         param.sid = mData.sid;
         param.buy = count;
-        param.take_coin = param.buy;
+        param.take_coin = coin ;
         BaseRequest<BidParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                onPaySuccess(count);
+                onPaySuccess(coin);
             }
 
             @Override

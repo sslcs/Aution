@@ -96,10 +96,10 @@ public class BaskActivity extends BaseBackActivity {
     private void showImage() {
         mBinding.ivDelete0.setVisibility(View.VISIBLE);
         mBinding.ivSelected1.setVisibility(View.VISIBLE);
-        ImageLoader.displayImage(mSelectImages.get(0), mBinding.ivSelected0);
+        ImageLoader.displayImage(mBinding.ivSelected0, mSelectImages.get(0));
         if (mSelectImages.size() > 1) {
             mBinding.ivDelete1.setVisibility(View.VISIBLE);
-            ImageLoader.displayImage(mSelectImages.get(1), mBinding.ivSelected1);
+            ImageLoader.displayImage(mBinding.ivSelected1, mSelectImages.get(1));
         }
     }
 
@@ -187,7 +187,7 @@ public class BaskActivity extends BaseBackActivity {
                 mBinding.ivSelected0.setImageResource(R.drawable.ic_bask_add);
                 mBinding.ivSelected1.setVisibility(View.GONE);
             } else {
-                ImageLoader.displayImage(mSelectImages.get(0), mBinding.ivSelected0);
+                ImageLoader.displayImage(mBinding.ivSelected0, mSelectImages.get(0));
                 mBinding.ivDelete1.setVisibility(View.GONE);
                 mBinding.ivSelected1.setImageResource(R.drawable.ic_bask_add);
             }

@@ -6,8 +6,8 @@
     <data>
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
-            name="position"
-            type="int"/>
+            name="red"
+            type="boolean"/>
         <variable
             name="data"
             type="com.happy.auction.entity.item.BidRecord"/>
@@ -37,7 +37,7 @@
             android:paddingLeft="5dp"
             android:singleLine="true"
             android:text="@{data.username}"
-            android:textColor="@color/text_normal"
+            android:textColor="@{red ? @color/main_red : @color/text_normal}"
             tools:text="用户名名名"/>
 
         <TextView
@@ -50,7 +50,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="@{data.ip_address}"
-            android:textColor="@color/text_normal"/>
+            android:textColor="@{red ? @color/main_red : @color/text_normal}"/>
 
         <TextView
             android:id="@+id/tv_status"
@@ -60,7 +60,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/tv_address"
             android:text="@string/bid_out"
-            android:textColor="@{position == 0 ? @color/main_red : @color/text_normal}"/>
+            android:textColor="@{red ? @color/main_red : @color/text_normal}"/>
 
         <TextView
             android:id="@+id/tv_price"
@@ -70,7 +70,7 @@
             android:layout_centerVertical="true"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@{StringUtil.formatSignMoney(data.bid_price)}"
-            android:textColor="@{position == 0 ? @color/main_red : @color/text_normal}"
+            android:textColor="@{red ? @color/main_red : @color/text_normal}"
             tools:text="￥0.10"/>
     </RelativeLayout>
 </layout>

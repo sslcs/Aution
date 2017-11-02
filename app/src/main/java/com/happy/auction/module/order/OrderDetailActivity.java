@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.Window;
 
@@ -22,7 +23,7 @@ import com.happy.auction.entity.response.OrderDetail;
 import com.happy.auction.module.address.AddressSelectActivity;
 import com.happy.auction.module.address.ContactSelectActivity;
 import com.happy.auction.module.detail.AuctionDetailActivity;
-import com.happy.auction.module.me.BaskListActivity;
+import com.happy.auction.module.me.BaskMyActivity;
 import com.happy.auction.module.me.CardActivity;
 import com.happy.auction.module.pay.OrderPayActivity;
 import com.happy.auction.net.NetCallback;
@@ -66,6 +67,13 @@ public class OrderDetailActivity extends BaseBackActivity {
     }
 
     private void initLayout() {
+        mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+            }
+        });
+
         mOrder = (ItemOrder) getIntent().getSerializableExtra(KEY_ITEM);
         mData = new OrderDetail(mOrder);
         setData();
@@ -107,14 +115,19 @@ public class OrderDetailActivity extends BaseBackActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
+                mBinding.refreshView.setRefreshing(false);
                 Type type = new TypeToken<DataResponse<OrderDetail>>() {}.getType();
                 DataResponse<OrderDetail> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null) {
                     mData = obj.data;
-                    // FIXME
-                    mData.status = 4;
                     setData();
                 }
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                super.onError(code, message);
+                mBinding.refreshView.setRefreshing(false);
             }
         });
     }
@@ -144,7 +157,7 @@ public class OrderDetailActivity extends BaseBackActivity {
             startActivityForResult(BaskActivity.newIntent(mOrder.sid), REQUEST_CODE_BASK);
         } else if (mData.status >= OrderDetail.STATUS_BASK) {
             // 已晒单
-            startActivity(BaskListActivity.newIntent());
+            startActivity(BaskMyActivity.newIntent());
         } else if (mData.status == OrderDetail.STATUS_WIN) {
             // 已拍中
             Intent intent = OrderPayActivity.newIntent(mOrder);
@@ -182,6 +195,8 @@ public class OrderDetailActivity extends BaseBackActivity {
             mData.status = 5;
             mOrder.status = 5;
             setData();
+        } else if (REQUEST_CODE_PAY == requestCode) {
+            loadData();
         }
     }
 

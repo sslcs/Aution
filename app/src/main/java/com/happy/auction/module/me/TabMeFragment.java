@@ -72,7 +72,6 @@ public class TabMeFragment extends BaseFragment {
             @Override
             public void accept(LogoutEvent event) throws Exception {
                 mBinding.setUser(null);
-                mBinding.ivAvatar.setImageResource(R.drawable.ic_avatar);
             }
         });
 
@@ -171,7 +170,7 @@ public class TabMeFragment extends BaseFragment {
         if (!isLogin()) {
             return;
         }
-        startActivity(BaskListActivity.newIntent());
+        startActivity(BaskMyActivity.newIntent());
     }
 
     public void onClickMyService(View view) {

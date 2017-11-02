@@ -58,10 +58,10 @@ public class TabLatestFragment extends BaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener<ItemLatest>() {
             @Override
             public void onItemClick(View view, ItemLatest item, int position) {
-//                startActivity(AuctionDetailActivity.newIntent(item));
-                WinDialog dialog = new WinDialog();
-                dialog.setData(item);
-                dialog.show(getChildFragmentManager(),"win");
+                startActivity(AuctionDetailActivity.newIntent(item));
+//                WinDialog dialog = new WinDialog();
+//                dialog.setData(item);
+//                dialog.show(getChildFragmentManager(),"win");
             }
         });
         mAdapter.setLoadMoreListener(new LoadMoreListener() {

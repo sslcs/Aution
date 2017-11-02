@@ -26,8 +26,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * Created by LiuCongshan on 17-10-16.
  * 收货地址编辑界面
+ *
+ * @author LiuCongshan
+ * @date 17-10-16
  */
 
 public class AddressEditActivity extends BaseBackActivity {

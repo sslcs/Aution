@@ -20,17 +20,23 @@ import com.happy.auction.R;
  */
 public class ImageLoader {
     public static void displayImage(String url, ImageView view, @DrawableRes int resId) {
+        if (TextUtils.isEmpty(url)) {
+            view.setImageResource(resId);
+            return;
+        }
         GlideApp.with(AppInstance.getInstance())
                 .load(url)
                 .error(resId)
                 .into(view);
     }
 
-    public static void displayImage(String url, ImageView view) {
+    @BindingAdapter("image_url")
+    public static void displayImage(ImageView view, String url) {
         displayImage(url, view, R.drawable.ic_default);
     }
 
-    public static void displayMenu(String url, ImageView view) {
+    @BindingAdapter("image_no_default")
+    public static void displayMenu(ImageView view, String url) {
         GlideApp.with(AppInstance.getInstance())
                 .load(url)
                 .into(view);
@@ -39,6 +45,7 @@ public class ImageLoader {
     @BindingAdapter("avatar")
     public static void loadAvatar(ImageView imageView, String url) {
         if (TextUtils.isEmpty(url)) {
+            imageView.setImageResource(R.drawable.ic_avatar);
             return;
         }
         GlideApp.with(imageView.getContext())
@@ -63,18 +70,6 @@ public class ImageLoader {
                         imageView.setImageBitmap(resource);
                     }
                 });
-    }
-
-    @BindingAdapter("image_url")
-    public static void loadImage(ImageView imageView, String url) {
-        if (TextUtils.isEmpty(url)) {
-            imageView.setImageResource(R.drawable.ic_default);
-            return;
-        }
-        GlideApp.with(imageView.getContext())
-                .load(url)
-                .error(R.drawable.ic_default)
-                .into(imageView);
     }
 
     @BindingAdapter(value = {"image_url", "image_width", "image_height"})

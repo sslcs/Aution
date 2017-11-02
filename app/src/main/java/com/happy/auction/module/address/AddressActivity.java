@@ -28,8 +28,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * Created by LiuCongshan on 17-10-16.
  * 收货地址界面
+ *
+ * @author LiuCongshan
+ * @date 17-10-16
  */
 public class AddressActivity extends BaseBackActivity implements OnViewClickListener<Address> {
     private final static int REQUEST_ADD = 100;

@@ -16,7 +16,7 @@
             android:id="@+id/iv_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:image_url="@{data.icon}"
+            app:image_no_default="@{data.icon}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_title"
             app:layout_constraintStart_toStartOf="parent"

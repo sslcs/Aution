@@ -85,7 +85,7 @@ public class MainActivity extends BaseTimeActivity {
         RxBus.getDefault().subscribe(this, BidNowEvent.class, new Consumer<BidNowEvent>() {
             @Override
             public void accept(BidNowEvent bidNowEvent) throws Exception {
-                mBinding.viewPager.setCurrentItem(0, true);
+                mBinding.viewPager.setCurrentItem(2, true);
                 Intent main = new Intent(MainActivity.this, MainActivity.class);
                 main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);

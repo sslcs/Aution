@@ -18,6 +18,7 @@
     <string name="format_announce">%1$s以%2$s拍得%3$s</string>
     <string name="error_qq">请检查QQ客户端是否正常!</string>
     <string name="strategy">攻略</string>
+    <string name="all_bask">晒单</string>
 
     <!-- tab latest -->
     <string name="format_deal_person">成交人： %1$s</string>
@@ -93,13 +94,14 @@
     <string name="order_all">全部</string>
     <string name="order_going">正在拍</string>
     <string name="order_win">已拍中</string>
-    <string name="order_unpaid">未付款</string>
+    <string name="order_unpaid">待付款</string>
     <string name="charge">充值</string>
     <string name="go_check">去查看</string>
     <string name="go_on">继续竞拍</string>
     <string name="format_deal_price">成交价：￥%1$s</string>
     <string name="format_deal_time">成交时间：%1$s</string>
-    <string name="format_bid_times">我已出价：%1$d次（退币%2$d）</string>
+    <string name="format_bid_times">我已出价：%1$d次</string>
+    <string name="format_bid_refund">我已出价：%1$d次（退币%2$d）</string>
     <string name="format_title">(第%1$d期) %2$s</string>
     <string name="hot_going">火热竞拍中……</string>
     <string name="bid_now">马上竞拍</string>
@@ -175,6 +177,9 @@
     <string name="confirm_pay">确认支付 (%1$s)</string>
     <string name="error_wechat">请检查微信客户端是否正常!</string>
     <string name="error_alipay">请检查支付宝客户端是否正常!</string>
+    <string name="tip_finish_pay">是否已完成支付</string>
+    <string name="unpaid">未支付</string>
+    <string name="paid">我已支付</string>
 
     <!-- auction pay -->
     <string name="pay">支付</string>
@@ -217,4 +222,5 @@
     <string name="tip_empty_address">您尚未添加任何收货地址哦～</string>
     <string name="tip_empty_contact">您尚未添加任何联系方式哦～</string>
     <string name="tip_add_address">点击下方按钮及时添加～</string>
+    <string name="confirm_contact">确认后，商品将发到该联系人的账号上</string>
 </resources>

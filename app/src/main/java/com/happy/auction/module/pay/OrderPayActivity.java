@@ -24,10 +24,10 @@ import java.lang.reflect.Type;
 
 
 /**
- * 订单支付界面<br/>
- * Created by LiuCongshan on 17-10-23.
+ * 订单支付界面
  *
  * @author LiuCongshan
+ * @date 17-10-23
  */
 public class OrderPayActivity extends BasePayActivity {
     private static final String KEY_EXTRA = "EXTRA";

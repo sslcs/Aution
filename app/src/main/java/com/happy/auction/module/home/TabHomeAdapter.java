@@ -44,7 +44,7 @@ public class TabHomeAdapter extends BaseCustomAdapter<ItemGoods, ItemGoodsBindin
         String tag = (String) binding.ivPic.getTag(binding.ivPic.getId());
         if (!item.icon.equals(tag)) {
             binding.ivPic.setTag(binding.ivPic.getId(), item.icon);
-            ImageLoader.loadImage(binding.ivPic, item.icon);
+            ImageLoader.displayImage(binding.ivPic, item.icon);
         }
 
         setTime(binding, item, position);

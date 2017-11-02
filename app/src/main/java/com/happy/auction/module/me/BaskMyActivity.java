@@ -19,7 +19,6 @@ import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.BaskMyParam;
 import com.happy.auction.entity.response.DataResponse;
-import com.happy.auction.module.detail.BaskAdapter;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
@@ -28,19 +27,19 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * 晒单记录界面<br/>
- * Created by LiuCongshan on 17-10-23.
+ * 我的晒单记录界面
  *
  * @author LiuCongshan
+ * @date 17-10-23
  */
 
-public class BaskListActivity extends BaseBackActivity {
+public class BaskMyActivity extends BaseBackActivity {
     private ActivityListBinding mBinding;
 
-    private BaskAdapter mAdapter;
+    private BaskMyAdapter mAdapter;
 
     public static Intent newIntent() {
-        return new Intent(AppInstance.getInstance(), BaskListActivity.class);
+        return new Intent(AppInstance.getInstance(), BaskMyActivity.class);
     }
 
     @Override
@@ -61,7 +60,7 @@ public class BaskListActivity extends BaseBackActivity {
         mBinding.tvToolbarTitle.setText(R.string.my_bask);
         mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.vList.addItemDecoration(new DecorationSpace());
-        mAdapter = new BaskAdapter();
+        mAdapter = new BaskMyAdapter();
         mAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {

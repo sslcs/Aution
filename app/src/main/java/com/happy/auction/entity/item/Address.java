@@ -1,13 +1,17 @@
 package com.happy.auction.entity.item;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
 
 /**
- * Created by LiuCongshan on 17-10-09.
  * 收货地址
+ *
+ * @author LiuCongshan
+ * @date 17-10-09
  */
 
-public class Address implements Serializable{
+public class Address implements Serializable {
     /**
      * id
      */
@@ -54,6 +58,6 @@ public class Address implements Serializable{
     public String town;
 
     public String getAddress() {
-        return province + city + district;
+        return province + city + district + (TextUtils.isEmpty(town) ? "" : town) + street;
     }
 }

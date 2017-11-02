@@ -17,8 +17,8 @@ import com.happy.auction.BuildConfig;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityWebBinding;
+import com.happy.auction.module.home.BaskAllActivity;
 import com.happy.auction.module.login.LoginActivity;
-import com.happy.auction.module.me.BaskListActivity;
 import com.happy.auction.module.pay.ChargePayActivity;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.ToastUtil;
@@ -123,7 +123,7 @@ public class WebActivity extends BaseBackActivity {
             startActivity(ChargePayActivity.newIntent());
             finish();
         } else if (PAGE_BASK.equalsIgnoreCase(page)) {
-            startActivity(BaskListActivity.newIntent());
+            startActivity(BaskAllActivity.newIntent());
             finish();
         } else if (PAGE_GOODS.equalsIgnoreCase(page)) {
             finish();

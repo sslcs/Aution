@@ -13,8 +13,10 @@ import com.happy.auction.databinding.FragmentTownSelectorBinding;
 import java.util.ArrayList;
 
 /**
- * Created by LiuCongshan on 17-10-17.
  * 乡镇地址选择器
+ *
+ * @author LiuCongshan
+ * @date 17-10-17
  */
 
 public class TownSelector extends BottomSheetDialogFragment {
@@ -42,6 +44,7 @@ public class TownSelector extends BottomSheetDialogFragment {
     private void initLayout() {
         mBinding.setFragment(this);
         mBinding.townPicker.setData(mData);
+        mCurrentTown = mData.get(0);
         mBinding.townPicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
             @Override
             public void onItemSelected(WheelPicker picker, Object data, int position) {

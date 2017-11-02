@@ -35,10 +35,11 @@ public class BidRecordAdapter extends BaseCustomAdapter<BidRecord, ItemBidRecord
     @Override
     public void bindItem(ItemBidRecordBinding binding, BidRecord item, int position) {
         binding.setData(item);
-        binding.setPosition(position);
         if (position == 0) {
+            binding.setRed(true);
             binding.tvStatus.setText(status == 0 ? R.string.bid_deal : R.string.bid_first);
         } else {
+            binding.setRed(false);
             binding.tvStatus.setText(R.string.bid_out);
         }
     }

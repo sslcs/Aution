@@ -1,11 +1,19 @@
 package com.happy.auction.module.address;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
+import com.happy.auction.R;
+import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.OnItemClickListener;
+import com.happy.auction.base.BaseBackActivity;
+import com.happy.auction.databinding.ActivitySelectAddressBinding;
 import com.happy.auction.entity.item.Address;
 import com.happy.auction.entity.param.AddressParam;
 import com.happy.auction.entity.param.BaseRequest;
@@ -18,12 +26,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * Created by LiuCongshan on 17-10-19.<br/>
  * 选择收货地址界面
+ *
+ * @author LiuCongshan
+ * @date 17-10-19
  */
-public class AddressSelectActivity extends BaseAddressSelectActivity {
+public class AddressSelectActivity extends BaseBackActivity {
     public static final String EXTRA_ADDRESS = "address";
     public static final String EXTRA_ID = "aid";
+    private final static int REQUEST_CODE = 100;
+
+    protected ActivitySelectAddressBinding mBinding;
     private AddressSelectAdapter mAdapter;
 
     public static Intent newIntent(int aid) {
@@ -33,7 +46,15 @@ public class AddressSelectActivity extends BaseAddressSelectActivity {
     }
 
     @Override
-    protected void initChildLayout() {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_select_address);
+        initLayout();
+    }
+
+    private void initLayout() {
+        mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
+        mBinding.vList.addItemDecoration(new DecorationSpace(10));
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
         mAdapter = new AddressSelectAdapter(id);
         mAdapter.setOnItemClickListener(new OnItemClickListener<Address>() {
@@ -43,9 +64,10 @@ public class AddressSelectActivity extends BaseAddressSelectActivity {
             }
         });
         mBinding.vList.setAdapter(mAdapter);
+
+        loadData();
     }
 
-    @Override
     protected void loadData() {
         AddressParam param = new AddressParam();
         BaseRequest<AddressParam> request = new BaseRequest<>(param);
@@ -69,13 +91,22 @@ public class AddressSelectActivity extends BaseAddressSelectActivity {
         });
     }
 
-    @Override
-    protected Intent getManageIntent() {
-        return AddressActivity.newIntent();
+    public void onClickConfirm(View view) {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_ADDRESS, mAdapter.getItem(mAdapter.getSelectPosition()));
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
-    protected void putIntentData(Intent intent) {
-        intent.putExtra(EXTRA_ADDRESS, mAdapter.getItem(mAdapter.getSelectPosition()));
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (RESULT_OK == resultCode) {
+            loadData();
+        }
+    }
+
+    public void onClickManage(View view) {
+        startActivityForResult(AddressActivity.newIntent(), REQUEST_CODE);
     }
 }

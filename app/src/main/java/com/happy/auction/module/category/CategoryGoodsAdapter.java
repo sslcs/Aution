@@ -32,7 +32,7 @@ public class CategoryGoodsAdapter extends BaseCustomAdapter<ItemGoods, ItemCateg
         String tag = (String) binding.ivIcon.getTag(binding.ivIcon.getId());
         if (!item.icon.equals(tag)) {
             binding.ivIcon.setTag(binding.ivIcon.getId(), item.icon);
-            ImageLoader.loadImage(binding.ivIcon, item.icon);
+            ImageLoader.displayImage(binding.ivIcon, item.icon);
         }
 
         setTime(binding.tvTime, item);

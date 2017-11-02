@@ -17,6 +17,11 @@ import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.ToastUtil;
 
+/**
+ * 修改用户名界面
+ *
+ * @author LiuCongshan
+ */
 public class UsernameActivity extends BaseBackActivity {
     private ActivityUsernameBinding mBinding;
 
