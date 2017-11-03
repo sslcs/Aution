@@ -19,7 +19,6 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.LatestParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.module.detail.AuctionDetailActivity;
-import com.happy.auction.module.detail.WinDialog;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;

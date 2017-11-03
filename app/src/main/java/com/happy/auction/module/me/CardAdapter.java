@@ -16,7 +16,6 @@ import com.happy.auction.entity.event.BidNowEvent;
 import com.happy.auction.entity.item.ItemCard;
 import com.happy.auction.entity.item.ItemCardPassword;
 import com.happy.auction.glide.ImageLoader;
-import com.happy.auction.module.MainActivity;
 import com.happy.auction.utils.RxBus;
 
 /**
@@ -61,9 +60,6 @@ public class CardAdapter extends BaseCustomAdapter<ItemCard, ItemCardBinding> {
 
         binding.vList.setLayoutManager(new LinearLayoutManager(AppInstance.getInstance()));
         final CardPasswordAdapter mAdapter = new CardPasswordAdapter();
-        for (ItemCardPassword p : item.card) {
-            p.isSelected = item.isSelected;
-        }
         mAdapter.addAll(item.card);
         mAdapter.setOnSelectionChangedListener(new CardPasswordAdapter.OnSelectionChangeListener() {
             @Override
@@ -80,6 +76,7 @@ public class CardAdapter extends BaseCustomAdapter<ItemCard, ItemCardBinding> {
                 if (mListener == null) {
                     return;
                 }
+                mListener.onSelectionChanged(item, checkParent);
                 mListener.onChildSelectionChanged(child, selected);
             }
         });

@@ -55,7 +55,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /**
- * 首页<br/>
+ * 首页
  *
  * @author LiuCongshan
  */
@@ -290,8 +290,7 @@ public class TabHomeFragment extends BaseFragment {
                 });
                 mBinding.rvBanner.setAdapter(adapter);
                 PagingScrollHelper helper = new PagingScrollHelper();
-                helper.setUpRecycleView(mBinding.rvBanner);
-
+                helper.setRecycleView(mBinding.rvBanner);
             }
         });
     }

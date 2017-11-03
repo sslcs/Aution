@@ -45,16 +45,15 @@ public class CardPasswordAdapter extends BaseCustomAdapter<ItemCardPassword, Ite
             }
         });
 
-        if (mListener == null) {
-            return;
-        }
-
         setOnItemClickListener(new OnItemClickListener<ItemCardPassword>() {
             @Override
             public void onItemClick(View view, ItemCardPassword item, int position) {
                 item.isSelected = !item.isSelected;
                 notifyItemChanged(position);
-                mListener.onSelectionChanged(item, item.isSelected);
+
+                if (mListener != null) {
+                    mListener.onSelectionChanged(item, item.isSelected);
+                }
             }
         });
     }

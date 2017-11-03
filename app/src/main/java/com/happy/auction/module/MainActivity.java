@@ -15,6 +15,7 @@ import com.happy.auction.base.BaseTimeActivity;
 import com.happy.auction.databinding.ActivityMainBinding;
 import com.happy.auction.entity.event.BidNowEvent;
 import com.happy.auction.entity.event.RequestEvent;
+import com.happy.auction.entity.event.WinEvent;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.MessageCountParam;
 import com.happy.auction.entity.param.SyncParam;
@@ -24,13 +25,16 @@ import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.entity.response.MessageCount;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.category.TabCategoryFragment;
+import com.happy.auction.module.detail.WinDialog;
 import com.happy.auction.module.home.TabHomeFragment;
 import com.happy.auction.module.latest.TabLatestFragment;
+import com.happy.auction.module.login.SetPasswordActivity;
 import com.happy.auction.module.me.TabMeFragment;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
+import com.happy.auction.utils.PreferenceUtil;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
 
@@ -90,6 +94,15 @@ public class MainActivity extends BaseTimeActivity {
                 main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(main);
+            }
+        });
+
+        RxBus.getDefault().subscribe(this, WinEvent.class, new Consumer<WinEvent>() {
+            @Override
+            public void accept(WinEvent event) throws Exception {
+                WinDialog dialog = new WinDialog();
+                dialog.setData(event);
+                dialog.show(getSupportFragmentManager(), "win");
             }
         });
     }
@@ -247,8 +260,16 @@ public class MainActivity extends BaseTimeActivity {
                 DataResponse<UserInfo> obj = GsonSingleton.get().fromJson(response, type);
                 AppInstance.getInstance().setUser(obj.data);
                 RxBus.getDefault().post(obj.data);
+
+                showSetPassword(obj.data);
             }
         });
+    }
+
+    private void showSetPassword(UserInfo info) {
+        if (info.noPassword() && PreferenceUtil.showSetPassword()) {
+            startActivity(SetPasswordActivity.newIntent());
+        }
     }
 
     private void getMessageCount() {

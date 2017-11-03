@@ -1,11 +1,14 @@
 package com.happy.auction.module.pay;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
@@ -25,9 +28,9 @@ import java.lang.reflect.Type;
 
 /**
  * 充值支付界面<br/>
- * Created by LiuCongshan on 17-10-23.
  *
  * @author LiuCongshan
+ * @date 17-10-23
  */
 public class ChargePayActivity extends BasePayActivity {
     private final ObservableInt mAmount = new ObservableInt(10);
@@ -49,6 +52,14 @@ public class ChargePayActivity extends BasePayActivity {
     private void initLayout() {
         mBinding.setAmount(mAmount);
         mBinding.setActivity(this);
+
+        mBinding.etAmount.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.performClick();
+                return false;
+            }
+        });
 
         vCurrentAmount = mBinding.tvAmount0;
         vCurrentAmount.requestFocus();
@@ -90,9 +101,28 @@ public class ChargePayActivity extends BasePayActivity {
 
     public void onClickAmount(View view) {
         mBinding.etAmount.clearFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(mBinding.etAmount.getWindowToken(), 0);
+        }
+
         int amount = Integer.valueOf((String) view.getTag());
-        if (vCurrentAmount == view && mAmount.get() == amount) return;
+        if (vCurrentAmount == view && mAmount.get() == amount) {
+            return;
+        }
         mAmount.set(amount);
+        vCurrentAmount.setSelected(false);
+        vCurrentAmount = view;
+        vCurrentAmount.setSelected(true);
+    }
+
+    public void onclickEdit(View view) {
+        try {
+            int number = Integer.parseInt(mBinding.etAmount.getText().toString());
+            mAmount.set(number);
+        } catch (NumberFormatException e) {
+            mAmount.set(0);
+        }
         vCurrentAmount.setSelected(false);
         vCurrentAmount = view;
         vCurrentAmount.setSelected(true);

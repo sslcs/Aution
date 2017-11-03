@@ -1,7 +1,5 @@
 package com.happy.auction.base;
 
-import android.support.v7.app.AppCompatActivity;
-
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -9,7 +7,7 @@ import com.umeng.analytics.MobclickAgent;
  *
  * @author LiuCongshan
  */
-public abstract class BasePageActivity extends AppCompatActivity {
+public abstract class BasePageActivity extends BaseTimeActivity {
     @Override
     public void onResume() {
         super.onResume();

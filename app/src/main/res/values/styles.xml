@@ -13,6 +13,10 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="Fullscreen" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="TextTab">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

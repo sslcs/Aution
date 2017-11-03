@@ -68,7 +68,7 @@
             style="@style/LoginEditText"
             android:layout_marginTop="1dp"
             android:afterTextChanged="@{activity::afterTextChanged}"
-            android:hint="@string/hint_password"
+            android:hint="@string/hint_password_new"
             android:inputType="textPassword"
             android:maxLength="20"
             app:layout_constraintEnd_toEndOf="parent"

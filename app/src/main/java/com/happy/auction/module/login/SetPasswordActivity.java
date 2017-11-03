@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -13,7 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseBackActivity;
-import com.happy.auction.databinding.ActivityChangePasswordBinding;
+import com.happy.auction.databinding.ActivitySetPasswordBinding;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.ChangePasswordParam;
 import com.happy.auction.entity.response.DataResponse;
@@ -28,27 +27,26 @@ import com.happy.auction.utils.Validation;
 import java.lang.reflect.Type;
 
 /**
- * 修改密码界面
+ * 设置密码界面
  *
  * @author LiuCongshan
  */
-public class ChangePasswordActivity extends BaseBackActivity {
-    private ActivityChangePasswordBinding mBinding;
+public class SetPasswordActivity extends BaseBackActivity {
+    private ActivitySetPasswordBinding mBinding;
 
     public static Intent newIntent() {
-        return new Intent(AppInstance.getInstance(), ChangePasswordActivity.class);
+        return new Intent(AppInstance.getInstance(), SetPasswordActivity.class);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_change_password);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_set_password);
         mBinding.setActivity(this);
     }
 
     public void onClickConfirm(View view) {
         ChangePasswordParam param = new ChangePasswordParam();
-        param.old_pwd = mBinding.etPasswordOld.getText().toString();
         param.pwd = mBinding.etPassword.getText().toString();
         BaseRequest<ChangePasswordParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
@@ -74,25 +72,15 @@ public class ChangePasswordActivity extends BaseBackActivity {
         mBinding.btnOK.setEnabled(checkValid());
     }
 
-    private boolean validPassword() {
-        return Validation.password(mBinding.etPassword.getText());
-    }
-
-    private boolean validPasswordOld() {
-        return Validation.password(mBinding.etPasswordOld.getText());
+    private boolean validPassword(String password) {
+        return Validation.password(password);
     }
 
     private boolean checkValid() {
-        if (validPassword()) {
-            String old = mBinding.etPasswordOld.getText().toString();
-            String password = mBinding.etPassword.getText().toString();
+        String password = mBinding.etPassword.getText().toString();
+        if (validPassword(password)) {
             String confirm = mBinding.etPasswordConfirm.getText().toString();
-            if (TextUtils.isEmpty(old)) {
-                return password.equals(confirm);
-            }
-            if (validPasswordOld()) {
-                return password.equals(confirm) && !password.equals(old);
-            }
+            return password.equals(confirm);
         }
         return false;
     }
@@ -117,13 +105,7 @@ public class ChangePasswordActivity extends BaseBackActivity {
         }
     }
 
-    public void onClickEyeOld(View view) {
-        boolean selected = view.isSelected();
-        view.setSelected(!selected);
-        if (selected) {
-            mBinding.etPasswordOld.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        } else {
-            mBinding.etPasswordOld.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-        }
+    public void onClickSkip(View view) {
+        finish();
     }
 }

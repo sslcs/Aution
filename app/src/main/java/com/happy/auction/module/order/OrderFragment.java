@@ -62,7 +62,6 @@ public class OrderFragment extends BaseFragment {
         mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mAdapter.clear();
                 loadData(0);
             }
         });
@@ -111,6 +110,9 @@ public class OrderFragment extends BaseFragment {
             @Override
             public void onSuccess(String response, String message) {
                 mBinding.refreshView.setRefreshing(false);
+                if (start == 0) {
+                    mAdapter.clear();
+                }
                 Type type = new TypeToken<DataResponse<ArrayList<ItemOrder>>>() {}.getType();
                 DataResponse<ArrayList<ItemOrder>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;

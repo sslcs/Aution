@@ -19,6 +19,8 @@ import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.BaskMyParam;
 import com.happy.auction.entity.response.DataResponse;
+import com.happy.auction.module.detail.BaskAdapter;
+import com.happy.auction.module.home.ImageActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
@@ -65,6 +67,12 @@ public class BaskMyActivity extends BaseBackActivity {
             @Override
             public void loadMore() {
                 loadData(mAdapter.getLast().bid);
+            }
+        });
+        mAdapter.setOnClickImageListener(new BaskAdapter.OnClickImageListener() {
+            @Override
+            public void onClick(ArrayList<String> img, int selection) {
+                startActivity(ImageActivity.newIntent(img, selection));
             }
         });
         mBinding.vList.setAdapter(mAdapter);

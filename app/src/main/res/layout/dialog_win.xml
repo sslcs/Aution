@@ -6,7 +6,7 @@
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
             name="data"
-            type="com.happy.auction.entity.item.BaseGoods"/>
+            type="com.happy.auction.entity.event.WinEvent"/>
         <variable
             name="fragment"
             type="com.happy.auction.module.detail.WinDialog"/>
@@ -50,7 +50,7 @@
             android:layout_marginTop="30dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{@string/tip_win(StringUtil.formatSignMoney(data.current_price), data.title)}"
+            android:text="@{@string/tip_win(StringUtil.formatSignMoney(data.price), data.title)}"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/v_background"

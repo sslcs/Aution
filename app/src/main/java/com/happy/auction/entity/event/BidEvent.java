@@ -3,8 +3,10 @@ package com.happy.auction.entity.event;
 import com.happy.auction.entity.response.BaseEvent;
 
 /**
- * Created by LiuCongshan on 17-8-18.
  * 出价事件
+ *
+ * @author LiuCongshan
+ * @date 17-8-18
  */
 
 public class BidEvent extends BaseEvent {

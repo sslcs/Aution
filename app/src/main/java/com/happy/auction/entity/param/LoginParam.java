@@ -1,7 +1,5 @@
 package com.happy.auction.entity.param;
 
-import com.happy.auction.entity.response.BaseEvent;
-
 /**
  * Created by LiuCongshan on 17-9-11.
  * 登录参数

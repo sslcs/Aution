@@ -54,11 +54,15 @@
         <activity android:name=".module.message.MessageActivity"/>
         <activity android:name=".module.message.MessageDetailActivity"/>
         <activity android:name=".module.order.BaskActivity"/>
+        <activity android:name=".module.home.BaskAllActivity"/>
+        <activity android:name=".module.login.SetPasswordActivity"/>
+        <activity
+            android:name=".module.home.ImageActivity"
+            android:theme="@style/Fullscreen"/>
 
         <!--Image Selector Entry-->
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".module.home.BaskAllActivity"/>
     </application>
 </manifest>

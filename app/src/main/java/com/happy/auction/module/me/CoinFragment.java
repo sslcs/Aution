@@ -76,6 +76,7 @@ public class CoinFragment extends BaseFragment {
         mAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {
+                mIndex = mAdapter.getLast().id;
                 loadData();
             }
         });
@@ -135,10 +136,9 @@ public class CoinFragment extends BaseFragment {
                 setBalance(obj.data);
 
                 int size = 0;
-                if (obj.data != null && obj.data.records != null) {
+                if (obj.data != null && obj.data.records != null && !obj.data.records.isEmpty()) {
                     mAdapter.addAll(obj.data.records);
                     size = obj.data.records.size();
-                    mIndex = mAdapter.getLast().id;
                 }
                 mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
                 mAdapter.setLoaded();

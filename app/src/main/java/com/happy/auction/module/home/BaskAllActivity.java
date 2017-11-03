@@ -36,7 +36,6 @@ import java.util.ArrayList;
 
 public class BaskAllActivity extends BaseBackActivity {
     private ActivityListBinding mBinding;
-
     private BaskAdapter mAdapter;
 
     public static Intent newIntent() {
@@ -66,6 +65,12 @@ public class BaskAllActivity extends BaseBackActivity {
             @Override
             public void loadMore() {
                 loadData(mAdapter.getLast().bid);
+            }
+        });
+        mAdapter.setOnClickImageListener(new BaskAdapter.OnClickImageListener() {
+            @Override
+            public void onClick(ArrayList<String> img, int selection) {
+                startActivity(ImageActivity.newIntent(img, selection));
             }
         });
         mBinding.vList.setAdapter(mAdapter);

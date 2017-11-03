@@ -109,6 +109,7 @@
             android:layout_height="34dp"
             android:afterTextChanged="@{activity::afterTextChanged}"
             android:background="@drawable/bg_input"
+            android:onClick="onclickEdit"
             android:gravity="center"
             android:hint="@string/hint_input_amount"
             android:inputType="numberDecimal"

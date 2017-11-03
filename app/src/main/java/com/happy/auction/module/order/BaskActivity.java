@@ -205,11 +205,7 @@ public class BaskActivity extends BaseBackActivity {
 
     private void checkValid() {
         String content = mBinding.etContent.getText().toString();
-        if (content.length() < 10 || mSelectImages.isEmpty()) {
-            return;
-        }
-
-        mBinding.tvTitleRight.setEnabled(true);
+        mBinding.tvTitleRight.setEnabled(content.length() > 0 && !mSelectImages.isEmpty());
     }
 
     private void dismissDialog() {

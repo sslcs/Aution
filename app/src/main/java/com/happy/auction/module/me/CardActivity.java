@@ -89,6 +89,11 @@ public class CardActivity extends BaseBackActivity {
         mAdapter.setOnSelectionChangedListener(new CardAdapter.OnSelectionChangeListener() {
             @Override
             public void onSelectionChanged(ItemCard item, boolean selected) {
+                if (!selected) {
+                    mBinding.tvSelect.setSelected(false);
+                    return;
+                }
+
                 boolean checkBottom = true;
                 for (ItemCard itemCard : mData) {
                     if (!itemCard.isSelected) {
@@ -168,12 +173,18 @@ public class CardActivity extends BaseBackActivity {
         if (mBinding.tvSelect.isSelected()) {
             mBinding.tvSelect.setSelected(false);
             for (ItemCard item : mData) {
+                for (ItemCardPassword password : item.card) {
+                    password.isSelected = false;
+                }
                 item.isSelected = false;
             }
         } else {
             mBinding.tvSelect.setSelected(true);
             for (ItemCard item : mData) {
                 item.isSelected = true;
+                for (ItemCardPassword password : item.card) {
+                    password.isSelected = true;
+                }
                 mSelectedList.addAll(item.card);
             }
         }

@@ -5,6 +5,7 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.entity.event.AuctionEndEvent;
 import com.happy.auction.entity.event.BidEvent;
 import com.happy.auction.entity.event.LogoutEvent;
+import com.happy.auction.entity.event.WinEvent;
 import com.happy.auction.entity.response.BaseEvent;
 import com.happy.auction.entity.response.BaseResponse;
 import com.happy.auction.entity.response.DataResponse;
@@ -56,7 +57,12 @@ public class MessageHandler {
         } else if (BaseEvent.EVENT_OFFLINE.equals(base.event)) {
             ToastUtil.show(base.msg);
             AppInstance.getInstance().logout();
-            RxBus.getDefault().post(new LogoutEvent());
+            onEvent(new LogoutEvent());
+        } else if (BaseEvent.EVENT_WIN.equals(base.event)) {
+            DebugLog.e("onWin : " + message);
+            type = new TypeToken<DataResponse<WinEvent>>() {}.getType();
+            DataResponse<WinEvent> response = GsonSingleton.get().fromJson(message, type);
+            onEvent(response.data);
         } else {
             DebugLog.e("onMessage : " + message);
             handleResponse(base, message);

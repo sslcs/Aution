@@ -68,7 +68,7 @@ public class AddressSelectActivity extends BaseBackActivity {
         loadData();
     }
 
-    protected void loadData() {
+    private void loadData() {
         AddressParam param = new AddressParam();
         BaseRequest<AddressParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
@@ -91,19 +91,19 @@ public class AddressSelectActivity extends BaseBackActivity {
         });
     }
 
-    public void onClickConfirm(View view) {
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_ADDRESS, mAdapter.getItem(mAdapter.getSelectPosition()));
-        setResult(RESULT_OK, intent);
-        finish();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (RESULT_OK == resultCode) {
             loadData();
         }
+    }
+
+    public void onClickConfirm(View view) {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_ADDRESS, mAdapter.getItem(mAdapter.getSelectPosition()));
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     public void onClickManage(View view) {

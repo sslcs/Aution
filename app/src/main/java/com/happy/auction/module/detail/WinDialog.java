@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.happy.auction.base.BaseDialog;
 import com.happy.auction.databinding.DialogWinBinding;
+import com.happy.auction.entity.event.WinEvent;
 import com.happy.auction.entity.item.BaseGoods;
 import com.happy.auction.module.order.OrderActivity;
 
@@ -21,9 +22,9 @@ import com.happy.auction.module.order.OrderActivity;
 public class WinDialog extends BaseDialog {
     private DialogWinBinding mBinding;
 
-    private BaseGoods mData;
+    private WinEvent mData;
 
-    public void setData(BaseGoods data) {
+    public void setData(WinEvent data) {
         mData = data;
     }
 

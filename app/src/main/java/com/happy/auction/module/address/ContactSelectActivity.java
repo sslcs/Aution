@@ -28,7 +28,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * 选择联系人界面<br/>
+ * 选择联系人界面
  *
  * @author LiuCongshan
  * @date 17-10-17
@@ -66,7 +66,7 @@ public class ContactSelectActivity extends BaseBackActivity {
         loadData();
     }
 
-    protected void loadData() {
+    private void loadData() {
         ContactParam param = new ContactParam();
         BaseRequest<ContactParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
@@ -89,6 +89,18 @@ public class ContactSelectActivity extends BaseBackActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (RESULT_OK == resultCode) {
+            loadData();
+        }
+    }
+
+    public void onClickManage(View view) {
+        startActivityForResult(ContactActivity.newIntent(), REQUEST_CODE);
+    }
+
     public void onClickConfirm(View view) {
         new CustomDialog.Builder().content(getString(R.string.confirm_contact))
                 .textLeft(getString(R.string.cancel))
@@ -108,17 +120,5 @@ public class ContactSelectActivity extends BaseBackActivity {
         intent.putExtra(EXTRA_CONTACT_ID, mAdapter.getItem(mAdapter.getSelectPosition()).vaid);
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (RESULT_OK == resultCode) {
-            loadData();
-        }
-    }
-
-    public void onClickManage(View view) {
-        startActivityForResult(ContactActivity.newIntent(), REQUEST_CODE);
     }
 }

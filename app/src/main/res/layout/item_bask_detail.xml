@@ -79,6 +79,7 @@
             android:layout_width="120dp"
             android:layout_height="112dp"
             android:scaleType="centerCrop"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_img"
             app:layout_constraintTop_toTopOf="@+id/iv_img"/>
@@ -100,14 +101,18 @@
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:text="@{data.goods_title}"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="@color/main_red"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_label"
             app:layout_constraintStart_toEndOf="@+id/tv_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             app:layout_constraintTop_toTopOf="@+id/tv_label"
             tools:text="5000元京东卡"/>
     </android.support.constraint.ConstraintLayout>

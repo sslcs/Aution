@@ -11,7 +11,6 @@ import android.text.TextUtils;
 
 import com.happy.auction.BuildConfig;
 import com.happy.auction.base.BasePageActivity;
-import com.happy.auction.utils.DebugLog;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.BufferedReader;
@@ -103,7 +102,6 @@ public class SplashActivity extends BasePageActivity {
         super.onCreate(savedInstanceState);
 
         initUM();
-//        DebugLog.e("getDeviceInfo : " + getDeviceInfo(this));
 
         startActivity(new Intent(this, MainActivity.class));
         finish();

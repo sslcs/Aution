@@ -19,6 +19,7 @@ import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.ui.TimerButton;
 import com.happy.auction.utils.GsonSingleton;
+import com.happy.auction.utils.PreferenceUtil;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
 import com.happy.auction.utils.Validation;
@@ -33,10 +34,6 @@ import java.lang.reflect.Type;
 public class CaptchaLoginFragment extends BaseFragment {
     private FragmentCaptchaLoginBinding mBinding;
 
-    public CaptchaLoginFragment() {
-        // Required empty public constructor
-    }
-
     public static CaptchaLoginFragment newInstance() {
         return new CaptchaLoginFragment();
     }
@@ -49,6 +46,11 @@ public class CaptchaLoginFragment extends BaseFragment {
     }
 
     private void initLayout() {
+        if (PreferenceUtil.showTipCaptcha()) {
+            mBinding.tvTip.setVisibility(View.VISIBLE);
+            mBinding.tvClose.setVisibility(View.VISIBLE);
+        }
+
         mBinding.btnCaptcha.setOnFinishListener(new TimerButton.OnFinishListener() {
             @Override
             public void onFinish() {
@@ -118,6 +120,12 @@ public class CaptchaLoginFragment extends BaseFragment {
                 RxBus.getDefault().post(obj.data);
             }
         });
+    }
+
+    public void onClickClose(View view) {
+        PreferenceUtil.closeTipCaptcha();
+        mBinding.tvClose.setVisibility(View.GONE);
+        mBinding.tvTip.setVisibility(View.GONE);
     }
 
     @Override

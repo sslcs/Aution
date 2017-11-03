@@ -271,6 +271,12 @@ public class TabMeFragment extends BaseFragment {
                 AppInstance.getInstance().setUser(obj.data);
                 mBinding.setUser(obj.data);
             }
+
+            @Override
+            public void onError(int code, String message) {
+                super.onError(code, message);
+                mBinding.refreshView.setRefreshing(false);
+            }
         });
     }
 }
