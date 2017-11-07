@@ -53,7 +53,6 @@ public class BaskAllActivity extends BaseBackActivity {
         mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mAdapter.clear();
                 loadData(0);
             }
         });
@@ -78,7 +77,7 @@ public class BaskAllActivity extends BaseBackActivity {
         loadData(0);
     }
 
-    private void loadData(int start) {
+    private void loadData(final int start) {
         BaskAllParam param = new BaskAllParam();
         param.start = start;
         BaseRequest<BaskAllParam> request = new BaseRequest<>(param);
@@ -86,6 +85,9 @@ public class BaskAllActivity extends BaseBackActivity {
             @Override
             public void onSuccess(String response, String message) {
                 mBinding.refreshView.setRefreshing(false);
+                if (start == 0) {
+                    mAdapter.clear();
+                }
                 Type type = new TypeToken<DataResponse<ArrayList<ItemBask>>>() {}.getType();
                 DataResponse<ArrayList<ItemBask>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;

@@ -120,7 +120,7 @@ public class TabCategoryFragment extends BaseFragment {
                 }
                 item = mAdapterGoods.getItem(position);
                 item.current_price = event.current_price;
-                item.bid_expire_time = event.bid_expire_time;
+                item.countdown = event.countdown;
                 mAdapterGoods.notifyItemChanged(position);
             }
         });
@@ -171,9 +171,6 @@ public class TabCategoryFragment extends BaseFragment {
     }
 
     private void loadData() {
-        if (mStart == 0) {
-            mAdapterGoods.clear();
-        }
         GoodsParam param = new GoodsParam();
         param.tid = mCurrentCategory.tid;
         param.start = mStart;
@@ -181,7 +178,9 @@ public class TabCategoryFragment extends BaseFragment {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mAdapterGoods.setLoaded();
+                if (mStart == 0) {
+                    mAdapterGoods.clear();
+                }
                 Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
                 DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
@@ -191,6 +190,7 @@ public class TabCategoryFragment extends BaseFragment {
                     mStart += size;
                 }
                 mAdapterGoods.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
+                mAdapterGoods.setLoaded();
             }
         });
     }

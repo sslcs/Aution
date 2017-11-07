@@ -6,7 +6,6 @@ import android.animation.ValueAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.view.View;
 
 /**
  * 实现RecycleView分页滚动的工具类
@@ -22,6 +21,7 @@ public class PagingScrollHelper extends RecyclerView.OnFlingListener {
     private final static int ORIENTATION_HORIZONTAL = 2;
 
     private RecyclerView mRecyclerView = null;
+    private CircleIndicator mIndicator;
     private int mOrientation;
     private ValueAnimator mAnimator = null;
     private OnPageChangedListener mListener;
@@ -52,6 +52,13 @@ public class PagingScrollHelper extends RecyclerView.OnFlingListener {
         });
         //获取滚动的方向
         updateLayoutManger();
+    }
+
+    public void setIndicator(CircleIndicator indicator) {
+        if (indicator == null) {
+            throw new IllegalArgumentException("indicator must be not null");
+        }
+        mIndicator = indicator;
     }
 
     private void updateLayoutManger() {
@@ -120,8 +127,11 @@ public class PagingScrollHelper extends RecyclerView.OnFlingListener {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     //回调监听
-                    if (null != mListener) {
-                        int position = mLinearLayoutManager.findFirstVisibleItemPosition();
+                    int position = mLinearLayoutManager.findFirstVisibleItemPosition();
+                    if (mIndicator != null) {
+                        mIndicator.onPageChanged(position);
+                    }
+                    if (mListener != null) {
                         mListener.onPageChanged(position);
                     }
                     offsetX = 0;

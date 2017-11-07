@@ -17,9 +17,13 @@ import com.happy.auction.BuildConfig;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityWebBinding;
+import com.happy.auction.entity.param.ActivityCompleteParam;
+import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.module.home.BaskAllActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.pay.ChargePayActivity;
+import com.happy.auction.net.NetCallback;
+import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.ToastUtil;
 
@@ -36,7 +40,7 @@ import java.util.HashMap;
 public class WebActivity extends BaseBackActivity {
     private static final int REQUEST_CODE_LOGIN = 100;
 
-    private static final String PAGE_RECHARGE = "recharge";
+    private static final String PAGE_CHARGE = "recharge";
     private static final String PAGE_BASK = "bask";
     private static final String PAGE_LOGIN = "login";
     private static final String PAGE_GOODS = "allGoods";
@@ -46,6 +50,10 @@ public class WebActivity extends BaseBackActivity {
     private static final String KEY_URL = "url";
     private static final String SCHEME_LOCAL = "hpjp://native/openLocal?";
     private static final String SCHEME_QQ = "mqqwpa://";
+
+    private static final String NAME_STRATEGY = "auction_valuable";
+    private static final String NAME_NEWBIE = "new_pay";
+
 
     private ActivityWebBinding mBinding;
     private String mTitle, mUrl;
@@ -96,13 +104,18 @@ public class WebActivity extends BaseBackActivity {
         }
 
         mTitle = getIntent().getStringExtra(KEY_TITLE);
-        if (getString(R.string.strategy).equals(mTitle)) {
+        if (mUrl.contains(NAME_STRATEGY)) {
             if (AppInstance.getInstance().isLogin()) {
                 mUrl += "?state=1&headimg=" + AppInstance.getInstance().getUser().avatar;
                 mUrl += "&name=" + Uri.parse(AppInstance.getInstance().getUser().username);
                 mUrl += "&local=gdgz";
             } else {
                 mUrl += "?state=0";
+            }
+        } else if (mUrl.contains(NAME_NEWBIE)) {
+            if (AppInstance.getInstance().isLogin()) {
+                mUrl += "?uid=" + AppInstance.getInstance().uid;
+                mUrl += "&token=" + AppInstance.getInstance().token;
             }
         }
 
@@ -119,22 +132,32 @@ public class WebActivity extends BaseBackActivity {
         String param = url.substring(24);
         HashMap<String, String> map = parseStringMap(param);
         String page = map.get("page");
-        if (PAGE_RECHARGE.equals(page)) {
+        if (PAGE_CHARGE.equals(page)) {
             startActivity(ChargePayActivity.newIntent());
             finish();
         } else if (PAGE_BASK.equalsIgnoreCase(page)) {
             startActivity(BaskAllActivity.newIntent());
             finish();
         } else if (PAGE_GOODS.equalsIgnoreCase(page)) {
-            finish();
+            onActivityComplete();
         } else if (PAGE_LOGIN.equalsIgnoreCase(page)) {
             startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN);
         } else if (PAGE_SHARE.equalsIgnoreCase(page)) {
-            startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN);
         } else {
             return false;
         }
         return true;
+    }
+
+    private void onActivityComplete() {
+        ActivityCompleteParam param = new ActivityCompleteParam();
+        BaseRequest<ActivityCompleteParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                finish();
+            }
+        });
     }
 
     private void initWebView() {
@@ -224,8 +247,12 @@ public class WebActivity extends BaseBackActivity {
         }
 
         if (REQUEST_CODE_LOGIN == requestCode) {
-            if (getString(R.string.strategy).equals(mTitle) && mUrl.contains("state=0")) {
+            if (mUrl.contains(NAME_STRATEGY) && mUrl.contains("state=0")) {
                 mUrl = mUrl.replace("state=0", "state=2");
+                mBinding.webView.loadUrl(mUrl);
+            } else if (mUrl.contains(NAME_NEWBIE)) {
+                mUrl += "?uid=" + AppInstance.getInstance().uid;
+                mUrl += "&token=" + AppInstance.getInstance().token;
                 mBinding.webView.loadUrl(mUrl);
             }
         }

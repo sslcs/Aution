@@ -66,11 +66,11 @@ public class MainActivity extends BaseTimeActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        init();
+        listenEvents();
         initWebSocket();
     }
 
-    private void init() {
+    private void listenEvents() {
         RxBus.getDefault().subscribe(this, RequestEvent.class, new Consumer<RequestEvent>() {
             @Override
             public void accept(RequestEvent requestEvent) throws Exception {
@@ -267,7 +267,7 @@ public class MainActivity extends BaseTimeActivity {
     }
 
     private void showSetPassword(UserInfo info) {
-        if (info.noPassword() && PreferenceUtil.showSetPassword()) {
+        if (info.noPassword() && PreferenceUtil.showSetPassword(info.phone)) {
             startActivity(SetPasswordActivity.newIntent());
         }
     }

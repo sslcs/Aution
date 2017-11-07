@@ -68,7 +68,6 @@ public class MessageFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 mStart = 0;
-                mAdapter.clear();
                 loadData();
             }
         });
@@ -110,6 +109,9 @@ public class MessageFragment extends BaseFragment {
             @Override
             public void onSuccess(String response, String message) {
                 mBinding.refreshView.setRefreshing(false);
+                if(mStart==0){
+                    mAdapter.clear();
+                }
                 Type type = new TypeToken<DataResponse<ArrayList<ItemMessage>>>() {}.getType();
                 DataResponse<ArrayList<ItemMessage>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;

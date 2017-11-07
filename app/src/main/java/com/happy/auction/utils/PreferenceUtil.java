@@ -52,6 +52,14 @@ public class PreferenceUtil {
         setToken("");
     }
 
+    public static boolean showSetPassword(String phone) {
+        if (!phone.equals(getString(KEY_MODIFY_PASSWORD, ""))) {
+            saveString(KEY_MODIFY_PASSWORD, phone);
+            return true;
+        }
+        return false;
+    }
+
     private static void saveBoolean(String key, boolean value) {
         PreferenceManager
                 .getDefaultSharedPreferences(AppInstance.getInstance())
@@ -72,13 +80,5 @@ public class PreferenceUtil {
 
     public static boolean showTipCaptcha() {
         return getBoolean(KEY_TIP_CAPTCHA, true);
-    }
-
-    public static boolean showSetPassword() {
-        if (getBoolean(KEY_MODIFY_PASSWORD, true)) {
-            saveBoolean(KEY_MODIFY_PASSWORD, false);
-            return true;
-        }
-        return false;
     }
 }

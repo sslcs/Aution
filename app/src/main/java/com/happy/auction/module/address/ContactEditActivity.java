@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseBackActivity;
@@ -13,13 +14,20 @@ import com.happy.auction.databinding.ActivityContactEditBinding;
 import com.happy.auction.entity.item.Contact;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.ContactEditParam;
+import com.happy.auction.entity.response.AddContactResponse;
+import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.ToastUtil;
 
+import java.lang.reflect.Type;
+
 /**
- * Created by LiuCongshan on 17-10-17.<br/>
  * 联系人编辑界面
+ *
+ * @author LiuCongshan
+ * @date 17-10-17
  */
 
 public class ContactEditActivity extends BaseBackActivity {
@@ -49,6 +57,9 @@ public class ContactEditActivity extends BaseBackActivity {
         if (getIntent().hasExtra(KEY_DATA)) {
             mData = (Contact) getIntent().getSerializableExtra(KEY_DATA);
             mBinding.setData(mData);
+            mBinding.tvToolbarTitle.setText(R.string.edit_contact);
+        } else {
+            mBinding.tvToolbarTitle.setText(R.string.title_add_contact);
         }
     }
 
@@ -63,7 +74,13 @@ public class ContactEditActivity extends BaseBackActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                setResult(RESULT_OK);
+                Type type = new TypeToken<DataResponse<AddContactResponse>>() {}.getType();
+                DataResponse<AddContactResponse> obj = GsonSingleton.get().fromJson(response, type);
+                Intent data = new Intent();
+                if (obj != null && obj.data != null) {
+                    data.putExtra(ContactSelectActivity.EXTRA_CONTACT_ID, obj.data.vaid);
+                }
+                setResult(RESULT_OK, data);
                 finish();
             }
 

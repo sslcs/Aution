@@ -7,8 +7,10 @@ import android.view.View;
 import com.happy.auction.AppInstance;
 
 /**
- * Created by LiuCongshan on 17-9-14.
  * 空白分割线
+ *
+ * @author LiuCongshan
+ * @date 17-9-14
  */
 
 public class DecorationSpace extends DecorationBase {
@@ -26,7 +28,7 @@ public class DecorationSpace extends DecorationBase {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
         final int position = parent.getChildAdapterPosition(view);
-        if (position != parent.getChildCount() - 1 || isEnableFooter()) {
+        if (position != parent.getAdapter().getItemCount() - 1 || isEnableFooter()) {
             outRect.bottom = dividerHeight;
         }
 

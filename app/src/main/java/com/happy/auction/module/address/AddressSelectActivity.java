@@ -74,13 +74,13 @@ public class AddressSelectActivity extends BaseBackActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mAdapter.setLoaded();
+                mAdapter.clear();
                 Type type = new TypeToken<DataResponse<ArrayList<Address>>>() {}.getType();
                 DataResponse<ArrayList<Address>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null && !obj.data.isEmpty()) {
-                    mAdapter.clear();
                     mAdapter.addAll(obj.data);
                 }
+                mAdapter.setLoaded();
             }
 
             @Override

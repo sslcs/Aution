@@ -2,6 +2,7 @@
     <string name="app_name">欢乐竞拍</string>
     <string name="tip_exit">别按了，再按就退出了呀！</string>
     <string name="tip_empty">暂无记录</string>
+    <string name="tip_empty_data">暂无数据</string>
     <string name="tip_coming">敬请期待</string>
 
     <!-- tab -->
@@ -17,8 +18,8 @@
     <string name="auction_finish">竞拍已结束</string>
     <string name="format_announce">%1$s以%2$s拍得%3$s</string>
     <string name="error_qq">请检查QQ客户端是否正常!</string>
-    <string name="strategy">攻略</string>
     <string name="all_bask">晒单</string>
+    <string name="bottom">已经到底部啦～</string>
 
     <!-- tab latest -->
     <string name="format_deal_person">成交人： %1$s</string>
@@ -210,6 +211,8 @@
     <!-- address -->
     <string name="manage_address">地址管理</string>
     <string name="manage_contact">联系人管理</string>
+    <string name="edit_contact">编辑联系人</string>
+    <string name="title_add_contact">添加联系人</string>
     <string name="add_address">＋添加收货地址</string>
     <string name="select_address">选择收货地址</string>
     <string name="add_contact">＋添加联系人</string>

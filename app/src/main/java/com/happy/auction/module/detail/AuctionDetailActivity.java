@@ -158,12 +158,10 @@ public class AuctionDetailActivity extends BaseBackActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
 
@@ -206,7 +204,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
         if (mData.status == 0) {
             mBinding.tvAuctionStatus.finish();
         } else {
-            mBinding.tvAuctionStatus.setExpireTime(mData.bid_expire_time);
+            mBinding.tvAuctionStatus.setExpireTime(mData.countdown);
             mBinding.tvAuctionStatus.setRepeat(mData.current_price == mData.bid_start_price);
         }
 
@@ -231,7 +229,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
                     return;
                 }
                 mData.setCurrentPrice(event.current_price);
-                mBinding.tvAuctionStatus.setExpireTime(event.bid_expire_time);
+                mBinding.tvAuctionStatus.setExpireTime(event.countdown);
                 mBinding.tvAuctionStatus.setRepeat(false);
 
                 BidRecord record = new BidRecord(event);
@@ -246,7 +244,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
                     return;
                 }
                 if (mAuctionCoin.current_bid_coins > 0) {
-                    int progress = mAuctionCoin.current_bidden_coins + 1;
+                    int progress = mAuctionCoin.current_bidden_coins + mData.bid_fee;
                     if (progress == mAuctionCoin.current_bid_coins) {
                         mAuctionCoin.setCurrentProgress(0);
                         mAuctionCoin.setCurrentCoin(0);
@@ -310,9 +308,12 @@ public class AuctionDetailActivity extends BaseBackActivity {
         });
     }
 
+    public String getNotLogin() {
+        return getString(R.string.not_login);
+    }
+
     private void loadAuctionCoin() {
         if (!AppInstance.getInstance().isLogin()) {
-            mBinding.tvBidTimes.setText(R.string.not_login);
             return;
         }
 
@@ -370,7 +371,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
         BidParam param = new BidParam();
         param.sid = mData.sid;
         param.buy = count;
-        param.take_coin = coin ;
+        param.take_coin = coin;
         BaseRequest<BidParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
@@ -386,12 +387,12 @@ public class AuctionDetailActivity extends BaseBackActivity {
         });
     }
 
-    private void onPaySuccess(int count) {
-        if (AppInstance.getInstance().getUser().free_coin >= count) {
-            mAuctionCoin.setBidGiftCoin(mAuctionCoin.bid_gift_coin + count);
-            if (count > 1) {
+    private void onPaySuccess(int coin) {
+        if (AppInstance.getInstance().getUser().free_coin >= coin) {
+            mAuctionCoin.setBidGiftCoin(mAuctionCoin.bid_gift_coin + coin);
+            if (coin > mData.bid_fee) {
                 mAuctionCoin.setCurrentProgress(0);
-                mAuctionCoin.setCurrentCoin(count);
+                mAuctionCoin.setCurrentCoin(coin);
             }
         } else {
             loadAuctionCoin();

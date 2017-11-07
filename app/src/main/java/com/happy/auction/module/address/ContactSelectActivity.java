@@ -35,7 +35,7 @@ import java.util.ArrayList;
  */
 public class ContactSelectActivity extends BaseBackActivity {
     public static final String EXTRA_CONTACT_ID = "contact_id";
-    private final static int REQUEST_CODE = 100;
+    private final static int REQUEST_CODE_MANAGE = 100;
     protected ActivitySelectAddressBinding mBinding;
     private ContactSelectAdapter mAdapter;
 
@@ -72,13 +72,13 @@ public class ContactSelectActivity extends BaseBackActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mAdapter.setLoaded();
+                mAdapter.clear();
                 Type type = new TypeToken<DataResponse<ArrayList<Contact>>>() {}.getType();
                 DataResponse<ArrayList<Contact>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null && !obj.data.isEmpty()) {
-                    mAdapter.clear();
                     mAdapter.addAll(obj.data);
                 }
+                mAdapter.setLoaded();
             }
 
             @Override
@@ -98,10 +98,13 @@ public class ContactSelectActivity extends BaseBackActivity {
     }
 
     public void onClickManage(View view) {
-        startActivityForResult(ContactActivity.newIntent(), REQUEST_CODE);
+        startActivityForResult(ContactActivity.newIntent(), REQUEST_CODE_MANAGE);
     }
 
     public void onClickConfirm(View view) {
+        if (mAdapter.isEmpty()) {
+            return;
+        }
         new CustomDialog.Builder().content(getString(R.string.confirm_contact))
                 .textLeft(getString(R.string.cancel))
                 .textRight(getString(R.string.ok))
@@ -118,6 +121,20 @@ public class ContactSelectActivity extends BaseBackActivity {
     private void setResult() {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_CONTACT_ID, mAdapter.getItem(mAdapter.getSelectPosition()).vaid);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!mAdapter.isEmpty()) {
+            super.onBackPressed();
+            return;
+        }
+
+        // 通知订单详情页联系人列表为空
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_CONTACT_ID, -1);
         setResult(RESULT_OK, intent);
         finish();
     }

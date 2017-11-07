@@ -19,6 +19,7 @@ import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.PayChargeParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.PayConfirmResponse;
+import com.happy.auction.module.me.BalanceActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.GsonSingleton;
@@ -27,7 +28,7 @@ import com.happy.auction.utils.ToastUtil;
 import java.lang.reflect.Type;
 
 /**
- * 充值支付界面<br/>
+ * 充值支付界面
  *
  * @author LiuCongshan
  * @date 17-10-23
@@ -126,5 +127,14 @@ public class ChargePayActivity extends BasePayActivity {
         vCurrentAmount.setSelected(false);
         vCurrentAmount = view;
         vCurrentAmount.setSelected(true);
+    }
+
+    @Override
+    protected void paySuccess() {
+        Intent intent = BalanceActivity.newIntent(0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
     }
 }

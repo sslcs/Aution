@@ -14,13 +14,16 @@ import com.happy.auction.R;
 import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityOrderDetailBinding;
 import com.happy.auction.entity.item.Address;
+import com.happy.auction.entity.item.Contact;
 import com.happy.auction.entity.item.ItemOrder;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.ConfirmAddressParam;
+import com.happy.auction.entity.param.ContactParam;
 import com.happy.auction.entity.param.OrderDetailParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.OrderDetail;
 import com.happy.auction.module.address.AddressSelectActivity;
+import com.happy.auction.module.address.ContactEditActivity;
 import com.happy.auction.module.address.ContactSelectActivity;
 import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.module.me.BaskMyActivity;
@@ -33,6 +36,7 @@ import com.happy.auction.utils.StringUtil;
 import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * 订单详情页面
@@ -49,6 +53,7 @@ public class OrderDetailActivity extends BaseBackActivity {
     private ActivityOrderDetailBinding mBinding;
     private OrderDetail mData;
     private ItemOrder mOrder;
+    private boolean hasContact = false;
 
     public static Intent newIntent(ItemOrder item) {
         Intent intent = new Intent(AppInstance.getInstance(), OrderDetailActivity.class);
@@ -145,9 +150,11 @@ public class OrderDetailActivity extends BaseBackActivity {
         } else if (mData.type == 1) {
             // 已付款-实物
             mBinding.btnBottom.setText(R.string.confirm_address);
+            loadContact();
         } else {
             // 已付款-虚拟物品
             mBinding.btnBottom.setText(R.string.select_virtual_address);
+            loadContact();
         }
     }
 
@@ -171,7 +178,12 @@ public class OrderDetailActivity extends BaseBackActivity {
             }
         } else {
             // 已付款-虚拟物品
-            Intent intent = ContactSelectActivity.newIntent();
+            Intent intent;
+            if (hasContact) {
+                intent = ContactSelectActivity.newIntent();
+            } else {
+                intent = ContactEditActivity.newIntent();
+            }
             startActivityForResult(intent, REQUEST_CODE_CONTACT);
         }
     }
@@ -184,9 +196,14 @@ public class OrderDetailActivity extends BaseBackActivity {
         }
 
         if (REQUEST_CODE_CONTACT == requestCode) {
-            int id = data.getIntExtra(ContactSelectActivity.EXTRA_CONTACT_ID, -1);
+            int id = -1;
+            if (data.hasExtra(ContactSelectActivity.EXTRA_CONTACT_ID)) {
+                id = data.getIntExtra(ContactSelectActivity.EXTRA_CONTACT_ID, -1);
+            }
             if (id != -1) {
                 onSelectAddress(id);
+            } else {
+                hasContact = false;
             }
         } else if (REQUEST_CODE_ADDRESS == requestCode) {
             mData.address = (Address) data.getSerializableExtra(AddressSelectActivity.EXTRA_ADDRESS);
@@ -230,5 +247,20 @@ public class OrderDetailActivity extends BaseBackActivity {
 
     public void onClickDetail(View view) {
         startActivity(AuctionDetailActivity.newIntent(mOrder));
+    }
+
+    private void loadContact() {
+        ContactParam param = new ContactParam();
+        BaseRequest<ContactParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<ArrayList<Contact>>>() {}.getType();
+                DataResponse<ArrayList<Contact>> obj = GsonSingleton.get().fromJson(response, type);
+                if (obj.data != null && !obj.data.isEmpty()) {
+                    hasContact = true;
+                }
+            }
+        });
     }
 }

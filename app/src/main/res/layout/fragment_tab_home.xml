@@ -67,11 +67,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/divider">
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rv_banner"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="160dp"
-                        app:layout_scrollFlags="scroll"/>
+                        android:layout_height="wrap_content"
+                        app:layout_scrollFlags="scroll">
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_banner"
+                            android:layout_width="match_parent"
+                            android:layout_height="160dp"/>
+                        <com.happy.auction.module.home.CircleIndicator
+                            android:id="@+id/circle_indicator"
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_gravity="bottom"
+                            android:visibility="gone"
+                            app:ci_background="@color/text_light"
+                            app:ci_selected_background="@color/main_red"/>
+                    </FrameLayout>
                     <include
                         android:id="@+id/menu"
                         layout="@layout/fragment_tab_home_menu"

@@ -88,6 +88,9 @@ public class TabLatestFragment extends BaseFragment {
             @Override
             public void onSuccess(String response, String message) {
                 mBinding.refreshView.setRefreshing(false);
+                if (mStart == 0) {
+                    mAdapter.clear();
+                }
                 Type type = new TypeToken<DataResponse<ArrayList<ItemLatest>>>() {}.getType();
                 DataResponse<ArrayList<ItemLatest>> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
@@ -104,7 +107,6 @@ public class TabLatestFragment extends BaseFragment {
 
     private void refresh() {
         mStart = 0;
-        mAdapter.clear();
         loadData();
     }
 

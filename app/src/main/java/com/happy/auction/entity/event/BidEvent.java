@@ -1,5 +1,6 @@
 package com.happy.auction.entity.event;
 
+import com.google.gson.annotations.SerializedName;
 import com.happy.auction.entity.response.BaseEvent;
 
 /**
@@ -11,12 +12,14 @@ import com.happy.auction.entity.response.BaseEvent;
 
 public class BidEvent extends BaseEvent {
     public int sid;
-    public int gid;
     public int current_price;
-    public int bid_expire_time;
+    @SerializedName("bid_expire_time")
+    public int countdown;
 
     public String uid;
     public String username;
-    public String headimg;
-    public String ip_address;
+    @SerializedName("headimg")
+    public String avatar;
+    @SerializedName("ip_address")
+    public String address;
 }

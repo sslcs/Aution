@@ -127,9 +127,9 @@ public class CoinFragment extends BaseFragment {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
+                mBinding.refreshView.setRefreshing(false);
                 if (mIndex == 0) {
                     mAdapter.clear();
-                    mBinding.refreshView.setRefreshing(false);
                 }
                 Type type = new TypeToken<DataResponse<CoinResponse>>() {}.getType();
                 DataResponse<CoinResponse> obj = GsonSingleton.get().fromJson(response, type);

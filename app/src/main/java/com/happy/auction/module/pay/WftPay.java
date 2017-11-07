@@ -11,7 +11,9 @@ import java.lang.ref.WeakReference;
 
 /**
  * 威富通
- * Created by zwy on 16-9-9.
+ *
+ * @author LiuCongshan
+ * @date 17-11-9
  */
 public class WftPay {
     private WeakReference<Context> context;
@@ -33,7 +35,20 @@ public class WftPay {
         msg.setTokenId(tokeId);
         msg.setTradeType(MainApplication.PAY_NEW_ZFB_WAP);
 
-        if (context.get() == null) return;
+        if (context.get() == null) {
+            return;
+        }
+        PayPlugin.unifiedH5Pay((Activity) context.get(), msg);
+    }
+
+    public void payQQ(String tokeId) {
+        RequestMsg msg = new RequestMsg();
+        msg.setTokenId(tokeId);
+        msg.setTradeType(MainApplication.PAY_QQ_WAP);
+
+        if (context.get() == null) {
+            return;
+        }
         PayPlugin.unifiedH5Pay((Activity) context.get(), msg);
     }
 }

@@ -1,10 +1,15 @@
 package com.happy.auction.entity.item;
 
 import com.google.gson.annotations.SerializedName;
+import com.happy.auction.AppInstance;
+import com.happy.auction.R;
+import com.happy.auction.utils.StringUtil;
 
 /**
- * Created by LiuCongshan on 17-9-12.
  * 订单item
+ *
+ * @author LiuCongshan
+ * @date 17-9-12
  */
 
 public class ItemOrder extends BaseGoods {
@@ -39,4 +44,12 @@ public class ItemOrder extends BaseGoods {
      * 1：正在拍，2：已拍中，3：已付款，4: 已确认领奖方式，5:已晒单，6:已结束
      */
     public int status;
+
+    public String getFormattedPrice() {
+        if (status == STATUS_GOING) {
+            return AppInstance.getInstance().getString(R.string.format_current_price, StringUtil.formatMoney(current_price));
+        } else {
+            return AppInstance.getInstance().getString(R.string.format_deal_price, StringUtil.formatMoney(current_price));
+        }
+    }
 }

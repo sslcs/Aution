@@ -8,8 +8,10 @@ import com.happy.auction.BR;
 import java.io.Serializable;
 
 /**
- * Created by LiuCongshan on 17-9-12.
  * 商品item基类
+ *
+ * @author LiuCongshan
+ * @date 17-9-12
  */
 
 public class BaseGoods extends BaseObservable implements Serializable {

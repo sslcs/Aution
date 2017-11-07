@@ -20,7 +20,8 @@ public class ItemPayType {
 
     public static final int WEB_ALIPAY = 208;
 
-    public static final int SDK_ALIPAY = 214;
+    public static final int SDK_ALIPAY = 215;
+    public static final int SDK_QQ = 216;
 
     public static final int SDK_WX = 217;
 

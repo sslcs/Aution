@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -21,16 +22,16 @@ import com.happy.auction.entity.response.PayConfirmResponse;
 import com.happy.auction.module.WebActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.ui.CustomDialog;
 import com.happy.auction.utils.GsonSingleton;
-import com.happy.auction.utils.ToastUtil;
 
 import java.lang.reflect.Type;
 
 /**
  * 出价充值界面<br/>
- * Created by LiuCongshan on 17-10-23.
  *
  * @author LiuCongshan
+ * @date 17-10-23
  */
 public class AuctionPayActivity extends BasePayActivity {
     private static final String KEY_EXTRA_DATA = "EXTRA_DATA";
@@ -81,12 +82,6 @@ public class AuctionPayActivity extends BasePayActivity {
                 Type type = new TypeToken<DataResponse<PayConfirmResponse>>() {}.getType();
                 DataResponse<PayConfirmResponse> obj = GsonSingleton.get().fromJson(response, type);
                 pay(obj.data, current);
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                super.onError(code, message);
-                ToastUtil.show(message);
             }
         });
     }

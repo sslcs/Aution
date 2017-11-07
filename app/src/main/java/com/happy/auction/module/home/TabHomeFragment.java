@@ -31,7 +31,6 @@ import com.happy.auction.entity.param.BaseParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.GoodsParam;
 import com.happy.auction.entity.param.MenuParam;
-import com.happy.auction.entity.param.SubscribeParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.glide.ImageLoader;
@@ -131,13 +130,11 @@ public class TabHomeFragment extends BaseFragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
                     if (!GoodsParam.TYPE_NEWBIE.equals(mType)) {
-                        mAdapter.clear();
                         mType = GoodsParam.TYPE_NEWBIE;
                         refresh();
                     }
                 } else {
                     if (!GoodsParam.TYPE_HOT.equals(mType)) {
-                        mAdapter.clear();
                         mType = GoodsParam.TYPE_HOT;
                         refresh();
                     }
@@ -175,7 +172,7 @@ public class TabHomeFragment extends BaseFragment {
                 }
                 item = mAdapter.getItem(position);
                 item.current_price = event.current_price;
-                item.bid_expire_time = event.bid_expire_time;
+                item.countdown = event.countdown;
                 mAdapter.addChangedPosition(position);
                 mAdapter.notifyItemChanged(position);
             }
@@ -267,6 +264,11 @@ public class TabHomeFragment extends BaseFragment {
     }
 
     private void openMenu(String title, String url) {
+        if (url.contains("recharge") && !AppInstance.getInstance().isLogin()) {
+            startActivity(LoginActivity.newIntent());
+            return;
+        }
+
         Intent intent = WebActivity.newIntent(title, url);
         if (intent != null) {
             startActivity(intent);
@@ -289,8 +291,13 @@ public class TabHomeFragment extends BaseFragment {
                     }
                 });
                 mBinding.rvBanner.setAdapter(adapter);
-                PagingScrollHelper helper = new PagingScrollHelper();
-                helper.setRecycleView(mBinding.rvBanner);
+                if (obj.data != null && obj.data.size() > 1) {
+                    PagingScrollHelper helper = new PagingScrollHelper();
+                    helper.setRecycleView(mBinding.rvBanner);
+                    helper.setIndicator(mBinding.circleIndicator);
+                    mBinding.circleIndicator.setVisibility(View.VISIBLE);
+                    mBinding.circleIndicator.setCount(obj.data.size());
+                }
             }
         });
     }
@@ -304,11 +311,11 @@ public class TabHomeFragment extends BaseFragment {
             @Override
             public void onSuccess(String response, String message) {
                 mBinding.refreshView.setRefreshing(false);
-                Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
-                DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
                 if (mStart == 0) {
                     mAdapter.clear();
                 }
+                Type type = new TypeToken<DataResponse<GoodsResponse>>() {}.getType();
+                DataResponse<GoodsResponse> obj = GsonSingleton.get().fromJson(response, type);
                 int size = 0;
                 if (obj.data != null && obj.data.goods != null && !obj.data.goods.isEmpty()) {
                     size = obj.data.goods.size();
@@ -353,12 +360,8 @@ public class TabHomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (mAdapter == null || !getUserVisibleHint()) {
-            return;
+        if (getUserVisibleHint()) {
+            refresh();
         }
-        SubscribeParam param = new SubscribeParam();
-        param.addAll(mAdapter.getData());
-        NetClient.query(new BaseRequest<>(param), null);
     }
 }

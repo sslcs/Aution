@@ -38,7 +38,7 @@ public class AddressActivity extends BaseBackActivity implements OnViewClickList
     private final static int REQUEST_EDIT = 101;
 
     private ActivityAddressBinding mBinding;
-    private AddressAdapter adapter;
+    private AddressAdapter mAdapter;
     private boolean mDataChanged = false;
 
     public static Intent newIntent() {
@@ -55,9 +55,9 @@ public class AddressActivity extends BaseBackActivity implements OnViewClickList
     private void initLayout() {
         mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.vList.addItemDecoration(new DecorationSpace(10));
-        adapter = new AddressAdapter();
-        adapter.setOnViewClickListener(this);
-        mBinding.vList.setAdapter(adapter);
+        mAdapter = new AddressAdapter();
+        mAdapter.setOnViewClickListener(this);
+        mBinding.vList.setAdapter(mAdapter);
 
         loadData();
     }
@@ -68,19 +68,19 @@ public class AddressActivity extends BaseBackActivity implements OnViewClickList
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.setLoaded();
+                mAdapter.clear();
                 Type type = new TypeToken<DataResponse<ArrayList<Address>>>() {}.getType();
                 DataResponse<ArrayList<Address>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null && !obj.data.isEmpty()) {
-                    adapter.clear();
-                    adapter.addAll(obj.data);
+                    mAdapter.addAll(obj.data);
                 }
+                mAdapter.setLoaded();
             }
 
             @Override
             public void onError(int code, String message) {
                 super.onError(code, message);
-                adapter.setLoaded();
+                mAdapter.setLoaded();
             }
         });
     }
@@ -116,7 +116,7 @@ public class AddressActivity extends BaseBackActivity implements OnViewClickList
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                adapter.setPositionDefault(position);
+                mAdapter.setPositionDefault(position);
             }
         });
     }
@@ -133,8 +133,8 @@ public class AddressActivity extends BaseBackActivity implements OnViewClickList
             @Override
             public void onSuccess(String response, String message) {
                 mDataChanged = true;
-                int position = adapter.getPosition(item);
-                adapter.removeItem(position);
+                int position = mAdapter.getPosition(item);
+                mAdapter.removeItem(position);
             }
         });
     }

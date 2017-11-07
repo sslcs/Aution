@@ -3,20 +3,22 @@ package com.happy.auction.adapter;
 import android.support.v7.widget.RecyclerView;
 
 /**
- * Created by LiuCongshan on 17-9-14.
  * divider基类
+ *
+ * @author LiuCongshan
+ * @date 17-9-14
  */
 
 public class DecorationBase extends RecyclerView.ItemDecoration {
     private boolean enableHeader = false;
-    private boolean enableFooter = true;
+    private boolean enableFooter = false;
 
     public void enableHeader() {
         enableHeader = true;
     }
 
-    public void disableFooter() {
-        enableFooter = false;
+    public void enableFooter() {
+        enableFooter = true;
     }
 
 

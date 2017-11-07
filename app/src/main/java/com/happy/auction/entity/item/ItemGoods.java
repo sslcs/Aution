@@ -2,6 +2,7 @@ package com.happy.auction.entity.item;
 
 import android.databinding.Bindable;
 
+import com.google.gson.annotations.SerializedName;
 import com.happy.auction.BR;
 
 /**
@@ -14,10 +15,11 @@ public class ItemGoods extends BaseGoods {
     /**
      * 竞拍过期时间戳，单位：毫秒
      */
-    public long bid_expire_time;
+    @SerializedName("bid_expire_time")
+    public long countdown;
     /**
      * 状态:<br/>
-     * 0:已结束，1：未开始，2：正在进行
+     * 0:已结束，1：未开始，2：正在进行, 3:停拍中
      */
     public int status;
 

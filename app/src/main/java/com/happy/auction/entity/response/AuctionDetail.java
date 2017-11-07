@@ -14,8 +14,10 @@ import com.happy.auction.utils.StringUtil;
 import java.util.ArrayList;
 
 /**
- * Created by LiuCongshan on 17-8-18.
  * 竞拍详情
+ *
+ * @author LiuCongshan
+ * @date 17-8-18
  */
 
 public class AuctionDetail extends ItemGoods {
@@ -62,7 +64,7 @@ public class AuctionDetail extends ItemGoods {
         if (goods == null) {
             return;
         }
-        this.bid_expire_time = goods.bid_expire_time;
+        this.countdown = goods.countdown;
         this.status = goods.status;
     }
 

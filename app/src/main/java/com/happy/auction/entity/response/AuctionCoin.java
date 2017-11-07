@@ -10,8 +10,10 @@ import com.happy.auction.BR;
 import com.happy.auction.R;
 
 /**
- * Created by LiuCongshan on 17-9-25.
  * 商品详情出价币数
+ *
+ * @author LiuCongshan
+ * @date 17-9-25
  */
 
 public class AuctionCoin extends BaseObservable {
@@ -69,7 +71,11 @@ public class AuctionCoin extends BaseObservable {
         return ss;
     }
 
-    public SpannableString getProgress(int progress, int total) {
+    public SpannableString getProgress(int progress, int total, int fee) {
+        if (fee > 1) {
+            progress /= fee;
+            total /= fee;
+        }
         String formatted = AppInstance.getInstance().getString(R.string.auto_bid_progress, progress, total);
         SpannableString ss = new SpannableString(formatted);
         String strTimes = String.valueOf(progress);

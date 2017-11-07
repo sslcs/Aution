@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@{@string/format_deal_price(StringUtil.formatMoney(data.current_price))}"
+            android:text="@{data.getFormattedPrice()}"
             android:textColor="@color/main_red"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/tv_bid_times"

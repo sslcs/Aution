@@ -30,7 +30,8 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "HOST", '"192.168.1.250:80/v1"'
+//            buildConfigField "String", "HOST", '"192.168.1.250:80/v1"'
+            buildConfigField "String", "HOST", '"hpjp.sherwin.top/v1"'
 
             minifyEnabled false
             signingConfig signingConfigs.release

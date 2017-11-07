@@ -15,31 +15,56 @@ import android.view.ViewGroup;
  */
 
 public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends BaseAdapter<T, B> {
-    static final int ITEM_TYPE_HEADER_BASE = 0XFA000;
-    static final int ITEM_TYPE_FOOTER_BASE = 0XFF000;
     private static final int ITEM_TYPE_EMPTY = Integer.MAX_VALUE - 1;
     private static final int ITEM_TYPE_LOADING = Integer.MAX_VALUE - 2;
     private static final int ITEM_TYPE_LOAD_MORE = Integer.MAX_VALUE - 3;
+    private static final int ITEM_TYPE_BOTTOM = Integer.MAX_VALUE - 4;
 
     private boolean showEmpty = true;
     private boolean showLoading = true;
     private boolean showMore = true;
+    private boolean showBottom = true;
     private boolean isLoaded = false;
     private boolean hasMore = false;
     private LoadMoreListener mLoadMoreListener;
 
-    public void disableEmpty() {
-        showEmpty = false;
+    /**
+     * 显示空数据view
+     *
+     * @param show default is true
+     */
+    public void showEmpty(boolean show) {
+        showEmpty = show;
         notifyDataSetChanged();
     }
 
-    public void disableLoading() {
-        showLoading = false;
+    /**
+     * 显示加载中view
+     *
+     * @param show default is true
+     */
+    public void showLoading(boolean show) {
+        showLoading = show;
         notifyDataSetChanged();
     }
 
-    public void disableMore() {
-        showMore = false;
+    /**
+     * 显示加载更多view
+     *
+     * @param show default is true
+     */
+    public void showLoadMore(boolean show) {
+        showMore = show;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 显示底部view
+     *
+     * @param show default is true
+     */
+    public void showBottom(boolean show) {
+        showBottom = show;
         notifyDataSetChanged();
     }
 
@@ -55,6 +80,10 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
 
         if (isShowLoadMore(position)) {
             return ITEM_TYPE_LOAD_MORE;
+        }
+
+        if (isShowBottom(position)) {
+            return ITEM_TYPE_BOTTOM;
         }
         return super.getItemViewType(position);
     }
@@ -74,6 +103,9 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
             return getBindingMore(parent, inflater);
         }
 
+        if (viewType == ITEM_TYPE_BOTTOM) {
+            return getBindingBottom(parent, inflater);
+        }
         return new CustomViewHolder<>(getBinding(parent, inflater));
     }
 
@@ -103,6 +135,15 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
      * @return 加载中ViewHolder
      */
     public abstract CustomViewHolder getBindingLoading(ViewGroup parent, LayoutInflater inflater);
+
+    /**
+     * 获取底部ViewHolder
+     *
+     * @param parent   父布局
+     * @param inflater 布局填充类
+     * @return 底部ViewHolder
+     */
+    public abstract CustomViewHolder getBindingBottom(ViewGroup parent, LayoutInflater inflater);
 
     @Override
     public void onBindViewHolder(CustomViewHolder<B> holder, int position) {
@@ -139,7 +180,7 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
 
     private int computeSpanSize(GridLayoutManager layoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position) {
         layoutManager.setAutoMeasureEnabled(false);
-        if (isShowLoading() || isShowEmpty() || isShowLoadMore(position)) {
+        if (isShowLoading() || isShowEmpty() || isShowLoadMore(position) || isShowBottom(position)) {
             return layoutManager.getSpanCount();
         }
 
@@ -152,7 +193,7 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
     @Override
     public void onViewAttachedToWindow(CustomViewHolder<B> holder) {
         super.onViewAttachedToWindow(holder);
-        if (isShowLoading() || isShowEmpty() || isShowLoadMore(holder.getLayoutPosition())) {
+        if (isShowLoading() || isShowEmpty() || isShowLoadMore(holder.getLayoutPosition()) || isShowBottom(holder.getLayoutPosition())) {
             ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
             if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
                 ((StaggeredGridLayoutManager.LayoutParams) lp).setFullSpan(true);
@@ -165,7 +206,7 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
         if (isShowEmpty() || isShowLoading()) {
             return 1;
         }
-        return getRealCount() + (hasLoadMore() ? 1 : 0);
+        return getRealCount() + (hasLoadMore() || hasBottom() ? 1 : 0);
     }
 
     private boolean isShowEmpty() {
@@ -198,5 +239,13 @@ public abstract class BaseFeatureAdapter<T, B extends ViewDataBinding> extends B
             isLoaded = true;
             notifyDataSetChanged();
         }
+    }
+
+    private boolean hasBottom() {
+        return showBottom && isLoaded && !isEmpty() && !hasLoadMore();
+    }
+
+    private boolean isShowBottom(int position) {
+        return hasBottom() && (position == getItemCount() - 1);
     }
 }

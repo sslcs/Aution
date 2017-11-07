@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.BaseCustomAdapter;
+import com.happy.auction.adapter.CustomViewHolder;
+import com.happy.auction.databinding.EmptyViewBinding;
 import com.happy.auction.databinding.ItemGoodsBinding;
 import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.glide.ImageLoader;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 
 /**
  * 首页商品Adapter
+ *
+ * @author LiuCongshan
  */
 public class TabHomeAdapter extends BaseCustomAdapter<ItemGoods, ItemGoodsBinding> {
     private ArrayList<Integer> arrayChangedPosition;
@@ -25,6 +29,13 @@ public class TabHomeAdapter extends BaseCustomAdapter<ItemGoods, ItemGoodsBindin
     public TabHomeAdapter() {
         redColor = AppInstance.getInstance().getResources().getColor(R.color.main_red);
         arrayChangedPosition = new ArrayList<>();
+    }
+
+    @Override
+    public CustomViewHolder getBindingEmpty(ViewGroup parent, LayoutInflater inflater) {
+        EmptyViewBinding binding = EmptyViewBinding.inflate(inflater, parent, false);
+        binding.tvAdd.setText(R.string.tip_empty_data);
+        return new CustomViewHolder<>(binding);
     }
 
     @Override
@@ -57,7 +68,7 @@ public class TabHomeAdapter extends BaseCustomAdapter<ItemGoods, ItemGoodsBindin
             return;
         }
 
-        binding.tvTime.setExpireTime(item.bid_expire_time);
+        binding.tvTime.setExpireTime(item.countdown);
         binding.tvTime.setRepeat(item.current_price == 0);
         if (arrayChangedPosition.contains(position)) {
             arrayChangedPosition.remove(Integer.valueOf(position));

@@ -37,6 +37,10 @@ public class PackageUtils {
         return PackageUtils.isInstalled(context, Uri.parse("alipays://platformapi/startApp"));
     }
 
+    public static boolean isInstalledQQ(Context context) {
+        return PackageUtils.isInstalled(context, Uri.parse("mqqwpa://"));
+    }
+
     public static boolean isInstalled(Context context, String pkgName) {
         PackageInfo packageInfo = null;
         try {

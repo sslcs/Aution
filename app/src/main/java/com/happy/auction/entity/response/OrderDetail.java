@@ -7,8 +7,10 @@ import com.happy.auction.entity.item.Contact;
 import com.happy.auction.entity.item.ItemOrder;
 
 /**
- * Created by LiuCongshan on 17-8-18.
  * 订单详情
+ *
+ * @author LiuCongshan
+ * @date 17-8-18
  */
 
 public class OrderDetail extends ItemOrder {

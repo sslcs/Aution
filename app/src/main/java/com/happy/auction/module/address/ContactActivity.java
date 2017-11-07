@@ -37,7 +37,7 @@ public class ContactActivity extends BaseBackActivity implements OnViewClickList
     private final static int REQUEST_EDIT = 101;
 
     private ActivityAddressBinding mBinding;
-    private ContactAdapter adapter;
+    private ContactAdapter mAdapter;
     private boolean mDataChanged = false;
 
     public static Intent newIntent() {
@@ -57,9 +57,9 @@ public class ContactActivity extends BaseBackActivity implements OnViewClickList
 
         mBinding.vList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.vList.addItemDecoration(new DecorationSpace(10));
-        adapter = new ContactAdapter();
-        adapter.setOnViewClickListener(this);
-        mBinding.vList.setAdapter(adapter);
+        mAdapter = new ContactAdapter();
+        mAdapter.setOnViewClickListener(this);
+        mBinding.vList.setAdapter(mAdapter);
 
         loadData();
     }
@@ -70,19 +70,19 @@ public class ContactActivity extends BaseBackActivity implements OnViewClickList
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
+                mAdapter.clear();
                 Type type = new TypeToken<DataResponse<ArrayList<Contact>>>() {}.getType();
                 DataResponse<ArrayList<Contact>> obj = GsonSingleton.get().fromJson(response, type);
                 if (obj.data != null && !obj.data.isEmpty()) {
-                    adapter.clear();
-                    adapter.addAll(obj.data);
+                    mAdapter.addAll(obj.data);
                 }
-                adapter.setLoaded();
+                mAdapter.setLoaded();
             }
 
             @Override
             public void onError(int code, String message) {
                 super.onError(code, message);
-                adapter.setLoaded();
+                mAdapter.setLoaded();
             }
         });
     }
@@ -120,8 +120,8 @@ public class ContactActivity extends BaseBackActivity implements OnViewClickList
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                int position = adapter.getPosition(item);
-                adapter.removeItem(position);
+                int position = mAdapter.getPosition(item);
+                mAdapter.removeItem(position);
                 mDataChanged = true;
             }
         });

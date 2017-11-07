@@ -39,8 +39,8 @@ public class BidRecord {
     public BidRecord(BidEvent event) {
         uid = event.uid;
         username = event.username;
-        avatar = event.headimg;
-        ip_address = event.ip_address;
+        avatar = event.avatar;
+        ip_address = event.address;
         bid_price = event.current_price;
     }
 }

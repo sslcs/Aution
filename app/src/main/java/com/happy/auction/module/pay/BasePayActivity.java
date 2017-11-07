@@ -15,7 +15,9 @@ import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.entity.item.ItemPayType;
 import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.param.ChargeStatusParam;
 import com.happy.auction.entity.param.PayOptionsParam;
+import com.happy.auction.entity.response.ChargeStatusResponse;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.PayConfirmResponse;
 import com.happy.auction.net.NetCallback;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 public abstract class BasePayActivity extends BaseBackActivity {
     protected PayTypeAdapter mAdapter;
     private boolean isPaying = false;
+    private String mTradeNumber;
 
     protected void initList(RecyclerView vList) {
         vList.setLayoutManager(new LinearLayoutManager(this));
@@ -66,6 +69,7 @@ public abstract class BasePayActivity extends BaseBackActivity {
     }
 
     protected void pay(PayConfirmResponse response, ItemPayType current) {
+        mTradeNumber = response.tradenum;
         if (ItemPayType.WEB_ALIPAY == response.pay_type) {
             if (!PackageUtils.isInstalledAlipay(this)) {
                 ToastUtil.show(R.string.error_alipay);
@@ -74,9 +78,7 @@ public abstract class BasePayActivity extends BaseBackActivity {
             if (TextUtils.isEmpty(response.params)) {
                 return;
             }
-            Uri uri = Uri.parse(response.params);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
+            openBrowser(response.params);
         } else if (ItemPayType.TH_PAY == response.pay_type) {
             if (!PackageUtils.isInstalledAlipay(this)) {
                 ToastUtil.show(R.string.error_alipay);
@@ -88,12 +90,23 @@ public abstract class BasePayActivity extends BaseBackActivity {
                 ToastUtil.show(R.string.error_alipay);
                 return;
             }
-            WftPay.getInstance(this).pay(response.params);
+            openBrowser(response.params);
+        } else if (ItemPayType.SDK_QQ == response.pay_type) {
+            if (!PackageUtils.isInstalledQQ(this)) {
+                ToastUtil.show(R.string.error_qq);
+                return;
+            }
+            openBrowser(response.params);
+        } else {
+            openBrowser(response.params);
         }
 
         isPaying = true;
-        // FixMe
-        onResume();
+    }
+
+    private void openBrowser(String url) {
+        Uri uri = Uri.parse(url);
+        startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
 
     @Override
@@ -102,7 +115,35 @@ public abstract class BasePayActivity extends BaseBackActivity {
         if (!isPaying) {
             return;
         }
+
         isPaying = false;
+        queryStatus();
+    }
+
+    private void queryStatus() {
+        ChargeStatusParam param = new ChargeStatusParam();
+        param.exorderno = mTradeNumber;
+        BaseRequest<ChargeStatusParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<ChargeStatusResponse>>() {}.getType();
+                DataResponse<ChargeStatusResponse> obj = GsonSingleton.get().fromJson(response, type);
+                if (obj.data != null && obj.data.status == 3) {
+                    paySuccess();
+                } else {
+                    showTip();
+                }
+            }
+        });
+    }
+
+    protected void paySuccess() {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    protected void showTip() {
         new CustomDialog.Builder().content(getString(R.string.tip_finish_pay))
                 .textRight(getString(R.string.unpaid))
                 .textLeft(getString(R.string.paid))
@@ -110,8 +151,7 @@ public abstract class BasePayActivity extends BaseBackActivity {
                     @Override
                     public void onClick(DialogFragment dialog) {
                         dialog.dismiss();
-                        setResult(RESULT_OK);
-                        finish();
+                        paySuccess();
                     }
                 })
                 .show(getSupportFragmentManager(), "pay");

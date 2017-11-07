@@ -12,6 +12,8 @@ import com.happy.auction.module.home.CountDownHome;
 
 /**
  * 分类商品Adapter
+ *
+ * @author LiuCongshan
  */
 public class CategoryGoodsAdapter extends BaseCustomAdapter<ItemGoods, ItemCategoryGoodsBinding> {
 
@@ -45,7 +47,7 @@ public class CategoryGoodsAdapter extends BaseCustomAdapter<ItemGoods, ItemCateg
             return;
         }
 
-        timer.setExpireTime(item.bid_expire_time);
+        timer.setExpireTime(item.countdown);
         timer.setRepeat(item.current_price == 0);
     }
 }
