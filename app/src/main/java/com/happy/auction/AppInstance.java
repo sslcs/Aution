@@ -8,6 +8,7 @@ import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.utils.PreferenceUtil;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Application instance
@@ -29,9 +30,17 @@ public class AppInstance extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         mInstance = this;
         uid = PreferenceUtil.getUid();
         token = PreferenceUtil.getToken();
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
     }
 
     public int dp2px(int dp) {

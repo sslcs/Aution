@@ -22,7 +22,7 @@ import com.happy.auction.entity.param.UserInfoParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
-import com.happy.auction.module.WebActivity;
+import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.message.MessageActivity;
 import com.happy.auction.module.order.OrderActivity;

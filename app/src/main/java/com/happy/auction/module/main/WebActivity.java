@@ -1,4 +1,4 @@
-package com.happy.auction.module;
+package com.happy.auction.module.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;

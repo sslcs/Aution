@@ -7,19 +7,16 @@
         <variable
             name="data"
             type="com.happy.auction.entity.event.WinEvent"/>
-        <variable
-            name="fragment"
-            type="com.happy.auction.module.detail.WinDialog"/>
     </data>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
         <View
             android:id="@+id/v_background"
             android:layout_width="270dp"
             android:layout_height="250dp"
-            android:layout_marginTop="85dp"
             android:background="@drawable/btn_corner"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -28,7 +25,9 @@
             android:id="@+id/iv_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="155dp"
             android:src="@drawable/img_win"
+            app:layout_constraintBottom_toBottomOf="@+id/v_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -36,10 +35,11 @@
             android:id="@+id/iv_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{fragment::onClickClose}"
+            android:onClick="onClickClose"
             android:src="@drawable/ic_close"
             app:layout_constraintEnd_toEndOf="@+id/v_background"
-            app:layout_constraintStart_toEndOf="@+id/v_background"/>
+            app:layout_constraintStart_toEndOf="@+id/v_background"
+            app:layout_constraintTop_toTopOf="@+id/iv_image"/>
 
         <TextView
             android:id="@+id/tv_message"
@@ -62,7 +62,7 @@
             android:layout_width="193dp"
             android:layout_height="48dp"
             android:background="@drawable/bg_circle_yellow"
-            android:onClick="@{fragment::onClickDetail}"
+            android:onClick="onClickDetail"
             android:text="@string/check_detail"
             android:textColor="@color/text_normal"
             android:textSize="15sp"

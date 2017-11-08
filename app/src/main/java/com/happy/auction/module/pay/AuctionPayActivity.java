@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -19,10 +18,9 @@ import com.happy.auction.entity.param.ConfigParam;
 import com.happy.auction.entity.response.ConfigInfo;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.PayConfirmResponse;
-import com.happy.auction.module.WebActivity;
+import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
-import com.happy.auction.ui.CustomDialog;
 import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 

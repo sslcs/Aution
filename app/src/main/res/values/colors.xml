@@ -12,5 +12,6 @@
     <color name="divider">#ececec</color>
     <color name="btn_disable">#bababa</color>
     <color name="transparent">#aaffffff</color>
+    <color name="transparent_black">#aa000000</color>
     <color name="green">#00C236</color>
 </resources>

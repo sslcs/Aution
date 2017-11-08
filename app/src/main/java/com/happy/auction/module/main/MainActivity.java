@@ -1,4 +1,4 @@
-package com.happy.auction.module;
+package com.happy.auction.module.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -25,7 +25,6 @@ import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.entity.response.MessageCount;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.category.TabCategoryFragment;
-import com.happy.auction.module.detail.WinDialog;
 import com.happy.auction.module.home.TabHomeFragment;
 import com.happy.auction.module.latest.TabLatestFragment;
 import com.happy.auction.module.login.SetPasswordActivity;
@@ -100,9 +99,7 @@ public class MainActivity extends BaseTimeActivity {
         RxBus.getDefault().subscribe(this, WinEvent.class, new Consumer<WinEvent>() {
             @Override
             public void accept(WinEvent event) throws Exception {
-                WinDialog dialog = new WinDialog();
-                dialog.setData(event);
-                dialog.show(getSupportFragmentManager(), "win");
+                startActivity(WinActivity.newIntent(event));
             }
         });
     }

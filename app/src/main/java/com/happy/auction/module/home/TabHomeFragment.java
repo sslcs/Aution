@@ -35,7 +35,7 @@ import com.happy.auction.entity.param.MenuParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.glide.ImageLoader;
-import com.happy.auction.module.WebActivity;
+import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.message.MessageActivity;

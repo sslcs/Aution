@@ -11,7 +11,7 @@ import com.happy.auction.R;
 import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivitySettingBinding;
 import com.happy.auction.entity.event.LogoutEvent;
-import com.happy.auction.module.WebActivity;
+import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.ui.CustomDialog;
 import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.RxBus;

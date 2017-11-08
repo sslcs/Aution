@@ -1,4 +1,4 @@
-package com.happy.auction.module;
+package com.happy.auction.module.main;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
