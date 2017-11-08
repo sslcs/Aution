@@ -19,8 +19,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /**
- * Created by LiuCongshan on 17-9-13.
  * 揭晓广播
+ *
+ * @author LiuCongshan
+ * @date 17-9-13
  */
 
 public class MarqueeTextView extends android.support.v7.widget.AppCompatTextView {
@@ -46,21 +48,29 @@ public class MarqueeTextView extends android.support.v7.widget.AppCompatTextView
     }
 
     public void addData(ArrayList<ItemLatest> data) {
-        if (data == null || data.isEmpty()) return;
+        if (data == null || data.isEmpty()) {
+            return;
+        }
         for (ItemLatest item : data) {
             addData(item);
         }
     }
 
     public synchronized void addData(ItemLatest item) {
-        if (item == null) return;
-        if (data.size() >= 10) data.remove(9);
+        if (item == null) {
+            return;
+        }
+        if (data.size() >= 10) {
+            data.remove(9);
+        }
         data.add(0, item);
         start();
     }
 
     private void start() {
-        if (disposable != null) return;
+        if (disposable != null) {
+            return;
+        }
         disposable = Observable.interval(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -73,7 +83,9 @@ public class MarqueeTextView extends android.support.v7.widget.AppCompatTextView
 
     private void show() {
         synchronized (data) {
-            if (data.isEmpty()) return;
+            if (data.isEmpty()) {
+                return;
+            }
             if (position < 0 || position >= data.size()) {
                 position = 0;
             }

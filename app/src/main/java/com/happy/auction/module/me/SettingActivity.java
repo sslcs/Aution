@@ -13,6 +13,7 @@ import com.happy.auction.databinding.ActivitySettingBinding;
 import com.happy.auction.entity.event.LogoutEvent;
 import com.happy.auction.module.WebActivity;
 import com.happy.auction.ui.CustomDialog;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.StringUtil;
 
@@ -34,15 +35,18 @@ public class SettingActivity extends BaseBackActivity {
     }
 
     public void onClickServiceProtocol(View view) {
+        EventAgent.onEvent(R.string.setting_service_agreement);
         String title = getString(R.string.service_protocol);
         startActivity(WebActivity.newIntent(title, StringUtil.URL_SERVICE_PROTOCOL));
     }
 
     public void onClickAboutUs(View view) {
+        EventAgent.onEvent(R.string.setting_about);
         startActivity(AboutActivity.newIntent());
     }
 
     public void onClickLogout(View view) {
+        EventAgent.onEvent(R.string.setting_logout);
         new CustomDialog.Builder()
                 .content(getString(R.string.tip_logout))
                 .textLeft(getString(R.string.cancel))

@@ -27,6 +27,7 @@ import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.module.pay.ChargePayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 
 import java.lang.reflect.Type;
@@ -93,6 +94,7 @@ public class CoinFragment extends BaseFragment {
     }
 
     public void onClickCharge(View view) {
+        EventAgent.onEvent(R.string.balance_recharge);
         startActivity(ChargePayActivity.newIntent());
     }
 
@@ -150,6 +152,18 @@ public class CoinFragment extends BaseFragment {
                 mBinding.refreshView.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (hasCreatedView && isVisibleToUser) {
+            if (mType == TYPE_COIN) {
+                EventAgent.onEvent(R.string.balance_coins);
+            } else {
+                EventAgent.onEvent(R.string.balance_freecoins);
+            }
+        }
     }
 
     @Override

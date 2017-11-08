@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
+import com.happy.auction.R;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.base.BaseFragment;
@@ -40,6 +41,7 @@ import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.message.MessageActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
@@ -110,6 +112,7 @@ public class TabHomeFragment extends BaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener<ItemGoods>() {
             @Override
             public void onItemClick(View view, ItemGoods item, int position) {
+                EventAgent.onEvent(R.string.home_detail);
                 startActivity(AuctionDetailActivity.newIntent(item));
             }
         });
@@ -117,6 +120,7 @@ public class TabHomeFragment extends BaseFragment {
         mBinding.tvAnnounce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EventAgent.onEvent(R.string.home_marquee);
                 if (view.getTag() == null) {
                     return;
                 }
@@ -129,11 +133,13 @@ public class TabHomeFragment extends BaseFragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
+                    EventAgent.onEvent(R.string.home_sticky_2);
                     if (!GoodsParam.TYPE_NEWBIE.equals(mType)) {
                         mType = GoodsParam.TYPE_NEWBIE;
                         refresh();
                     }
                 } else {
+                    EventAgent.onEvent(R.string.home_sticky_1);
                     if (!GoodsParam.TYPE_HOT.equals(mType)) {
                         mType = GoodsParam.TYPE_HOT;
                         refresh();
@@ -250,10 +256,12 @@ public class TabHomeFragment extends BaseFragment {
                     final ItemMenu menu = obj.data.get(i);
                     tvMenu[i].setText(menu.title);
                     ImageLoader.displayMenu(ivMenu[i], menu.icon);
+                    final int finalI = i;
                     View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             openMenu(menu.title, menu.url);
+                            EventAgent.onEvent(getString(R.string.home_menu_) + (finalI + 1));
                         }
                     };
                     tvMenu[i].setOnClickListener(listener);
@@ -264,7 +272,7 @@ public class TabHomeFragment extends BaseFragment {
     }
 
     private void openMenu(String title, String url) {
-        if (url.contains("recharge") && !AppInstance.getInstance().isLogin()) {
+        if (url.contains(WebActivity.PAGE_CHARGE) && !AppInstance.getInstance().isLogin()) {
             startActivity(LoginActivity.newIntent());
             return;
         }
@@ -288,6 +296,7 @@ public class TabHomeFragment extends BaseFragment {
                     @Override
                     public void onItemClick(View view, ItemBanner item, int position) {
                         openMenu(item.title, item.url);
+                        EventAgent.onEvent(getString(R.string.banner_) + (position + 1));
                     }
                 });
                 mBinding.rvBanner.setAdapter(adapter);
@@ -336,6 +345,7 @@ public class TabHomeFragment extends BaseFragment {
     }
 
     public void onClickMessage(View view) {
+        EventAgent.onEvent(R.string.home_message);
         if (AppInstance.getInstance().isLogin()) {
             startActivity(MessageActivity.newIntent());
         } else {
@@ -353,6 +363,7 @@ public class TabHomeFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (hasCreatedView && isVisibleToUser) {
+            EventAgent.onEvent(R.string.tab_1);
             refresh();
         }
     }

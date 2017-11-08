@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
+import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
@@ -21,6 +22,7 @@ import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 
 import java.lang.reflect.Type;
@@ -57,10 +59,10 @@ public class TabLatestFragment extends BaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener<ItemLatest>() {
             @Override
             public void onItemClick(View view, ItemLatest item, int position) {
+                if (position < 5) {
+                    EventAgent.onEvent(getString(R.string.announce_) + (position + 1));
+                }
                 startActivity(AuctionDetailActivity.newIntent(item));
-//                WinDialog dialog = new WinDialog();
-//                dialog.setData(item);
-//                dialog.show(getChildFragmentManager(),"win");
             }
         });
         mAdapter.setLoadMoreListener(new LoadMoreListener() {
@@ -114,6 +116,7 @@ public class TabLatestFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (hasCreatedView && isVisibleToUser) {
+            EventAgent.onEvent(R.string.tab_2);
             refresh();
         }
     }

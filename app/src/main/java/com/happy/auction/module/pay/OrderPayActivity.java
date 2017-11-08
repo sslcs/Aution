@@ -17,6 +17,7 @@ import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.PayConfirmResponse;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.ToastUtil;
 
@@ -57,6 +58,7 @@ public class OrderPayActivity extends BasePayActivity {
     }
 
     public void onClickPay(View view) {
+        EventAgent.onEvent(R.string.reward_pay_confirm);
         final ItemPayType current = mAdapter.getItem(mAdapter.getSelectedPosition());
         PayConfirmParam param = new PayConfirmParam();
         param.pay_type = current.pay_type;

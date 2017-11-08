@@ -31,6 +31,7 @@ import com.happy.auction.module.me.CardActivity;
 import com.happy.auction.module.pay.OrderPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.StringUtil;
 import com.happy.auction.utils.ToastUtil;
@@ -161,23 +162,28 @@ public class OrderDetailActivity extends BaseBackActivity {
     public void onClickBtnBottom(View view) {
         if (mData.status == OrderDetail.STATUS_CONFIRM) {
             // 已确认
+            EventAgent.onEvent(R.string.reward_detail_share);
             startActivityForResult(BaskActivity.newIntent(mOrder.sid), REQUEST_CODE_BASK);
         } else if (mData.status >= OrderDetail.STATUS_BASK) {
             // 已晒单
+            EventAgent.onEvent(R.string.reward_detail_shareorder);
             startActivity(BaskMyActivity.newIntent());
         } else if (mData.status == OrderDetail.STATUS_WIN) {
             // 已拍中
+            EventAgent.onEvent(R.string.reward_detail_pay);
             Intent intent = OrderPayActivity.newIntent(mOrder);
             startActivityForResult(intent, REQUEST_CODE_PAY);
         } else if (mData.type == 1) {
             // 已付款-实物
             if (mData.address != null) {
+                EventAgent.onEvent(R.string.reward_detail_address_confirm);
                 onSelectAddress(mData.address.aid);
             } else {
                 onClickChangeAddress(null);
             }
         } else {
             // 已付款-虚拟物品
+            EventAgent.onEvent(R.string.reward_detail_number_option);
             Intent intent;
             if (hasContact) {
                 intent = ContactSelectActivity.newIntent();
@@ -237,15 +243,18 @@ public class OrderDetailActivity extends BaseBackActivity {
     }
 
     public void onClickChangeAddress(View view) {
+        EventAgent.onEvent(R.string.reward_detail_address_option);
         Intent intent = AddressSelectActivity.newIntent(mData.address.aid);
         startActivityForResult(intent, REQUEST_CODE_ADDRESS);
     }
 
     public void onClickCardPassword(View view) {
+        EventAgent.onEvent(R.string.reward_detail_cardcord);
         startActivity(CardActivity.newIntent());
     }
 
     public void onClickDetail(View view) {
+        EventAgent.onEvent(R.string.reward_detail_aution);
         startActivity(AuctionDetailActivity.newIntent(mOrder));
     }
 

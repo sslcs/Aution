@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
+import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationColor;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
@@ -26,6 +27,7 @@ import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 
@@ -73,6 +75,9 @@ public class TabCategoryFragment extends BaseFragment {
                 if (position == mAdapterCategory.getSelectedPosition()) {
                     return;
                 }
+                if (position < 10) {
+                    EventAgent.onEvent(getString(R.string.category_) + (position + 1));
+                }
                 mAdapterCategory.setSelectedPosition(position);
                 mCurrentCategory = item;
                 refresh();
@@ -86,6 +91,7 @@ public class TabCategoryFragment extends BaseFragment {
         mAdapterGoods.setOnItemClickListener(new OnItemClickListener<ItemGoods>() {
             @Override
             public void onItemClick(View view, ItemGoods item, int position) {
+                EventAgent.onEvent(R.string.category_detail);
                 startActivity(AuctionDetailActivity.newIntent(item));
             }
         });
@@ -199,6 +205,7 @@ public class TabCategoryFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (hasCreatedView && isVisibleToUser) {
+            EventAgent.onEvent(R.string.tab_3);
             refresh();
         }
     }

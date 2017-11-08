@@ -1,0 +1,98 @@
+<resources>
+    <string name="tab_1">tab_1</string>
+    <string name="tab_2">tab_2</string>
+    <string name="tab_3">tab_3</string>
+    <string name="tab_4">tab_4</string>
+
+    <string name="home_message">home_message</string>
+    <string name="banner_">banner_</string>
+    <string name="home_menu_">home_menu_</string>
+    <string name="home_marquee">home_marquee</string>
+    <string name="home_sticky_1">home_sticky_1</string>
+    <string name="home_sticky_2">home_sticky_2</string>
+    <string name="home_detail">home_detail</string>
+
+    <string name="announce_">announce_</string>
+    <string name="category_">category_</string>
+    <string name="category_detail">category_detail</string>
+
+    <string name="me_setting">me_setting</string>
+    <string name="me_personal">me_personal</string>
+    <string name="me_coins">me_coins</string>
+    <string name="me_freecoins">me_freecoins</string>
+    <string name="me_points">me_points</string>
+    <string name="me_recharge">me_recharge</string>
+    <string name="me_orders">me_orders</string>
+    <string name="me_orders_ongoing">me_orders_ongoing</string>
+    <string name="me_orders_deal">me_orders_deal</string>
+    <string name="me_orders_due">me_orders_due</string>
+    <string name="me_cardcord">me_cardcord</string>
+    <string name="me_shareorder">me_shareorder</string>
+    <string name="me_help">me_help</string>
+    <string name="me_message">me_message</string>
+
+    <string name="login_password">login_password</string>
+    <string name="login_quickpass">login_quickpass</string>
+
+    <string name="personal_head">personal_head</string>
+    <string name="personal_name">personal_name</string>
+    <string name="personal_password">personal_password</string>
+    <string name="personal_address">personal_address</string>
+    <string name="personal_contact">personal_phonenumber</string>
+
+    <string name="setting_logout">setting_logout</string>
+    <string name="setting_service_agreement">setting_service_agreement</string>
+    <string name="setting_about">setting_about</string>
+
+    <string name="balance_coins">balance_coins</string>
+    <string name="balance_freecoins">balance_freecoins</string>
+    <string name="balance_recharge">balance_recharge</string>
+
+    <string name="recharge_pay">recharge_pay</string>
+
+    <string name="cardcord_selectall">orders_all</string>
+    <string name="cardcord_copy">cardcord_copy</string>
+
+    <string name="orders_all">orders_all</string>
+    <string name="orders_ongoing">orders_ongoing</string>
+    <string name="orders_deal">orders_deal</string>
+    <string name="orders_due">orders_due</string>
+    <string name="orders_auction_detail">orders_auction_detail</string>
+    <string name="orders_reward_detail">orders_reward_detail</string>
+
+    <string name="reward_detail_aution">reward_detail_aution</string>
+    <string name="reward_detail_pay">reward_detail_pay</string>
+    <string name="reward_detail_number_option">reward_detail_number_option</string>
+    <string name="reward_detail_address_confirm">reward_detail_address_confirm</string>
+    <string name="reward_detail_address_option">reward_detail_address_option</string>
+    <string name="reward_detail_cardcord">reward_detail_cardcord</string>
+    <string name="reward_detail_share">reward_detail_share</string>
+    <string name="reward_detail_shareorder">reward_detail_shareorder</string>
+
+    <string name="reward_pay_confirm">reward_pay_confirm</string>
+
+    <string name="share_order_send">share_order_send</string>
+    <string name="share_order_photo">share_order_photo</string>
+    <string name="share_order_content">share_order_content</string>
+
+    <string name="goods_detail_more">goods_detail_more</string>
+    <string name="goods_detail_record">goods_detail_record</string>
+    <string name="goods_detail_rules">goods_detail_rules</string>
+    <string name="goods_detail_before">goods_detail_before</string>
+    <string name="goods_detail_before_share">goods_detail_before_share</string>
+    <string name="goods_detail_bid_add">goods_detail_bid_add</string>
+    <string name="goods_detail_bid_minus">goods_detail_bid_minus</string>
+    <string name="goods_detail_bid_choose">goods_detail_bid_choose</string>
+    <string name="goods_detail_bid">goods_detail_bid</string>
+    <string name="goods_detail_bid_cancel">goods_detail_bid_cancel</string>
+    <string name="goods_detail_bid_new">goods_detail_bid_new</string>
+    <string name="goods_detail_rules_understand">goods_detail_rules_understand</string>
+
+    <string name="goods_pay_confirm">goods_pay_confirm</string>
+
+    <string name="message_bid">message_bid</string>
+    <string name="message_stream">message_stream</string>
+    <string name="message_announce">message_announce</string>
+    <string name="click_message_detail">message_detail</string>
+
+</resources>

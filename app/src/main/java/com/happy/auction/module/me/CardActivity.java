@@ -31,6 +31,7 @@ import com.happy.auction.entity.param.CardParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.ToastUtil;
 
@@ -154,6 +155,7 @@ public class CardActivity extends BaseBackActivity {
     }
 
     public void onClickCopy(View view) {
+        EventAgent.onEvent(R.string.cardcord_copy);
         if (mSelectedList.isEmpty()) {
             return;
         }
@@ -172,6 +174,7 @@ public class CardActivity extends BaseBackActivity {
     }
 
     public void onClickSelect(View view) {
+        EventAgent.onEvent(R.string.cardcord_selectall);
         mSelectedList.clear();
         if (mBinding.tvSelect.isSelected()) {
             mBinding.tvSelect.setSelected(false);

@@ -20,6 +20,7 @@ import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.ui.LoadingDialog;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.ToastUtil;
 import com.qiniu.android.http.ResponseInfo;
@@ -49,6 +50,7 @@ public class BaskActivity extends BaseBackActivity {
     private int mSID;
     private ArrayList<String> mUploadImages = new ArrayList<>(2);
     private ArrayList<String> mSelectImages = new ArrayList<>(2);
+    private boolean bSendEvent = true;
 
     public static Intent newIntent(int sid) {
         Intent intent = new Intent(AppInstance.getInstance(), BaskActivity.class);
@@ -69,6 +71,7 @@ public class BaskActivity extends BaseBackActivity {
     }
 
     public void onClickAlbum(View view) {
+        EventAgent.onEvent(R.string.share_order_photo);
         MultiImageSelector.create()
                 .multi()
                 .count(2)
@@ -145,6 +148,7 @@ public class BaskActivity extends BaseBackActivity {
     }
 
     public void onClickSend(View view) {
+        EventAgent.onEvent(R.string.share_order_send);
         if (mLoadingDialog == null) {
             mLoadingDialog = new LoadingDialog();
         }
@@ -200,6 +204,10 @@ public class BaskActivity extends BaseBackActivity {
     }
 
     public void afterTextChanged(Editable s) {
+        if (bSendEvent) {
+            bSendEvent = false;
+            EventAgent.onEvent(R.string.share_order_content);
+        }
         checkValid();
     }
 

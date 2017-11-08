@@ -47,6 +47,8 @@ import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.pay.AuctionPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.DebugLog;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
@@ -144,11 +146,13 @@ public class AuctionDetailActivity extends BaseBackActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
+                    EventAgent.onEvent(R.string.goods_detail_before_share);
                     mBinding.vList.setAdapter(mAdapterBask);
                     if (mAdapterBask.isEmpty()) {
                         loadBask();
                     }
                 } else {
+                    EventAgent.onEvent(R.string.goods_detail_before);
                     mBinding.vList.setAdapter(mAdapterPrevious);
                     if (mAdapterPrevious.isEmpty()) {
                         loadPrevious();
@@ -162,6 +166,15 @@ public class AuctionDetailActivity extends BaseBackActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        mBinding.etTimes.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (bottom < oldBottom) {
+                    EventAgent.onEvent(R.string.goods_detail_bid_choose);
+                }
             }
         });
 
@@ -332,6 +345,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
     }
 
     public void onClickBid(View view) {
+        EventAgent.onEvent(R.string.goods_detail_bid);
         if (!AppInstance.getInstance().isLogin()) {
             startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN_BID);
             return;
@@ -400,6 +414,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
     }
 
     public void onClickNext(View view) {
+        EventAgent.onEvent(R.string.goods_detail_bid_new);
         mAdapter.clear();
         mBinding.setCoin(null);
         mBinding.setNewBid(null);
@@ -434,12 +449,14 @@ public class AuctionDetailActivity extends BaseBackActivity {
     }
 
     public void onClickMinus(View view) {
+        EventAgent.onEvent(R.string.goods_detail_bid_add);
         if (mTimes.get() > 1) {
             mTimes.set(mTimes.get() - 1);
         }
     }
 
     public void onClickPlus(View view) {
+        EventAgent.onEvent(R.string.goods_detail_bid_minus);
         mTimes.set(mTimes.get() + 1);
     }
 
@@ -453,6 +470,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
     }
 
     public void onClickCancel(View view) {
+        EventAgent.onEvent(R.string.goods_detail_bid_cancel);
         AuctionCancelParam param = new AuctionCancelParam();
         param.sid = mData.sid;
         BaseRequest<AuctionCancelParam> request = new BaseRequest<>(param);
@@ -518,16 +536,19 @@ public class AuctionDetailActivity extends BaseBackActivity {
     }
 
     public void onClickMore(View view) {
+        EventAgent.onEvent(R.string.goods_detail_record);
         startActivity(BidRecordActivity.newIntent(mData.sid, mData.status));
     }
 
     public void onClickDetail(View view) {
+        EventAgent.onEvent(R.string.goods_detail_more);
         String title = getString(R.string.goods_detail);
         String url = "http://" + BuildConfig.HOST + "/web/goods/detail?gid=" + mData.gid;
         startActivity(WebActivity.newIntent(title, url));
     }
 
     public void onClickRule(View view) {
+        EventAgent.onEvent(R.string.goods_detail_rules);
         RuleDialog.newInstance().show(getSupportFragmentManager(), "rule");
     }
 

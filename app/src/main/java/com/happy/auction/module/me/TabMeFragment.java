@@ -30,6 +30,7 @@ import com.happy.auction.module.pay.ChargePayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.ui.CustomDialog;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.StringUtil;
@@ -92,10 +93,12 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickSetting(View view) {
+        EventAgent.onEvent(R.string.me_setting);
         startActivity(SettingActivity.newIntent());
     }
 
     public void onClickAvatar(View view) {
+        EventAgent.onEvent(R.string.me_personal);
         if (!isLogin()) {
             return;
         }
@@ -103,6 +106,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickAuctionCoin(View view) {
+        EventAgent.onEvent(R.string.me_coins);
         if (!isLogin()) {
             return;
         }
@@ -110,6 +114,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickFreeCoin(View view) {
+        EventAgent.onEvent(R.string.me_freecoins);
         if (!isLogin()) {
             return;
         }
@@ -117,6 +122,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickPoint(View view) {
+        EventAgent.onEvent(R.string.me_points);
         new CustomDialog.Builder()
                 .content(getString(R.string.tip_coming))
                 .textRight(getString(R.string.ok))
@@ -124,6 +130,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickCharge(View view) {
+        EventAgent.onEvent(R.string.me_recharge);
         if (!isLogin()) {
             return;
         }
@@ -131,6 +138,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickOrder(View view) {
+        EventAgent.onEvent(R.string.me_orders);
         if (!isLogin()) {
             return;
         }
@@ -138,6 +146,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickAuctionGoing(View view) {
+        EventAgent.onEvent(R.string.me_orders_ongoing);
         if (!isLogin()) {
             return;
         }
@@ -145,6 +154,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickAuctionWin(View view) {
+        EventAgent.onEvent(R.string.me_orders_deal);
         if (!isLogin()) {
             return;
         }
@@ -152,6 +162,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickAuctionUnpaid(View view) {
+        EventAgent.onEvent(R.string.me_orders_due);
         if (!isLogin()) {
             return;
         }
@@ -159,6 +170,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickMyCard(View view) {
+        EventAgent.onEvent(R.string.me_cardcord);
         if (!isLogin()) {
             return;
         }
@@ -167,6 +179,7 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickMyPublish(View view) {
+        EventAgent.onEvent(R.string.me_shareorder);
         if (!isLogin()) {
             return;
         }
@@ -174,11 +187,13 @@ public class TabMeFragment extends BaseFragment {
     }
 
     public void onClickMyService(View view) {
+        EventAgent.onEvent(R.string.me_help);
         String title = getString(R.string.my_service);
         startActivity(WebActivity.newIntent(title, StringUtil.URL_SERVICE_CENTER));
     }
 
     public void onClickMyMessage(View view) {
+        EventAgent.onEvent(R.string.me_message);
         if (!isLogin()) {
             return;
         }
@@ -202,8 +217,13 @@ public class TabMeFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && AppInstance.getInstance().isLogin()) {
-            getBalance();
+        if (isVisibleToUser) {
+            if (hasCreatedView) {
+                EventAgent.onEvent(R.string.tab_3);
+            }
+            if (AppInstance.getInstance().isLogin()) {
+                getBalance();
+            }
         }
     }
 

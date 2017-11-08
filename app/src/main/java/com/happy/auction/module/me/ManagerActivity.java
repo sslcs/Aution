@@ -22,6 +22,7 @@ import com.happy.auction.module.address.ContactActivity;
 import com.happy.auction.module.login.ChangePasswordActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.ToastUtil;
 import com.qiniu.android.http.ResponseInfo;
@@ -64,23 +65,29 @@ public class ManagerActivity extends BaseBackActivity {
     }
 
     public void onClickAvatar(View view) {
+        EventAgent.onEvent(R.string.personal_head);
         MultiImageSelector.create()
                 .showCamera(true)
                 .single()
                 .start(this, REQUEST_CODE_CHOOSE);
     }
 
-    public void onClickPassword(View view) {startActivity(ChangePasswordActivity.newIntent());}
+    public void onClickPassword(View view) {
+        EventAgent.onEvent(R.string.personal_password);
+        startActivity(ChangePasswordActivity.newIntent());}
 
     public void onClickAddress(View view) {
+        EventAgent.onEvent(R.string.personal_address);
         startActivity(AddressActivity.newIntent());
     }
 
     public void onClickContact(View view) {
+        EventAgent.onEvent(R.string.personal_contact);
         startActivity(ContactActivity.newIntent());
     }
 
     public void onClickUsername(View view) {
+        EventAgent.onEvent(R.string.personal_name);
         startActivityForResult(UsernameActivity.newIntent(this), REQUEST_USER_INFO);
     }
 

@@ -40,7 +40,7 @@ import java.util.HashMap;
 public class WebActivity extends BaseBackActivity {
     private static final int REQUEST_CODE_LOGIN = 100;
 
-    private static final String PAGE_CHARGE = "recharge";
+    public static final String PAGE_CHARGE = "recharge";
     private static final String PAGE_BASK = "bask";
     private static final String PAGE_LOGIN = "login";
     private static final String PAGE_GOODS = "allGoods";
@@ -56,7 +56,7 @@ public class WebActivity extends BaseBackActivity {
 
 
     private ActivityWebBinding mBinding;
-    private String mTitle, mUrl;
+    private String mUrl;
 
     public static Intent newIntent(String title, String url) {
         DebugLog.e("title: " + title + " url: " + url);
@@ -103,7 +103,7 @@ public class WebActivity extends BaseBackActivity {
             return;
         }
 
-        mTitle = getIntent().getStringExtra(KEY_TITLE);
+        String mTitle = getIntent().getStringExtra(KEY_TITLE);
         if (mUrl.contains(NAME_STRATEGY)) {
             if (AppInstance.getInstance().isLogin()) {
                 mUrl += "?state=1&headimg=" + AppInstance.getInstance().getUser().avatar;

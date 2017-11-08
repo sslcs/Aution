@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
+import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
 import com.happy.auction.adapter.OnItemClickListener;
@@ -22,6 +23,7 @@ import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 
 import java.lang.reflect.Type;
@@ -42,6 +44,7 @@ public class OrderFragment extends BaseFragment {
 
     private FragmentListBinding mBinding;
     private OrderAdapter mAdapter;
+    private int mType;
 
     public static OrderFragment newInstance(int type) {
         OrderFragment fragment = new OrderFragment();
@@ -59,6 +62,7 @@ public class OrderFragment extends BaseFragment {
     }
 
     private void initLayout() {
+        mType = getArguments().getInt(KEY_TYPE);
         mBinding.refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -75,8 +79,10 @@ public class OrderFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, ItemOrder item, int position) {
                 if (item.status == 1 || item.status == 6) {
+                    EventAgent.onEvent(R.string.orders_auction_detail);
                     startActivity(AuctionDetailActivity.newIntent(item));
                 } else {
+                    EventAgent.onEvent(R.string.orders_reward_detail);
                     Bundle bundle = null;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                         bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, "v_info").toBundle();
@@ -104,7 +110,7 @@ public class OrderFragment extends BaseFragment {
     private void loadData(final int start) {
         OrderParam param = new OrderParam();
         param.start = start;
-        param.record_type = getArguments().getInt(KEY_TYPE);
+        param.record_type = mType;
         BaseRequest<OrderParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
@@ -129,8 +135,20 @@ public class OrderFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (hasCreatedView && isVisibleToUser && mAdapter.isEmpty()) {
-            loadData(0);
+        if (hasCreatedView && isVisibleToUser) {
+            if (mType == TYPE_ALL) {
+                EventAgent.onEvent(R.string.orders_all);
+            } else if (mType == TYPE_GOING) {
+                EventAgent.onEvent(R.string.orders_ongoing);
+            } else if (mType == TYPE_WIN) {
+                EventAgent.onEvent(R.string.orders_deal);
+            } else {
+                EventAgent.onEvent(R.string.orders_due);
+            }
+
+            if (mAdapter.isEmpty()) {
+                loadData(0);
+            }
         }
     }
 }
