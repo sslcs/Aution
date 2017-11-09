@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import com.happy.auction.AppInstance;
+import com.happy.auction.BuildConfig;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivitySettingBinding;
@@ -32,6 +33,9 @@ public class SettingActivity extends BaseBackActivity {
         super.onCreate(savedInstanceState);
         ActivitySettingBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
         binding.setUser(AppInstance.getInstance().getUser());
+        if (BuildConfig.DEBUG) {
+            binding.tvServer.setVisibility(View.VISIBLE);
+        }
     }
 
     public void onClickServiceProtocol(View view) {
@@ -61,5 +65,9 @@ public class SettingActivity extends BaseBackActivity {
                     }
                 })
                 .show(getSupportFragmentManager(), "Logout");
+    }
+
+    public void onClickServer(View view) {
+        startActivity(new Intent("com.happy.DebugActivity"));
     }
 }

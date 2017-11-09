@@ -79,12 +79,6 @@ public abstract class BasePayActivity extends BaseBackActivity {
                 return;
             }
             openBrowser(response.params);
-        } else if (ItemPayType.TH_PAY == response.pay_type) {
-            if (!PackageUtils.isInstalledAlipay(this)) {
-                ToastUtil.show(R.string.error_alipay);
-                return;
-            }
-            ThPay.getInstance(getSupportFragmentManager(), this).pay(response.params, current.app_id);
         } else if (ItemPayType.SDK_ALIPAY == response.pay_type) {
             if (!PackageUtils.isInstalledAlipay(this)) {
                 ToastUtil.show(R.string.error_alipay);

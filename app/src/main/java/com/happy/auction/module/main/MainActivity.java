@@ -60,6 +60,14 @@ public class MainActivity extends BaseTimeActivity {
     private boolean isDestroyed = false;
     private long mLastBackPressedTime;
 
+    public static Intent newInstance() {
+        Intent intent = new Intent(AppInstance.getInstance(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,10 +97,7 @@ public class MainActivity extends BaseTimeActivity {
             @Override
             public void accept(BidNowEvent bidNowEvent) throws Exception {
                 mBinding.viewPager.setCurrentItem(2, true);
-                Intent main = new Intent(MainActivity.this, MainActivity.class);
-                main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                main.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(main);
+                startActivity(MainActivity.newInstance());
             }
         });
 
@@ -136,8 +141,12 @@ public class MainActivity extends BaseTimeActivity {
 
     private void initWebSocket() {
         OkHttpClient httpClient = new OkHttpClient.Builder().build();
+        String host = BuildConfig.HOST;
+        if (BuildConfig.DEBUG) {
+            host = PreferenceUtil.getHost();
+        }
         Request request = new Request.Builder()
-                .url("ws://" + BuildConfig.HOST + "/ws")
+                .url("ws://" + host + "/ws")
                 .build();
         httpClient.newWebSocket(request, new WebSocketListener() {
             @Override
@@ -243,7 +252,8 @@ public class MainActivity extends BaseTimeActivity {
             ToastUtil.show(R.string.tip_exit);
             mLastBackPressedTime = System.currentTimeMillis();
         } else {
-            super.onBackPressed();
+            setResult(911);
+            finish();
         }
     }
 

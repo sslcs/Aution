@@ -9,6 +9,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="com.happy.auctio.permission.JPUSH_MESSAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
     <application
         android:name=".AppInstance"
@@ -19,6 +25,7 @@
 
         <activity
             android:name=".module.main.SplashActivity"
+            android:launchMode="singleTask"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -27,6 +34,7 @@
         </activity>
 
         <activity android:name=".module.main.MainActivity"/>
+        <activity android:name=".module.main.WebActivity"/>
         <activity android:name=".module.me.SettingActivity"/>
         <activity android:name=".module.me.UsernameActivity"/>
         <activity android:name=".module.me.BalanceActivity"/>
@@ -37,10 +45,12 @@
         <activity android:name=".module.login.LoginActivity"/>
         <activity android:name=".module.login.ForgetActivity"/>
         <activity android:name=".module.login.ChangePasswordActivity"/>
+        <activity android:name=".module.login.SetPasswordActivity"/>
         <activity android:name=".module.detail.AuctionDetailActivity"/>
         <activity android:name=".module.detail.BidRecordActivity"/>
         <activity android:name=".module.order.OrderActivity"/>
         <activity android:name=".module.order.OrderDetailActivity"/>
+        <activity android:name=".module.order.BaskActivity"/>
         <activity android:name=".module.pay.OrderPayActivity"/>
         <activity android:name=".module.pay.AuctionPayActivity"/>
         <activity android:name=".module.pay.ChargePayActivity"/>
@@ -50,21 +60,33 @@
         <activity android:name=".module.address.ContactEditActivity"/>
         <activity android:name=".module.address.ContactSelectActivity"/>
         <activity android:name=".module.address.AddressSelectActivity"/>
-        <activity android:name=".module.main.WebActivity"/>
         <activity android:name=".module.message.MessageActivity"/>
         <activity android:name=".module.message.MessageDetailActivity"/>
-        <activity android:name=".module.order.BaskActivity"/>
         <activity android:name=".module.home.BaskAllActivity"/>
-        <activity android:name=".module.login.SetPasswordActivity"/>
         <activity
             android:name=".module.home.ImageActivity"
             android:theme="@style/Fullscreen"/>
-        <activity android:name=".module.main.WinActivity"
+        <activity
+            android:name=".module.main.WinActivity"
             android:theme="@style/Transparent"/>
 
         <!--Image Selector Entry-->
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
             android:configChanges="orientation|screenSize"/>
+
+        <receiver
+            android:name=".module.main.PushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION"/> <!--Required  用户注册SDK的intent-->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/> <!--Required  用户接收SDK消息的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/> <!--Required  用户接收SDK通知栏信息的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/> <!--Required  用户打开自定义通知栏的intent-->
+                <action android:name="cn.jpush.android.intent.CONNECTION"/><!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="com.happy.auction"/>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

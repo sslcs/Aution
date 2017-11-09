@@ -4,6 +4,7 @@
     <string name="tip_empty">暂无记录</string>
     <string name="tip_empty_data">暂无数据</string>
     <string name="tip_coming">敬请期待</string>
+    <string name="title_debug">服务器选择</string>
 
     <!-- tab -->
     <string name="tab_home">首页</string>
@@ -157,7 +158,7 @@
     <string name="check_detail">查看详情</string>
 
     <!-- order detail -->
-    <string name="order_detail">订单详情</string>
+    <string name="order_detail">拍品详情</string>
     <string name="progress_bask">已晒单</string>
     <string name="progress_confirm">已确认领奖方式</string>
     <string name="progress_pay">已付款</string>
@@ -168,6 +169,7 @@
     <string name="mail_address">收货地址</string>
     <string name="mail_info">物流信息</string>
     <string name="confirm_address">确认收货地址</string>
+    <string name="add_mail_address">添加收货地址</string>
     <string name="select_virtual_address">选择充值号码</string>
     <string name="change_address">更改地址</string>
     <string name="tip_mail_info">将在1–5个工作日发货</string>
@@ -212,10 +214,10 @@
     <string name="manage_address">地址管理</string>
     <string name="manage_contact">联系人管理</string>
     <string name="edit_contact">编辑联系人</string>
-    <string name="title_add_contact">添加联系人</string>
     <string name="add_address">＋添加收货地址</string>
     <string name="select_address">选择收货地址</string>
     <string name="add_contact">＋添加联系人</string>
+    <string name="title_add_contact">添加联系人</string>
     <string name="select_contact">选择联系人</string>
     <string name="default_address">默认地址</string>
     <string name="delete">删除</string>

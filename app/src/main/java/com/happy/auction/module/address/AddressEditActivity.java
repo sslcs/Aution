@@ -15,6 +15,8 @@ import com.happy.auction.entity.item.Address;
 import com.happy.auction.entity.param.AddressEditParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.TownParam;
+import com.happy.auction.entity.response.AddAddressResponse;
+import com.happy.auction.entity.response.AddContactResponse;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.TownResponse;
 import com.happy.auction.net.NetCallback;
@@ -72,7 +74,7 @@ public class AddressEditActivity extends BaseBackActivity {
     }
 
     public void onClickStore(View view) {
-        AddressEditParam param = new AddressEditParam(mData != null);
+        final AddressEditParam param = new AddressEditParam(mData != null);
         param.username = mBinding.etUsername.getText().toString().trim();
         param.phone = mBinding.etPhone.getText().toString().trim();
         param.province = mProvince;
@@ -87,7 +89,16 @@ public class AddressEditActivity extends BaseBackActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                setResult(RESULT_OK);
+                Intent data = new Intent();
+                if (mData == null) {
+                    Type type = new TypeToken<DataResponse<AddAddressResponse>>() {}.getType();
+                    DataResponse<AddAddressResponse> obj = GsonSingleton.get().fromJson(response, type);
+                    if (obj != null && obj.data != null) {
+                        Address address = getAddress(obj.data.aid, param);
+                        data.putExtra(AddressSelectActivity.EXTRA_ADDRESS, address);
+                    }
+                }
+                setResult(RESULT_OK, data);
                 finish();
             }
 
@@ -97,6 +108,19 @@ public class AddressEditActivity extends BaseBackActivity {
                 ToastUtil.show(message);
             }
         });
+    }
+
+    private Address getAddress(int id, AddressEditParam param) {
+        Address address = new Address();
+        address.aid = id;
+        address.username = param.username;
+        address.phone = param.phone;
+        address.province = param.province;
+        address.city = param.city;
+        address.district = param.district;
+        address.town = param.town;
+        address.street = param.street;
+        return address;
     }
 
     public void onClickArea(View view) {

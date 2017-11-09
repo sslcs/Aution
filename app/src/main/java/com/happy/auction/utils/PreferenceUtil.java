@@ -3,6 +3,7 @@ package com.happy.auction.utils;
 import android.preference.PreferenceManager;
 
 import com.happy.auction.AppInstance;
+import com.happy.auction.BuildConfig;
 
 /**
  * SharedPreferences存储数据
@@ -12,6 +13,7 @@ import com.happy.auction.AppInstance;
  */
 
 public class PreferenceUtil {
+    private static final String KEY_HOST = "HOST";
     private static final String KEY_UID = "uid";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_TIP_CAPTCHA = "tip_captcha";
@@ -50,6 +52,14 @@ public class PreferenceUtil {
     public static void logout() {
         setUid("");
         setToken("");
+    }
+
+    public static String getHost() {
+        return getString(KEY_HOST, BuildConfig.HOST);
+    }
+
+    public static void setHost(String host) {
+        saveString(KEY_HOST, host);
     }
 
     public static boolean showSetPassword(String phone) {

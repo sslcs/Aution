@@ -71,7 +71,7 @@ public class MarqueeTextView extends android.support.v7.widget.AppCompatTextView
         if (disposable != null) {
             return;
         }
-        disposable = Observable.interval(3, TimeUnit.SECONDS)
+        disposable = Observable.interval(5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override

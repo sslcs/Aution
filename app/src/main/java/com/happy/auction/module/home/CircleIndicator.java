@@ -80,7 +80,6 @@ public class CircleIndicator extends View implements PagingScrollHelper.OnPageCh
     }
 
     public void setCount(int count) {
-        DebugLog.e("count : " + count);
         createTabItems(count);
         createMovingItem();
         requestLayout();
@@ -113,6 +112,7 @@ public class CircleIndicator extends View implements PagingScrollHelper.OnPageCh
     }
 
     private void createTabItems(int count) {
+        tabItems.clear();
         for (int i = 0; i < count; i++) {
             OvalShape circle = new OvalShape();
             ShapeDrawable drawable = new ShapeDrawable(circle);

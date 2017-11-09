@@ -35,9 +35,9 @@ import com.happy.auction.entity.param.MenuParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.GoodsResponse;
 import com.happy.auction.glide.ImageLoader;
-import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.detail.AuctionDetailActivity;
 import com.happy.auction.module.login.LoginActivity;
+import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.message.MessageActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
@@ -306,9 +306,30 @@ public class TabHomeFragment extends BaseFragment {
                     helper.setIndicator(mBinding.circleIndicator);
                     mBinding.circleIndicator.setVisibility(View.VISIBLE);
                     mBinding.circleIndicator.setCount(obj.data.size());
+                    autoScroll(adapter.getRealCount());
                 }
             }
         });
+    }
+
+    private void autoScroll(final int count) {
+        final LinearLayoutManager llm = (LinearLayoutManager) mBinding.rvBanner.getLayoutManager();
+        Observable.interval(5, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        int position = llm.findLastVisibleItemPosition();
+                        if (position != llm.findFirstVisibleItemPosition()) {
+                            return;
+                        }
+                        position++;
+                        if (position >= count) {
+                            position = 0;
+                        }
+                        mBinding.rvBanner.smoothScrollToPosition(position);
+                    }
+                });
     }
 
     private void loadGoods() {
@@ -329,7 +350,7 @@ public class TabHomeFragment extends BaseFragment {
                 if (obj.data != null && obj.data.goods != null && !obj.data.goods.isEmpty()) {
                     size = obj.data.goods.size();
                     mAdapter.addAll(obj.data.goods);
-                    mStart += size;
+                    mStart = mAdapter.getLast().sid;
                 }
                 mAdapter.setHasMore(size >= BaseParam.DEFAULT_LIMIT);
                 mAdapter.setLoaded();

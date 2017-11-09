@@ -99,9 +99,22 @@ public class AddressSelectActivity extends BaseBackActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mAdapter.isEmpty()) {
+            setResult(null);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     public void onClickConfirm(View view) {
+        setResult(mAdapter.getItem(mAdapter.getSelectPosition()));
+    }
+
+    private void setResult(Address address) {
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_ADDRESS, mAdapter.getItem(mAdapter.getSelectPosition()));
+        intent.putExtra(EXTRA_ADDRESS, address);
         setResult(RESULT_OK, intent);
         finish();
     }

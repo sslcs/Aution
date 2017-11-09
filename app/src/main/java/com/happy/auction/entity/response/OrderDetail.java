@@ -89,11 +89,11 @@ public class OrderDetail extends ItemOrder {
     }
 
     public boolean showAddress() {
-        return address != null && type == 1 && status > STATUS_WIN;
+        return address != null && !TextUtils.isEmpty(address.phone) && type == 1 && status > STATUS_WIN;
     }
 
     public boolean showChangeAddress() {
-        return type == 1 && status == STATUS_PAID;
+        return type == 1 && status == STATUS_PAID && !TextUtils.isEmpty(address.phone);
     }
 
     public boolean showMailInfo() {

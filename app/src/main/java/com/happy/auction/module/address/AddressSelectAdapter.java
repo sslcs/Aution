@@ -8,8 +8,10 @@ import com.happy.auction.databinding.ItemSelectAddressBinding;
 import com.happy.auction.entity.item.Address;
 
 /**
- * Created by LiuCongshan on 17-10-19.<br/>
  * 选择收货地址Adapter
+ *
+ * @author LiuCongshan
+ * @date 17-10-19
  */
 public class AddressSelectAdapter extends BaseCustomAdapter<Address, ItemSelectAddressBinding> {
     private int mSelectedPosition = -1;
@@ -17,6 +19,7 @@ public class AddressSelectAdapter extends BaseCustomAdapter<Address, ItemSelectA
 
     public AddressSelectAdapter(int id) {
         mId = id;
+        showBottom(false);
     }
 
     @Override

@@ -10,6 +10,8 @@ import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.utils.PreferenceUtil;
 import com.squareup.leakcanary.LeakCanary;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Application instance
  *
@@ -34,6 +36,8 @@ public class AppInstance extends Application {
         mInstance = this;
         uid = PreferenceUtil.getUid();
         token = PreferenceUtil.getToken();
+        JPushInterface.setDebugMode(BuildConfig.DEBUG);
+        JPushInterface.init(this);
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
@@ -102,7 +106,7 @@ public class AppInstance extends Application {
     }
 
     public String getChannel() {
-        return "";
+        return "0";
     }
 
     public int getResColor(int resId) {

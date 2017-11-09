@@ -12,6 +12,18 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64', 'arm64-v8a'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "0847fa596ddd675fd679aef3",
+                JPUSH_CHANNEL: "developer-default",
+        ]
     }
 
     //导入dataBinding支持
@@ -31,6 +43,7 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "HOST", '"192.168.1.250:80/v1"'
+            buildConfigField "String", "HOST_RELEASE", '"hpjp.sherwin.top/v1"'
             minifyEnabled false
             signingConfig signingConfigs.release
         }
@@ -91,7 +104,11 @@ dependencies {
     implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
     // RxBinding
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-
+    //LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    betaImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    // JPush
+    implementation 'cn.jiguang.sdk:jpush:3.0.9'
+    implementation 'cn.jiguang.sdk:jcore:1.1.7'
 }

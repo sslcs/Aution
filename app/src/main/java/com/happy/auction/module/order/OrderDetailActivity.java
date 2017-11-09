@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 
@@ -22,6 +23,7 @@ import com.happy.auction.entity.param.ContactParam;
 import com.happy.auction.entity.param.OrderDetailParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.OrderDetail;
+import com.happy.auction.module.address.AddressEditActivity;
 import com.happy.auction.module.address.AddressSelectActivity;
 import com.happy.auction.module.address.ContactEditActivity;
 import com.happy.auction.module.address.ContactSelectActivity;
@@ -150,8 +152,11 @@ public class OrderDetailActivity extends BaseBackActivity {
             mBinding.btnBottom.setText(R.string.go_pay);
         } else if (mData.type == 1) {
             // 已付款-实物
-            mBinding.btnBottom.setText(R.string.confirm_address);
-            loadContact();
+            if (mData.address != null && !TextUtils.isEmpty(mData.address.phone)) {
+                mBinding.btnBottom.setText(R.string.confirm_address);
+            } else {
+                mBinding.btnBottom.setText(R.string.add_mail_address);
+            }
         } else {
             // 已付款-虚拟物品
             mBinding.btnBottom.setText(R.string.select_virtual_address);
@@ -175,11 +180,11 @@ public class OrderDetailActivity extends BaseBackActivity {
             startActivityForResult(intent, REQUEST_CODE_PAY);
         } else if (mData.type == 1) {
             // 已付款-实物
-            if (mData.address != null) {
+            if (mData.address != null && !TextUtils.isEmpty(mData.address.phone)) {
                 EventAgent.onEvent(R.string.reward_detail_address_confirm);
                 onSelectAddress(mData.address.aid);
             } else {
-                onClickChangeAddress(null);
+                startActivityForResult(AddressEditActivity.newIntent(), REQUEST_CODE_ADDRESS);
             }
         } else {
             // 已付款-虚拟物品
@@ -213,7 +218,12 @@ public class OrderDetailActivity extends BaseBackActivity {
             }
         } else if (REQUEST_CODE_ADDRESS == requestCode) {
             mData.address = (Address) data.getSerializableExtra(AddressSelectActivity.EXTRA_ADDRESS);
-            mBinding.setData(mData);
+            if (mData.address != null) {
+                mBinding.setData(mData);
+                setBottom();
+            } else {
+                loadData();
+            }
         } else if (REQUEST_CODE_BASK == requestCode) {
             mData.status = 5;
             mOrder.status = 5;

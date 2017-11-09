@@ -1,8 +1,10 @@
 package com.happy.auction.entity.param;
 
 /**
- * Created by LiuCongshan on 17-10-17.<br/>
  * 编辑收货地址参数
+ *
+ * @author LiuCongshan
+ * @date 17-10-17
  */
 
 public class AddressEditParam extends BaseParam {

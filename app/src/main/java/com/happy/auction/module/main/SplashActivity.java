@@ -1,6 +1,7 @@
 package com.happy.auction.module.main;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.happy.auction.BuildConfig;
 import com.happy.auction.base.BasePageActivity;
+import com.happy.auction.utils.DebugLog;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -43,9 +45,15 @@ public class SplashActivity extends BasePageActivity {
         initUM();
 
         if (checkPermission()) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            startMain();
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        DebugLog.e("onNewIntent");
+        startMain();
     }
 
     private void initUM() {
@@ -61,7 +69,19 @@ public class SplashActivity extends BasePageActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        startMain();
+    }
+
+    private void startMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivityForResult(intent, 100);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 911) {
+            finish();
+        }
     }
 }
