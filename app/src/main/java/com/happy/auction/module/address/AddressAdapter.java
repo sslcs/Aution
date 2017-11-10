@@ -21,6 +21,10 @@ public class AddressAdapter extends BaseCustomAdapter<Address, ItemAddressBindin
     private OnViewClickListener<Address> mListener;
     private int mPositionDefault = -1;
 
+    public AddressAdapter() {
+        showBottom(false);
+    }
+
     @Override
     public CustomViewHolder getBindingEmpty(ViewGroup parent, LayoutInflater inflater) {
         EmptyAddressBinding binding = EmptyAddressBinding.inflate(inflater, parent, false);

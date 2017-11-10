@@ -370,7 +370,12 @@ public class TabHomeFragment extends BaseFragment {
         if (AppInstance.getInstance().isLogin()) {
             startActivity(MessageActivity.newIntent());
         } else {
-            startActivity(LoginActivity.newIntent());
+            startActivity(LoginActivity.newIntent(new LoginActivity.OnLoginListener() {
+                @Override
+                public void onLogin() {
+
+                }
+            }));
         }
     }
 

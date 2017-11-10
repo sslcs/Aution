@@ -47,13 +47,16 @@ import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.pay.AuctionPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
 
@@ -176,6 +179,16 @@ public class AuctionDetailActivity extends BaseBackActivity {
                 }
             }
         });
+
+        RxView.clicks(mBinding.btnBid)
+                .throttleFirst(500, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        DebugLog.e("objcect : " + o.toString());
+                        onClickBid(null);
+                    }
+                });
 
         initData();
         listenEvents();
@@ -404,7 +417,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
         if (AppInstance.getInstance().getUser().free_coin >= coin) {
             mAuctionCoin.setBidGiftCoin(mAuctionCoin.bid_gift_coin + coin);
             if (coin > mData.bid_fee) {
-                mAuctionCoin.setCurrentProgress(0);
+                mAuctionCoin.setCurrentProgress(1);
                 mAuctionCoin.setCurrentCoin(coin);
             }
         } else {

@@ -489,17 +489,16 @@
             android:paddingTop="10dp"
             android:text="@{coin==null? activity.getNotLogin() : coin.getBidTimes(coin.bid_coin,coin.bid_gift_coin)}"
             android:textColor="@color/text_dark"
-            app:layout_constraintBottom_toTopOf="@+id/btn_bottom"
+            app:layout_constraintBottom_toTopOf="@+id/btn_bid"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
         <TextView
-            android:id="@+id/btn_bottom"
+            android:id="@+id/btn_bid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_bottom"
             android:gravity="center"
-            android:onClick="onClickBid"
             android:paddingBottom="10dp"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
@@ -515,10 +514,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_bottom"
-            app:layout_constraintEnd_toStartOf="@+id/btn_bottom"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_bid"
+            app:layout_constraintEnd_toStartOf="@+id/btn_bid"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_bottom"/>
+            app:layout_constraintTop_toTopOf="@+id/btn_bid"/>
 
         <EditText
             android:id="@+id/et_times"
@@ -529,10 +528,10 @@
             android:gravity="center"
             android:inputType="number"
             android:text="@{String.valueOf(bidTimes)}"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_bottom"
-            app:layout_constraintEnd_toStartOf="@+id/btn_bottom"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_bid"
+            app:layout_constraintEnd_toStartOf="@+id/btn_bid"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_bottom"/>
+            app:layout_constraintTop_toTopOf="@+id/btn_bid"/>
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
@@ -617,7 +616,7 @@
             android:visibility="@{coin.current_bid_coins==0?View.GONE:View.VISIBLE,default=gone}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_bottom"/>
+            app:layout_constraintTop_toTopOf="@+id/btn_bid"/>
 
         <TextView
             android:id="@+id/btn_next"
@@ -633,7 +632,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_bottom"
+            app:layout_constraintTop_toTopOf="@+id/btn_bid"
             tools:visibility="gone"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -21,6 +21,10 @@ import com.happy.auction.entity.item.Contact;
 public class ContactAdapter extends BaseCustomAdapter<Contact, ItemContactBinding> {
     private OnViewClickListener<Contact> mListener;
 
+    public ContactAdapter(){
+        showBottom(false);
+    }
+
     @Override
     public CustomViewHolder getBindingEmpty(ViewGroup parent, LayoutInflater inflater) {
         EmptyAddressBinding binding = EmptyAddressBinding.inflate(inflater, parent, false);

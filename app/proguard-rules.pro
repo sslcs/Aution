@@ -30,3 +30,11 @@
 -keep public class com.happy.auction.R$* {
     public static final int *;
 }
+
+#威付通
+-keep public class om.switfpass.pay.R$* {
+    public static final int *;
+}
+-keep class com.switfpass.pay.** {
+    *;
+}

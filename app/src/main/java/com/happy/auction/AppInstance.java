@@ -96,6 +96,7 @@ public class AppInstance extends Application {
         PreferenceUtil.logout();
         uid = "";
         token = "";
+        setUser(null);
     }
 
     public void setLoginResponse(LoginResponse response) {

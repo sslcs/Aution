@@ -1,6 +1,5 @@
 package com.happy.auction.module.login;
 
-import android.app.Activity;
 import android.content.Intent;
 
 import com.happy.auction.AppInstance;
@@ -18,10 +17,16 @@ import io.reactivex.functions.Consumer;
  * @author LiuCongshan
  */
 public class LoginActivity extends BaseTabActivity {
+    private static OnLoginListener mListener;
     private String phone;
 
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), LoginActivity.class);
+    }
+
+    public static Intent newIntent(OnLoginListener listener) {
+        mListener = listener;
+        return newIntent();
     }
 
     @Override
@@ -36,7 +41,7 @@ public class LoginActivity extends BaseTabActivity {
         RxBus.getDefault().subscribe(this, LoginResponse.class, new Consumer<LoginResponse>() {
             @Override
             public void accept(LoginResponse response) throws Exception {
-                setResult(Activity.RESULT_OK);
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -48,5 +53,19 @@ public class LoginActivity extends BaseTabActivity {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mListener = null;
+        RxBus.getDefault().unsubscribe(this);
+    }
+
+    public interface OnLoginListener {
+        /**
+         * 回调登录成功事件
+         */
+        void onLogin();
     }
 }

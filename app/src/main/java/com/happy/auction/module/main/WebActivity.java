@@ -19,17 +19,21 @@ import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityWebBinding;
 import com.happy.auction.entity.param.ActivityCompleteParam;
 import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.home.BaskAllActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.pay.ChargePayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.DebugLog;
+import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
 
 import java.io.File;
 import java.net.URLDecoder;
 import java.util.HashMap;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * WebView页面
@@ -38,9 +42,10 @@ import java.util.HashMap;
  */
 
 public class WebActivity extends BaseBackActivity {
+    public static final String PAGE_CHARGE = "recharge";
+
     private static final int REQUEST_CODE_LOGIN = 100;
 
-    public static final String PAGE_CHARGE = "recharge";
     private static final String PAGE_BASK = "bask";
     private static final String PAGE_LOGIN = "login";
     private static final String PAGE_GOODS = "allGoods";
@@ -141,6 +146,17 @@ public class WebActivity extends BaseBackActivity {
         } else if (PAGE_GOODS.equalsIgnoreCase(page)) {
             onActivityComplete();
         } else if (PAGE_LOGIN.equalsIgnoreCase(page)) {
+            if (mUrl.contains(NAME_STRATEGY)) {
+                RxBus.getDefault().subscribe(this, UserInfo.class, new Consumer<UserInfo>() {
+                    @Override
+                    public void accept(UserInfo user) throws Exception {
+                        mUrl += "&headimg=" + AppInstance.getInstance().getUser().avatar;
+                        mUrl += "&name=" + Uri.parse(AppInstance.getInstance().getUser().username);
+                        mUrl += "&local=gdgz";
+                        mBinding.webView.loadUrl(mUrl);
+                    }
+                });
+            }
             startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN);
         } else if (PAGE_SHARE.equalsIgnoreCase(page)) {
         } else {
@@ -155,6 +171,11 @@ public class WebActivity extends BaseBackActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
+                finish();
+            }
+
+            @Override
+            public void onError(int code, String message) {
                 finish();
             }
         });
@@ -256,5 +277,11 @@ public class WebActivity extends BaseBackActivity {
                 mBinding.webView.loadUrl(mUrl);
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxBus.getDefault().unsubscribe(this);
     }
 }

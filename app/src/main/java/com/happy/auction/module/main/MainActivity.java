@@ -243,6 +243,10 @@ public class MainActivity extends BaseTimeActivity {
     protected void onDestroy() {
         super.onDestroy();
         isDestroyed = true;
+        if (mSocket != null) {
+            mSocket.cancel();
+            mSocket = null;
+        }
         RxBus.getDefault().unsubscribeAll();
     }
 

@@ -92,13 +92,17 @@ public abstract class BasePayActivity extends BaseBackActivity {
             }
             openBrowser(response.params);
         } else {
+            isPaying = true;
             openBrowser(response.params);
         }
-
         isPaying = true;
     }
 
     private void openBrowser(String url) {
+        if (TextUtils.isEmpty(url)) {
+            onResume();
+            return;
+        }
         Uri uri = Uri.parse(url);
         startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
