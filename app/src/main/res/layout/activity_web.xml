@@ -18,7 +18,7 @@
             app:layout_constraintStart_toStartOf="@+id/tv_toolbar_title"
             app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
 
-        <WebView
+        <com.happy.auction.module.main.CustomWebView
             android:id="@+id/web_view"
             android:layout_width="0dp"
             android:layout_height="0dp"

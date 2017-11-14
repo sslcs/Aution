@@ -112,16 +112,7 @@ public class CaptchaLoginFragment extends BaseFragment {
         param.phone = mBinding.etPhone.getText().toString();
         param.code = mBinding.etCaptcha.getText().toString();
         param.login_type = LoginParam.TYPE_CAPTCHA;
-
-        BaseRequest<LoginParam> request = new BaseRequest<>(param);
-        NetClient.query(request, new NetCallback() {
-            @Override
-            public void onSuccess(String response, String message) {
-                Type type = new TypeToken<DataResponse<LoginResponse>>() {}.getType();
-                DataResponse<LoginResponse> obj = GsonSingleton.get().fromJson(response, type);
-                RxBus.getDefault().post(obj.data);
-            }
-        });
+        ((LoginActivity)getActivity()).login(param);
     }
 
     public void onClickClose(View view) {

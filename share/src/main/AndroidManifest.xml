@@ -1,0 +1,27 @@
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.happy.auction">
+
+    <application>
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <!--微信分享回调 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
+        <meta-data
+            android:name="Mob-AppKey"
+            android:value="21e161dc93922"/>
+        <meta-data
+            android:name="Mob-AppSecret"
+            android:value="bd8d79529ef767bf111e9c87608f46ea"/>
+    </application>
+</manifest>

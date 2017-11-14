@@ -2,18 +2,18 @@ package com.happy.auction.module.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.webkit.SslErrorHandler;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.happy.auction.AppInstance;
-import com.happy.auction.BuildConfig;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityWebBinding;
@@ -27,12 +27,13 @@ import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.RxBus;
+import com.happy.auction.utils.StringUtil;
 import com.happy.auction.utils.ToastUtil;
 
-import java.io.File;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -159,6 +160,9 @@ public class WebActivity extends BaseBackActivity {
             }
             startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN);
         } else if (PAGE_SHARE.equalsIgnoreCase(page)) {
+            String title = map.get("wxtitle");
+            String content = map.get("wxcontent");
+            share(title, content);
         } else {
             return false;
         }
@@ -219,45 +223,6 @@ public class WebActivity extends BaseBackActivity {
                 }
             }
         });
-        // init settings
-        final WebSettings settings = mBinding.webView.getSettings();
-
-        // build in zoom bar
-        settings.setSupportZoom(false);
-        settings.setBuiltInZoomControls(false);
-
-        // auto scale to fit in
-        settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(true);
-
-        // enabled flash plugin or other
-        settings.setPluginState(WebSettings.PluginState.ON);
-
-        settings.setJavaScriptEnabled(true);
-        settings.setJavaScriptCanOpenWindowsAutomatically(true);
-
-        try {
-            File cacheDir = getApplicationContext().getExternalCacheDir();
-            if (cacheDir == null) {
-                getCacheDir();
-            }
-            if (cacheDir != null) {
-                settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-                settings.setAppCachePath(cacheDir.getAbsolutePath());
-                settings.setAppCacheEnabled(true);
-                settings.setAllowFileAccess(true);
-                settings.setDomStorageEnabled(true);
-                settings.setLoadsImagesAutomatically(true);
-            }
-        } catch (Exception ignored) {
-        }
-
-        final String ua = settings.getUserAgentString() + getBaseUserAgent();
-        settings.setUserAgentString(ua);
-    }
-
-    private String getBaseUserAgent() {
-        return " UA/plat=1&ver=" + BuildConfig.VERSION_NAME + "&channel=" + AppInstance.getInstance().getChannel() + "&appid=3 ";
     }
 
     @Override
@@ -283,5 +248,21 @@ public class WebActivity extends BaseBackActivity {
     protected void onDestroy() {
         super.onDestroy();
         RxBus.getDefault().unsubscribe(this);
+    }
+
+
+    private void share(String title, String content) {
+        OnekeyShare oks = new OnekeyShare();
+        oks.disableSSOWhenAuthorize();
+        oks.setTitle(title);
+        oks.setText(content);
+        Bitmap logo = BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo);
+        oks.setImageData(logo);
+        String url = mUrl.replace("client_index", "login");
+        url += "?name=" + StringUtil.formatPhone(AppInstance.getInstance().getUser().phone);
+        url += "&uid=" + AppInstance.getInstance().uid;
+        oks.setUrl(url);
+        oks.setSilent(true);
+        oks.show(this);
     }
 }

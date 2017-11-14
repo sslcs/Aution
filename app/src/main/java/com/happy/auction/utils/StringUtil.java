@@ -1,5 +1,7 @@
 package com.happy.auction.utils;
 
+import android.text.TextUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -75,5 +77,12 @@ public class StringUtil {
     public static String formatPercent(int save) {
         float percent = save / 100.0f;
         return String.format(Locale.CHINA, "%.2f%%", percent);
+    }
+
+    public static String formatPhone(String phone) {
+        if (TextUtils.isEmpty(phone) || phone.length() < 11) {
+            return phone;
+        }
+        return phone.substring(0, 3) + "****" + phone.substring(7);
     }
 }

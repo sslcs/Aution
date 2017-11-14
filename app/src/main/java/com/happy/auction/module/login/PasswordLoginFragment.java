@@ -30,13 +30,10 @@ import java.lang.reflect.Type;
 
 /**
  * 密码登录
+ * @author LiuCongshan
  */
 public class PasswordLoginFragment extends BaseFragment {
     private FragmentPasswordLoginBinding binding;
-
-    public PasswordLoginFragment() {
-        // Required empty public constructor
-    }
 
     public static PasswordLoginFragment newInstance() {
         return new PasswordLoginFragment();
@@ -83,16 +80,7 @@ public class PasswordLoginFragment extends BaseFragment {
         param.phone = binding.etPhone.getText().toString();
         param.pwd = binding.etPassword.getText().toString();
         param.login_type = LoginParam.TYPE_PASSWORD;
-
-        BaseRequest<LoginParam> request = new BaseRequest<>(param);
-        NetClient.query(request, new NetCallback() {
-            @Override
-            public void onSuccess(String response, String message) {
-                Type type = new TypeToken<DataResponse<LoginResponse>>() {}.getType();
-                DataResponse<LoginResponse> obj = GsonSingleton.get().fromJson(response, type);
-                RxBus.getDefault().post(obj.data);
-            }
-        });
+        ((LoginActivity)getActivity()).login(param);
     }
 
     public void onClickForget(View view) {

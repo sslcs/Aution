@@ -48,12 +48,6 @@ android {
             signingConfig signingConfigs.release
         }
 
-        beta {
-            buildConfigField "String", "HOST", '"hpjp.sherwin.top/v1"'
-            minifyEnabled false
-            signingConfig signingConfigs.release
-        }
-
         release {
             buildConfigField "String", "HOST", '"hpjp.sherwin.top/v1"'
             minifyEnabled true
@@ -106,9 +100,10 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     //LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    betaImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     // JPush
     implementation 'cn.jiguang.sdk:jpush:3.0.9'
     implementation 'cn.jiguang.sdk:jcore:1.1.7'
+
+    implementation project(':share')
 }

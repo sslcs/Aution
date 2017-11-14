@@ -2,12 +2,24 @@ package com.happy.auction.module.login;
 
 import android.content.Intent;
 
+import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.ViewPagerAdapter;
 import com.happy.auction.base.BaseTabActivity;
+import com.happy.auction.entity.param.BaseRequest;
+import com.happy.auction.entity.param.LoginParam;
+import com.happy.auction.entity.param.UserInfoParam;
+import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.LoginResponse;
+import com.happy.auction.entity.response.UserInfo;
+import com.happy.auction.net.NetCallback;
+import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.GsonSingleton;
+import com.happy.auction.utils.PreferenceUtil;
 import com.happy.auction.utils.RxBus;
+
+import java.lang.reflect.Type;
 
 import io.reactivex.functions.Consumer;
 
@@ -26,7 +38,7 @@ public class LoginActivity extends BaseTabActivity {
 
     public static Intent newIntent(OnLoginListener listener) {
         mListener = listener;
-        return newIntent();
+        return new Intent(AppInstance.getInstance(), LoginActivity.class);
     }
 
     @Override
@@ -41,8 +53,44 @@ public class LoginActivity extends BaseTabActivity {
         RxBus.getDefault().subscribe(this, LoginResponse.class, new Consumer<LoginResponse>() {
             @Override
             public void accept(LoginResponse response) throws Exception {
+                getUserInfo();
+            }
+        });
+    }
+
+    private void getUserInfo() {
+        UserInfoParam param = new UserInfoParam();
+        BaseRequest<UserInfoParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<UserInfo>>() {}.getType();
+                DataResponse<UserInfo> obj = GsonSingleton.get().fromJson(response, type);
+                AppInstance.getInstance().setUser(obj.data);
+                RxBus.getDefault().post(obj.data);
+
+                if (obj.data == null) {
+                    return;
+                }
                 setResult(RESULT_OK);
                 finish();
+                if (obj.data.noPassword() && PreferenceUtil.showSetPassword(obj.data.phone)) {
+                    startActivity(SetPasswordActivity.newIntent());
+                } else if (mListener != null) {
+                    mListener.onLogin();
+                }
+            }
+        });
+    }
+
+    public void login(LoginParam param) {
+        BaseRequest<LoginParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<LoginResponse>>() {}.getType();
+                DataResponse<LoginResponse> obj = GsonSingleton.get().fromJson(response, type);
+                RxBus.getDefault().post(obj.data);
             }
         });
     }

@@ -41,15 +41,23 @@ import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.message.MessageActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
+import com.mob.MobSDK;
+import com.mob.commons.SHARESDK;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -271,9 +279,14 @@ public class TabHomeFragment extends BaseFragment {
         });
     }
 
-    private void openMenu(String title, String url) {
+    private void openMenu(final String title, final String url) {
         if (url.contains(WebActivity.PAGE_CHARGE) && !AppInstance.getInstance().isLogin()) {
-            startActivity(LoginActivity.newIntent());
+            startActivity(LoginActivity.newIntent(new LoginActivity.OnLoginListener() {
+                @Override
+                public void onLogin() {
+                    openMenu(title, url);
+                }
+            }));
             return;
         }
 
@@ -373,7 +386,7 @@ public class TabHomeFragment extends BaseFragment {
             startActivity(LoginActivity.newIntent(new LoginActivity.OnLoginListener() {
                 @Override
                 public void onLogin() {
-
+                    startActivity(MessageActivity.newIntent());
                 }
             }));
         }

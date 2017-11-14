@@ -181,11 +181,10 @@ public class AuctionDetailActivity extends BaseBackActivity {
         });
 
         RxView.clicks(mBinding.btnBid)
-                .throttleFirst(500, TimeUnit.MILLISECONDS)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        DebugLog.e("objcect : " + o.toString());
                         onClickBid(null);
                     }
                 });
