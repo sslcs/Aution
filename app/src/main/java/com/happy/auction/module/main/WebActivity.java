@@ -210,7 +210,6 @@ public class WebActivity extends BaseBackActivity {
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String url) {
-                super.onReceivedError(view, errorCode, description, url);
                 if (url.startsWith(SCHEME_QQ)) {
                     try {
                         Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
@@ -220,6 +219,8 @@ public class WebActivity extends BaseBackActivity {
                     } catch (Exception e) {
                         ToastUtil.show(R.string.error_qq);
                     }
+                } else {
+                    super.onReceivedError(view, errorCode, description, url);
                 }
             }
         });

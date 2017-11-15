@@ -1,8 +1,10 @@
 package com.happy.auction.entity.param;
 
 /**
- * Created by LiuCongshan on 17-9-11.
  * 获取用户信息参数
+ *
+ * @author LiuCongshan
+ * @date 17-9-11
  */
 
 public class UserInfoParam extends BaseParam {

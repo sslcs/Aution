@@ -609,7 +609,6 @@
             android:layout_height="0dp"
             android:background="@color/btn_disable"
             android:gravity="center"
-            android:onClick="onClickCancel"
             android:text="@string/detail_btn_cancel"
             android:textColor="@color/btn_text_selector"
             android:textSize="17sp"

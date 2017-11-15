@@ -30,11 +30,80 @@
 -keep public class com.happy.auction.R$* {
     public static final int *;
 }
+-keep class com.happy.auction.entity.** {*;}
 
-#威付通
--keep public class om.switfpass.pay.R$* {
-    public static final int *;
+-keepattributes *Annotation*
+
+#ShareSDk
+-keep class com.mob.tools.**{*;}
+-keep class cn.sharesdk.**{*;}
+-keep class **.R$* {*;}
+-keep class **.R{*;}
+-dontwarn com.mob.tools.**
+-dontwarn **.R$*
+
+#Jpush
+-dontoptimize
+-dontpreverify
+
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** {*;}
+
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** {*;}
+
+#保留行号
+-keepattributes SourceFile,LineNumberTable
+
+##自定义View不能被混淆
+-keep public class * extends android.view.* {
+    void set*(***);
+    *** get*();
 }
--keep class com.switfpass.pay.** {
-    *;
+-keep public class * extends android.widget.* {
+    void set*(***);
+    *** get*();
 }
+
+# 保持自定义控件类不被混淆
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+# 保持自定义控件类不被混淆
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+-keep public class * implements TypeEvaluator<*> {*;}
+
+-keep class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator *;
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+
+#WheelPicker
+-keep class com.aigestudio.wheelpicker.** {*;}
+
+#rxjava
+-dontwarn sun.misc.**
+-keep class sun.misc.** {*;}
+-dontwarn javax.annotation.**
+-keep class javax.annotation.** {*;}
+
+#glide
+-keep class com.bumptech.glide.** {*;}
+#picasso
+-dontwarn com.squareup.okhttp.**
+-keep class com.squareup.okhttp.** {*;}
+-dontwarn okio.**
+-keep class okio.** {*;}
+
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-verbose

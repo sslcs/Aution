@@ -16,7 +16,6 @@ import com.happy.auction.entity.param.AddressEditParam;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.TownParam;
 import com.happy.auction.entity.response.AddAddressResponse;
-import com.happy.auction.entity.response.AddContactResponse;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.TownResponse;
 import com.happy.auction.net.NetCallback;

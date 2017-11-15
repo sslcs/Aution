@@ -22,8 +22,8 @@ import com.happy.auction.entity.param.UserInfoParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
-import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.login.LoginActivity;
+import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.message.MessageActivity;
 import com.happy.auction.module.order.OrderActivity;
 import com.happy.auction.module.pay.ChargePayActivity;
@@ -84,11 +84,16 @@ public class TabMeFragment extends BaseFragment {
         });
     }
 
-    private boolean isLogin() {
+    private boolean isLogin(final View view) {
         if (AppInstance.getInstance().isLogin()) {
             return true;
         }
-        startActivity(LoginActivity.newIntent());
+        startActivity(LoginActivity.newIntent(new LoginActivity.OnLoginListener() {
+            @Override
+            public void onLogin() {
+                view.performClick();
+            }
+        }));
         return false;
     }
 
@@ -99,7 +104,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickAvatar(View view) {
         EventAgent.onEvent(R.string.me_personal);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(ManagerActivity.newIntent(getActivity()));
@@ -107,7 +112,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickAuctionCoin(View view) {
         EventAgent.onEvent(R.string.me_coins);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(BalanceActivity.newIntent(0));
@@ -115,7 +120,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickFreeCoin(View view) {
         EventAgent.onEvent(R.string.me_freecoins);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(BalanceActivity.newIntent(1));
@@ -131,7 +136,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickCharge(View view) {
         EventAgent.onEvent(R.string.me_recharge);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(ChargePayActivity.newIntent());
@@ -139,7 +144,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickOrder(View view) {
         EventAgent.onEvent(R.string.me_orders);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(OrderActivity.newIntent(0));
@@ -147,7 +152,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickAuctionGoing(View view) {
         EventAgent.onEvent(R.string.me_orders_ongoing);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(OrderActivity.newIntent(1));
@@ -155,7 +160,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickAuctionWin(View view) {
         EventAgent.onEvent(R.string.me_orders_deal);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(OrderActivity.newIntent(2));
@@ -163,7 +168,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickAuctionUnpaid(View view) {
         EventAgent.onEvent(R.string.me_orders_due);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(OrderActivity.newIntent(3));
@@ -171,7 +176,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickMyCard(View view) {
         EventAgent.onEvent(R.string.me_cardcord);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(CardActivity.newIntent());
@@ -180,7 +185,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickMyPublish(View view) {
         EventAgent.onEvent(R.string.me_shareorder);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(BaskMyActivity.newIntent());
@@ -194,7 +199,7 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickMyMessage(View view) {
         EventAgent.onEvent(R.string.me_message);
-        if (!isLogin()) {
+        if (!isLogin(view)) {
             return;
         }
         startActivity(MessageActivity.newIntent());

@@ -7,26 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.reflect.TypeToken;
 import com.happy.auction.R;
 import com.happy.auction.base.BaseFragment;
 import com.happy.auction.databinding.FragmentCaptchaLoginBinding;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.CaptchaParam;
 import com.happy.auction.entity.param.LoginParam;
-import com.happy.auction.entity.response.DataResponse;
-import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.ui.TimerButton;
 import com.happy.auction.utils.EventAgent;
-import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.PreferenceUtil;
-import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
 import com.happy.auction.utils.Validation;
-
-import java.lang.reflect.Type;
 
 /**
  * 免密登录

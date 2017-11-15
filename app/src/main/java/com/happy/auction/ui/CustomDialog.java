@@ -169,6 +169,11 @@ public class CustomDialog extends BaseDialog {
     }
 
     public interface OnClickListener {
+        /**
+         * 点击事件
+         *
+         * @param dialog 当前dialog
+         */
         void onClick(DialogFragment dialog);
     }
 
@@ -176,6 +181,7 @@ public class CustomDialog extends BaseDialog {
         private Bundle bundle;
         private OnClickListener mListenerLeft;
         private OnClickListener mListenerRight;
+        private boolean cancelable = true;
 
         public Builder() {
             bundle = new Bundle();
@@ -231,6 +237,11 @@ public class CustomDialog extends BaseDialog {
             return this;
         }
 
+        public Builder setCancelable(boolean cancelable) {
+            this.cancelable = cancelable;
+            return this;
+        }
+
         public CustomDialog build() {
             CustomDialog dialog = new CustomDialog();
             dialog.setArguments(bundle);
@@ -240,6 +251,7 @@ public class CustomDialog extends BaseDialog {
             if (mListenerRight != null) {
                 dialog.setRightOnClickListener(mListenerRight);
             }
+            dialog.setCancelable(cancelable);
             return dialog;
         }
 

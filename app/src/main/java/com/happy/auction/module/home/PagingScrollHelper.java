@@ -152,12 +152,12 @@ public class PagingScrollHelper extends RecyclerView.OnFlingListener {
         if (newState == 0 && mOrientation != ORIENTATION_NULL) {
             int vX = 0, vY = 0;
             if (mOrientation == ORIENTATION_VERTICAL) {
-                //如果滑动的距离超过屏幕的一半表示需要滑动到下一页
-                if (Math.abs(offsetY) > mRecyclerView.getHeight() / 2) {
+                //如果滑动的距离超过屏幕的1/3表示需要滑动到下一页
+                if (Math.abs(offsetY) > mRecyclerView.getHeight() / 3) {
                     vY = offsetY;
                 }
             } else {
-                if (Math.abs(offsetX) > mRecyclerView.getWidth() / 2) {
+                if (Math.abs(offsetX) > mRecyclerView.getWidth() / 3) {
                     vX = offsetX;
                 }
             }

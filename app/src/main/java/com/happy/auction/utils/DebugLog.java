@@ -3,15 +3,15 @@ package com.happy.auction.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.happy.auction.BuildConfig;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Created by LiuCongshan on 2015/7/8 10:05.
  * Debug Log
+ *
+ * @author LiuCongshan
+ * @date 2015/7/8 10:05
  */
 public class DebugLog {
     static String className;
@@ -23,7 +23,7 @@ public class DebugLog {
     }
 
     public static boolean isDebuggable() {
-        return BuildConfig.DEBUG;
+        return true;
     }
 
     private static String createLog(String log) {
@@ -45,8 +45,7 @@ public class DebugLog {
         Log.e(className, createLog(message));
     }
 
-    public static void e(Throwable e)
-    {
+    public static void e(Throwable e) {
         if (!isDebuggable()) {
             return;
         }

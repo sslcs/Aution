@@ -41,23 +41,15 @@ import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.message.MessageActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
-import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.ToastUtil;
-import com.mob.MobSDK;
-import com.mob.commons.SHARESDK;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -326,23 +318,30 @@ public class TabHomeFragment extends BaseFragment {
     }
 
     private void autoScroll(final int count) {
-        final LinearLayoutManager llm = (LinearLayoutManager) mBinding.rvBanner.getLayoutManager();
         Observable.interval(5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        int position = llm.findLastVisibleItemPosition();
-                        if (position != llm.findFirstVisibleItemPosition()) {
-                            return;
-                        }
-                        position++;
-                        if (position >= count) {
-                            position = 0;
-                        }
-                        mBinding.rvBanner.smoothScrollToPosition(position);
+                        scroll(count);
                     }
                 });
+    }
+
+    private void scroll(int count) {
+        LinearLayoutManager llm = (LinearLayoutManager) mBinding.rvBanner.getLayoutManager();
+        int position = llm.findLastVisibleItemPosition();
+        if (position != llm.findFirstVisibleItemPosition()) {
+            return;
+        }
+        position++;
+        if (position >= count) {
+            position = 0;
+            mBinding.circleIndicator.onPageChanged(position);
+            mBinding.rvBanner.scrollToPosition(position);
+        } else {
+            mBinding.rvBanner.smoothScrollToPosition(position);
+        }
     }
 
     private void loadGoods() {

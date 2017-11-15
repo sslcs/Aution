@@ -21,17 +21,10 @@ import com.happy.auction.entity.response.PayConfirmResponse;
 import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
-import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
-import com.mob.MobSDK;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /**
  * 出价充值界面

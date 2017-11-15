@@ -13,7 +13,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.happy.auction.R;
-import com.happy.auction.utils.DebugLog;
 
 import java.util.ArrayList;
 import java.util.List;

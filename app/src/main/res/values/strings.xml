@@ -235,4 +235,7 @@
     <string name="tip_empty_contact">您尚未添加任何联系方式哦～</string>
     <string name="tip_add_address">点击下方按钮及时添加～</string>
     <string name="confirm_contact">确认后，商品将发到该联系人的账号上</string>
+
+    <!-- upgrade -->
+    <string name="upgrade_title">检测到新版本 V%s 是否更新?</string>
 </resources>

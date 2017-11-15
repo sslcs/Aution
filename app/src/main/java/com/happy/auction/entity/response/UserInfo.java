@@ -3,8 +3,10 @@ package com.happy.auction.entity.response;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by LiuCongshan on 17-8-31.
  * User data view model
+ *
+ * @author LiuCongshan
+ * @date 17-8-31
  */
 
 public class UserInfo {

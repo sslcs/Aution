@@ -50,6 +50,8 @@
             android:layout_marginLeft="80dp"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:background="@null"
+            android:maxLength="12"
+            android:maxLines="1"
             android:text="@{user.username}"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_username_label"

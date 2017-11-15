@@ -28,13 +28,13 @@ import java.util.List;
  */
 
 public class MessageHandler {
-    private final List<NetCallback> handlers = Collections.synchronizedList(new ArrayList<NetCallback>());
+    private final List<NetCallback> callbacks = Collections.synchronizedList(new ArrayList<NetCallback>());
 
     public void addHandler(NetCallback handler) {
         if (handler == null) {
             return;
         }
-        handlers.add(0, handler);
+        callbacks.add(0, handler);
     }
 
     public void handle(String message) {
@@ -54,7 +54,9 @@ public class MessageHandler {
             DataResponse<AuctionEndEvent> response = GsonSingleton.get().fromJson(message, type);
             onEvent(response.data);
         } else if (BaseEvent.EVENT_OFFLINE.equals(base.event)) {
+            DebugLog.e("offline : " + message);
             ToastUtil.show(base.msg);
+            cancelAll();
             AppInstance.getInstance().logout();
             onEvent(new LogoutEvent());
         } else if (BaseEvent.EVENT_WIN.equals(base.event)) {
@@ -69,27 +71,27 @@ public class MessageHandler {
     }
 
     private synchronized void handleResponse(BaseResponse base, String response) {
-        if (handlers.isEmpty()) {
+        if (callbacks.isEmpty()) {
             return;
         }
         if (base.isSuccess()) {
-            for (int i = handlers.size() - 1; i >= 0; i--) {
-                NetCallback handler = handlers.get(i);
-                if (handler.tag.equals(base.tag)) {
-                    handler.onSuccess(response, base.msg);
-                    if (i < handlers.size()) {
-                        handlers.remove(i);
+            for (int i = callbacks.size() - 1; i >= 0; i--) {
+                NetCallback callback = callbacks.get(i);
+                if (callback.tag.equals(base.tag)) {
+                    callback.onSuccess(response, base.msg);
+                    if (i < callbacks.size()) {
+                        callbacks.remove(i);
                     }
                     break;
                 }
             }
         } else {
-            for (int i = handlers.size() - 1; i >= 0; i--) {
-                NetCallback handler = handlers.get(i);
-                if (handler.tag.equals(base.tag)) {
-                    handler.onError(base.code, base.msg);
-                    if (i < handlers.size()) {
-                        handlers.remove(i);
+            for (int i = callbacks.size() - 1; i >= 0; i--) {
+                NetCallback callback = callbacks.get(i);
+                if (callback.tag.equals(base.tag)) {
+                    callback.onError(base.code, base.msg);
+                    if (i < callbacks.size()) {
+                        callbacks.remove(i);
                     }
                     break;
                 }
@@ -102,6 +104,17 @@ public class MessageHandler {
     }
 
     public void clear() {
-        handlers.clear();
+        callbacks.clear();
+    }
+
+    public void cancelAll() {
+        if (callbacks.isEmpty()) {
+            return;
+        }
+
+        for (NetCallback callback : callbacks) {
+            callback.onError(-1, "");
+        }
+        clear();
     }
 }

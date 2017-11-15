@@ -10,8 +10,10 @@ import com.happy.auction.R;
 import java.util.Locale;
 
 /**
- * Created by LiuCongshan on 17-9-20.
  * 自定义倒计时TextView
+ *
+ * @author LiuCongshan
+ * @date 17-9-20
  */
 
 public class CountDownHome extends android.support.v7.widget.AppCompatTextView {

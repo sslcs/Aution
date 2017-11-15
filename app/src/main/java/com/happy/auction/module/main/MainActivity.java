@@ -2,9 +2,11 @@ package com.happy.auction.module.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
@@ -19,10 +21,12 @@ import com.happy.auction.entity.event.WinEvent;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.MessageCountParam;
 import com.happy.auction.entity.param.SyncParam;
+import com.happy.auction.entity.param.UpgradeParam;
 import com.happy.auction.entity.param.UserInfoParam;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.entity.response.MessageCount;
+import com.happy.auction.entity.response.UpgradeResponse;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.category.TabCategoryFragment;
 import com.happy.auction.module.home.TabHomeFragment;
@@ -31,6 +35,7 @@ import com.happy.auction.module.login.SetPasswordActivity;
 import com.happy.auction.module.me.TabMeFragment;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.ui.CustomDialog;
 import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.PreferenceUtil;
@@ -225,6 +230,7 @@ public class MainActivity extends BaseTimeActivity {
                     getUserInfo();
                     getMessageCount();
                 }
+                getUpgradeInfo();
             }
 
             @Override
@@ -237,6 +243,46 @@ public class MainActivity extends BaseTimeActivity {
                 }
             }
         });
+    }
+
+    private void getUpgradeInfo() {
+        UpgradeParam param = new UpgradeParam();
+        BaseRequest<UpgradeParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                Type type = new TypeToken<DataResponse<UpgradeResponse>>() {}.getType();
+                DataResponse<UpgradeResponse> obj = GsonSingleton.get().fromJson(response, type);
+                if (obj.data != null) {
+                    showUpgrade(obj.data);
+                }
+            }
+        });
+    }
+
+    private void showUpgrade(final UpgradeResponse data) {
+        if (data.version_number <= BuildConfig.VERSION_CODE) {
+            return;
+        }
+
+        CustomDialog.Builder builder = new CustomDialog.Builder()
+                .title(getString(R.string.upgrade_title, data.version))
+                .content(data.change_log)
+                .textRight(getString(R.string.ok))
+                .setOnClickRightListener(new CustomDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogFragment dialog) {
+                        Uri uri = Uri.parse(data.download_url);
+                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                    }
+                });
+
+        if (data.update == 2) {
+            builder.setCancelable(false);
+        } else {
+            builder.textLeft(getString(R.string.cancel));
+        }
+        builder.show(getSupportFragmentManager(), "upgrade");
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.happy.auction.net;
 
+import android.text.TextUtils;
+
 import com.happy.auction.utils.ToastUtil;
 
 /**
@@ -14,7 +16,9 @@ public abstract class NetCallback {
     public String tag;
 
     public void onError(int code, String message) {
-        ToastUtil.show(message);
+        if (!TextUtils.isEmpty(message)) {
+            ToastUtil.show(message);
+        }
     }
 
     /**

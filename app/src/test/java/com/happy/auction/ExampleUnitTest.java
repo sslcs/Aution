@@ -2,9 +2,6 @@ package com.happy.auction;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Vector;
-
 import static org.junit.Assert.assertEquals;
 
 /**

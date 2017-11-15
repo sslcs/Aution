@@ -94,6 +94,7 @@ public class CountDownDetail extends android.support.v7.widget.AppCompatTextView
                 }
             }
         }.start();
+        startAnimator();
     }
 
     private void setTime(String time) {
@@ -120,8 +121,6 @@ public class CountDownDetail extends android.support.v7.widget.AppCompatTextView
             animator = ObjectAnimator.ofPropertyValuesHolder(this, scaleX, scaleY);
         }
 
-        if (!animator.isRunning()) {
-            animator.start();
-        }
+        animator.start();
     }
 }

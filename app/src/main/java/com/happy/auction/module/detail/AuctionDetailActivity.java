@@ -42,8 +42,8 @@ import com.happy.auction.entity.response.AuctionCoin;
 import com.happy.auction.entity.response.AuctionDetail;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.UserBalance;
-import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.login.LoginActivity;
+import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.pay.AuctionPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
@@ -188,6 +188,14 @@ public class AuctionDetailActivity extends BaseBackActivity {
                         onClickBid(null);
                     }
                 });
+        RxView.clicks(mBinding.btnCancel)
+                .throttleFirst(500, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        onClickCancel(null);
+                    }
+                });
 
         initData();
         listenEvents();
@@ -232,6 +240,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
             mBinding.tvAuctionStatus.setRepeat(mData.current_price == mData.bid_start_price);
         }
 
+        mAdapter.clear();
         if (mData.bid_records != null && !mData.bid_records.isEmpty()) {
             mAdapter.addAll(mData.bid_records);
             mBinding.setNewBid(mData.bid_records.get(0));
@@ -312,22 +321,6 @@ public class AuctionDetailActivity extends BaseBackActivity {
                     mIndexBask = 0;
                     loadBask();
                 }
-            }
-        });
-    }
-
-    private void loadLatest() {
-        AuctionDetailParam param = new AuctionDetailParam();
-        param.gid = mData.gid;
-        BaseRequest<AuctionDetailParam> request = new BaseRequest<>(param);
-        NetClient.query(request, new NetCallback() {
-            @Override
-            public void onSuccess(String response, String message) {
-                Type type = new TypeToken<DataResponse<AuctionDetail>>() {}.getType();
-                DataResponse<AuctionDetail> obj = GsonSingleton.get().fromJson(response, type);
-                mData = obj.data;
-                initData();
-                loadAuctionCoin();
             }
         });
     }
@@ -416,7 +409,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
         if (AppInstance.getInstance().getUser().free_coin >= coin) {
             mAuctionCoin.setBidGiftCoin(mAuctionCoin.bid_gift_coin + coin);
             if (coin > mData.bid_fee) {
-                mAuctionCoin.setCurrentProgress(1);
+                mAuctionCoin.setCurrentProgress(0);
                 mAuctionCoin.setCurrentCoin(coin);
             }
         } else {
@@ -426,11 +419,24 @@ public class AuctionDetailActivity extends BaseBackActivity {
 
     public void onClickNext(View view) {
         EventAgent.onEvent(R.string.goods_detail_bid_new);
-        mAdapter.clear();
-        mBinding.setCoin(null);
-        mBinding.setNewBid(null);
-        setBtnMoreVisibility();
-        loadLatest();
+
+        AuctionDetailParam param = new AuctionDetailParam();
+        param.gid = mData.gid;
+        BaseRequest<AuctionDetailParam> request = new BaseRequest<>(param);
+        NetClient.query(request, new NetCallback() {
+            @Override
+            public void onSuccess(String response, String message) {
+                mBinding.setCoin(null);
+                mBinding.setNewBid(null);
+                setBtnMoreVisibility();
+
+                Type type = new TypeToken<DataResponse<AuctionDetail>>() {}.getType();
+                DataResponse<AuctionDetail> obj = GsonSingleton.get().fromJson(response, type);
+                mData = obj.data;
+                initData();
+                loadAuctionCoin();
+            }
+        });
     }
 
     @Override
@@ -476,7 +482,9 @@ public class AuctionDetailActivity extends BaseBackActivity {
             int number = Integer.parseInt(editable.toString());
             mTimes.set(number);
         } catch (NumberFormatException e) {
-            mTimes.set(0);
+            if (!TextUtils.isEmpty(editable)) {
+                mTimes.set(0);
+            }
         }
     }
 
