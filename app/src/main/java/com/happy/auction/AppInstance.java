@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.entity.response.UserBalance;
 import com.happy.auction.entity.response.UserInfo;
+import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.PreferenceUtil;
+import com.happy.auction.utils.WalleChannelReader;
 import com.squareup.leakcanary.LeakCanary;
 
 import cn.jpush.android.api.JPushInterface;
@@ -24,6 +26,7 @@ public class AppInstance extends Application {
     public String uid;
     public String token;
     private UserInfo user;
+    private String mChannel;
 
     public static AppInstance getInstance() {
         return mInstance;
@@ -107,7 +110,15 @@ public class AppInstance extends Application {
     }
 
     public String getChannel() {
-        return "0";
+        if (TextUtils.isEmpty(mChannel)) {
+            mChannel = WalleChannelReader.getChannel(this);
+        }
+
+        if (TextUtils.isEmpty(mChannel)) {
+            mChannel = "0";
+        }
+        DebugLog.e("mChannel : " + mChannel);
+        return mChannel;
     }
 
     public int getResColor(int resId) {

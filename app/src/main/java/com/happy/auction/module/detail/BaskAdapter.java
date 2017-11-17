@@ -11,6 +11,7 @@ import com.happy.auction.databinding.EmptyViewBinding;
 import com.happy.auction.databinding.ItemBaskDetailBinding;
 import com.happy.auction.entity.item.ItemBask;
 import com.happy.auction.glide.ImageLoader;
+import com.happy.auction.ui.LineTextView;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,8 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
 
     @Override
     public void bindItem(final ItemBaskDetailBinding binding, final ItemBask item, int position) {
+        binding.tvContent.setTag(position);
+        binding.tvContent.initStatus(item.expand);
         binding.setData(item);
         ImageLoader.displayImage(binding.ivImg, item.s_img.get(0));
         if (item.s_img.size() > 1) {
@@ -56,6 +59,22 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
             binding.ivImg.setOnClickListener(listener);
             binding.ivImg1.setOnClickListener(listener);
         }
+
+        binding.tvContent.setShowExpandListener(new LineTextView.ShowExpandListener() {
+            @Override
+            public void showExpand(boolean show) {
+
+            }
+        });
+        binding.tvContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.tvContent.canExpand()) {
+                    item.expand = !item.expand;
+                    binding.tvContent.expand(item.expand);
+                }
+            }
+        });
     }
 
     public void setOnClickImageListener(OnClickImageListener listener) {

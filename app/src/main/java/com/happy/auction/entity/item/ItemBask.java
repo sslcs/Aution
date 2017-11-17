@@ -55,4 +55,6 @@ public class ItemBask {
      * 晒单图片
      */
     public ArrayList<String> img;
+
+    public boolean expand = false;
 }

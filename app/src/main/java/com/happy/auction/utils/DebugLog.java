@@ -3,6 +3,8 @@ package com.happy.auction.utils;
 import android.content.Context;
 import android.util.Log;
 
+import com.happy.auction.BuildConfig;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class DebugLog {
     }
 
     public static boolean isDebuggable() {
-        return true;
+        return BuildConfig.DEBUG;
     }
 
     private static String createLog(String log) {

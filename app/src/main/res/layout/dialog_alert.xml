@@ -6,13 +6,12 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         app:cardCornerRadius="5dp">
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:orientation="vertical">
-
+            android:background="@android:color/white">
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
@@ -21,9 +20,8 @@
                 android:gravity="center"
                 android:lineSpacingMultiplier="1.2"
                 android:minHeight="35dp"
-                android:textColor="#707070"
+                android:textColor="@color/text_normal"
                 android:textSize="16sp"
-
                 android:visibility="gone"
                 tools:text="title"
                 tools:visibility="visible"/>
@@ -36,55 +34,54 @@
                 android:lineSpacingMultiplier="1.2"
                 android:minHeight="63dp"
                 android:padding="10dp"
-                android:textColor="#707070"
+                android:textColor="@color/text_normal"
                 android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"
                 tools:text="content"/>
 
             <View
+                android:id="@+id/v_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/divider"/>
+                android:background="@color/divider"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/btn_left"
+                android:layout_width="0px"
+                android:layout_height="42dp"
+                android:gravity="center"
+                android:textColor="@color/text_normal"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/btn_right"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/v_divider"
+                tools:text="取消"
+                tools:visibility="visible"/>
 
-                <TextView
-                    android:id="@+id/btn_left"
-                    android:layout_width="0px"
-                    android:layout_height="42dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:minHeight="30dp"
-                    android:minWidth="80dp"
-                    android:textColor="@color/text_normal"
-                    android:textSize="16sp"
-                    android:visibility="gone"
-                    tools:text="取消"
-                    tools:visibility="visible"/>
-                <View
-                    android:id="@+id/divider"
-                    android:layout_width="1dp"
-                    android:layout_height="42dp"
-                    android:background="@color/divider"/>
+            <View
+                android:id="@+id/divider"
+                android:layout_width="1dp"
+                android:layout_height="42dp"
+                android:background="@color/divider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/v_divider"/>
 
-                <TextView
-                    android:id="@+id/btn_right"
-                    android:layout_width="0px"
-                    android:layout_height="42dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:minHeight="30dp"
-                    android:minWidth="80dp"
-                    android:textColor="@color/main_red"
-                    android:textSize="16sp"
-                    android:visibility="gone"
-                    tools:text="确定"
-                    tools:visibility="visible"/>
-            </LinearLayout>
-        </LinearLayout>
-
+            <TextView
+                android:id="@+id/btn_right"
+                android:layout_width="0px"
+                android:layout_height="42dp"
+                android:gravity="center"
+                android:textColor="@color/main_red"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_left"
+                app:layout_constraintTop_toBottomOf="@+id/v_divider"
+                tools:text="确定"
+                tools:visibility="visible"/>
+        </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </layout>

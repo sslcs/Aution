@@ -9,6 +9,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -60,12 +61,17 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
 
+
 /**
  * 竞拍详情页面
  *
  * @author LiuCongshan
  */
 public class AuctionDetailActivity extends BaseBackActivity {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     private static final String KEY_GOODS = "GOODS";
     private static final int REQUEST_CODE_LOGIN_BID = 100;
     private static final int REQUEST_CODE_PAY = 101;

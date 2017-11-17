@@ -28,7 +28,7 @@ public class SyncParam extends BaseParam {
     public String imsi;
     public String android_id;
     public String mac;
-    public String channel = "0";
+    public String channel = AppInstance.getInstance().getChannel();
     private String app_ver = BuildConfig.VERSION_NAME;
     private String app_ver_num = String.valueOf(BuildConfig.VERSION_CODE);
     private String token = AppInstance.getInstance().token;

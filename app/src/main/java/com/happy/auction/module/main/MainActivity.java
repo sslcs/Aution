@@ -118,6 +118,9 @@ public class MainActivity extends BaseTimeActivity {
         if (mBinding.viewPager.getAdapter() != null) {
             return;
         }
+
+        getUpgradeInfo();
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.add(TabHomeFragment.newInstance());
         adapter.add(TabLatestFragment.newInstance());
@@ -230,7 +233,6 @@ public class MainActivity extends BaseTimeActivity {
                     getUserInfo();
                     getMessageCount();
                 }
-                getUpgradeInfo();
             }
 
             @Override

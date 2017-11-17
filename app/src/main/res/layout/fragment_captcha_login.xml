@@ -13,7 +13,7 @@
         tools:context="com.happy.auction.module.login.CaptchaLoginFragment">
         <TextView
             android:id="@+id/tv_tip"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
             android:background="#FDF6D5"
             android:gravity="center_vertical"
@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/tv_close"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:drawablePadding="2sp"
             android:drawableRight="@drawable/ic_close_tip"
@@ -39,7 +39,9 @@
             android:textColor="#78A9D4"
             android:textSize="12sp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_tip"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_tip"
             tools:visibility="visible"/>
 
         <EditText

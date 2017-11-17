@@ -494,6 +494,22 @@
             app:layout_constraintRight_toRightOf="parent"/>
 
         <TextView
+            android:id="@+id/tv_login"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/selector_arrow_right"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@string/login_now"
+            android:visibility="@{coin==null? View.VISIBLE : View.GONE, default=gone}"
+            android:textColor="@color/main_red"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_bid_times"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_bid_times"/>
+
+        <TextView
             android:id="@+id/btn_bid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

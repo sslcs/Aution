@@ -21,7 +21,7 @@ public abstract class BaseDialog extends DialogFragment {
     @Nullable
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Dialog(getActivity(), R.style.TransparentDialog);
+        return new Dialog(getActivity(), R.style.BaseDialog);
     }
 
     @Override

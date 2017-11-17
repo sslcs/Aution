@@ -65,7 +65,6 @@ public class WebActivity extends BaseBackActivity {
     private String mUrl;
 
     public static Intent newIntent(String title, String url) {
-        DebugLog.e("title: " + title + " url: " + url);
         if (TextUtils.isEmpty(url)) {
             return null;
         }
