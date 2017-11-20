@@ -12,6 +12,7 @@ import com.happy.auction.databinding.ItemBaskDetailBinding;
 import com.happy.auction.entity.item.ItemBask;
 import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.ui.LineTextView;
+import com.happy.auction.utils.DebugLog;
 
 import java.util.ArrayList;
 
@@ -36,9 +37,9 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
     }
 
     @Override
-    public void bindItem(final ItemBaskDetailBinding binding, final ItemBask item, int position) {
+    public void bindItem(final ItemBaskDetailBinding binding, final ItemBask item, final int position) {
         binding.tvContent.setTag(position);
-        binding.tvContent.initStatus(item.expand);
+        binding.tvContent.initStatus(item.expand.get());
         binding.setData(item);
         ImageLoader.displayImage(binding.ivImg, item.s_img.get(0));
         if (item.s_img.size() > 1) {
@@ -63,18 +64,24 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
         binding.tvContent.setShowExpandListener(new LineTextView.ShowExpandListener() {
             @Override
             public void showExpand(boolean show) {
-
+                item.show.set(show);
             }
         });
-        binding.tvContent.setOnClickListener(new View.OnClickListener() {
+
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.tvContent.canExpand()) {
-                    item.expand = !item.expand;
-                    binding.tvContent.expand(item.expand);
+                if (item.show.get()) {
+                    item.expand.set(!item.expand.get());
+                    binding.tvContent.expand(item.expand.get());
+                    float rotation = item.expand.get() ? -90 : 90;
+                    binding.ivExpand.animate().rotation(rotation);
                 }
             }
-        });
+        };
+        binding.tvContent.setOnClickListener(listener);
+        binding.tvExpand.setOnClickListener(listener);
+        binding.ivExpand.setOnClickListener(listener);
     }
 
     public void setOnClickImageListener(OnClickImageListener listener) {

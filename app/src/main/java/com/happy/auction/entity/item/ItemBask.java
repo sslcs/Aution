@@ -1,5 +1,7 @@
 package com.happy.auction.entity.item;
 
+import android.databinding.ObservableBoolean;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -56,5 +58,6 @@ public class ItemBask {
      */
     public ArrayList<String> img;
 
-    public boolean expand = false;
+    public final ObservableBoolean expand = new ObservableBoolean(false);
+    public final ObservableBoolean show = new ObservableBoolean(false);
 }

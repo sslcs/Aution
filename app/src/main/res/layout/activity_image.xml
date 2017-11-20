@@ -15,27 +15,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-        <ImageView
-            android:id="@+id/iv_dot_0"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+
+        <com.happy.auction.module.home.CircleIndicator
+            android:id="@+id/circle_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
             android:layout_marginBottom="20dp"
-            android:src="@drawable/image_indicator"
             android:visibility="gone"
+            app:ci_background="@color/text_light"
+            app:ci_selected_background="@color/main_red"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/iv_dot_1"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <ImageView
-            android:id="@+id/iv_dot_1"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/image_indicator"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_dot_0"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_dot_0"
-            app:layout_constraintTop_toTopOf="@+id/iv_dot_0"/>
+            app:layout_constraintStart_toStartOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

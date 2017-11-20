@@ -43,12 +43,12 @@ import com.happy.auction.entity.response.AuctionCoin;
 import com.happy.auction.entity.response.AuctionDetail;
 import com.happy.auction.entity.response.DataResponse;
 import com.happy.auction.entity.response.UserBalance;
+import com.happy.auction.module.home.ImageActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.pay.AuctionPayActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
-import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
@@ -68,14 +68,14 @@ import io.reactivex.functions.Consumer;
  * @author LiuCongshan
  */
 public class AuctionDetailActivity extends BaseBackActivity {
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
-
     private static final String KEY_GOODS = "GOODS";
     private static final int REQUEST_CODE_LOGIN_BID = 100;
     private static final int REQUEST_CODE_PAY = 101;
     private static final int REQUEST_CODE_LOGIN = 102;
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     private final ObservableInt mTimes = new ObservableInt(1);
     private ActivityAuctionDetailBinding mBinding;
@@ -134,6 +134,12 @@ public class AuctionDetailActivity extends BaseBackActivity {
             }
         });
         mAdapterBask = new BaskAdapter();
+        mAdapterBask.setOnClickImageListener(new BaskAdapter.OnClickImageListener() {
+            @Override
+            public void onClick(ArrayList<String> img, int selection) {
+                startActivity(ImageActivity.newIntent(img, selection));
+            }
+        });
         mAdapterBask.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void loadMore() {

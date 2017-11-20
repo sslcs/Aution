@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View"/>
         <import type="com.happy.auction.utils.StringUtil"/>
         <variable
             name="data"
@@ -12,8 +13,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:paddingBottom="10dp">
         <ImageView
             android:id="@+id/iv_avatar"
             android:layout_width="42dp"
@@ -65,6 +66,28 @@
             app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
             tools:text="测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试"/>
 
+        <TextView
+            android:id="@+id/tv_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="6dp"
+            android:text="@{data.expand ? @string/fold : @string/expand}"
+            android:textColor="@color/main_red"
+            android:textSize="14sp"
+            android:visibility="@{data.show ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toStartOf="@+id/tv_username"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content"/>
+        <ImageView
+            android:id="@+id/iv_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="@{data.expand ? -90 : 90}"
+            android:visibility="@{data.show ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_expand"
+            app:layout_constraintStart_toEndOf="@+id/tv_expand"
+            app:layout_constraintTop_toTopOf="@+id/tv_expand"
+            app:srcCompat="@drawable/vector_arrow_red"/>
+
         <ImageView
             android:id="@+id/iv_img"
             android:layout_width="120dp"
@@ -72,7 +95,7 @@
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="@+id/tv_username"
-            app:layout_constraintTop_toBottomOf="@+id/tv_content"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_expand"/>
 
         <ImageView
             android:id="@+id/iv_img_1"
@@ -102,15 +125,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="@{data.goods_title}"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:ellipsize="end"
             android:singleLine="true"
+            android:text="@{data.goods_title}"
             android:textColor="@color/main_red"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_label"
-            app:layout_constraintStart_toEndOf="@+id/tv_label"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            app:layout_constraintStart_toEndOf="@+id/tv_label"
             app:layout_constraintTop_toTopOf="@+id/tv_label"
             tools:text="5000元京东卡"/>
     </android.support.constraint.ConstraintLayout>

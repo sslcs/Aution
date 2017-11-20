@@ -7,6 +7,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+
 /**
  * 实现RecycleView分页滚动的工具类
  *
@@ -28,6 +35,8 @@ public class PagingScrollHelper extends RecyclerView.OnFlingListener {
     private LinearLayoutManager mLinearLayoutManager;
     private int offsetY = 0;
     private int offsetX = 0;
+    private Disposable mDisposable;
+    private boolean enableAutoScroll = false;
 
     public void setRecycleView(RecyclerView recycleView) {
         if (recycleView == null) {
@@ -84,6 +93,10 @@ public class PagingScrollHelper extends RecyclerView.OnFlingListener {
             return false;
         }
 
+        if (mDisposable != null) {
+            mDisposable.dispose();
+            mDisposable = null;
+        }
         //记录滚动开始和结束的位置
         int endPoint = 0;
         int startPoint;
@@ -134,6 +147,9 @@ public class PagingScrollHelper extends RecyclerView.OnFlingListener {
                     if (mListener != null) {
                         mListener.onPageChanged(position);
                     }
+                    if (enableAutoScroll) {
+                        enableAutoScroll();
+                    }
                     offsetX = 0;
                     offsetY = 0;
                 }
@@ -152,7 +168,7 @@ public class PagingScrollHelper extends RecyclerView.OnFlingListener {
         if (newState == 0 && mOrientation != ORIENTATION_NULL) {
             int vX = 0, vY = 0;
             if (mOrientation == ORIENTATION_VERTICAL) {
-                //如果滑动的距离超过屏幕的1/3表示需要滑动到下一页
+                //如果滑动的距离超过屏幕的1/2 表示需要滑动到下一页
                 if (Math.abs(offsetY) > mRecyclerView.getHeight() / 3) {
                     vY = offsetY;
                 }
@@ -167,6 +183,56 @@ public class PagingScrollHelper extends RecyclerView.OnFlingListener {
 
     public void setOnPageChangedListener(OnPageChangedListener listener) {
         mListener = listener;
+    }
+
+    public void enableAutoScroll() {
+        enableAutoScroll = true;
+        if (mDisposable != null) {
+            return;
+        }
+        mDisposable = Observable.interval(5, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        scroll();
+                    }
+                });
+    }
+
+    private void scroll() {
+        if (mRecyclerView == null) {
+            return;
+        }
+
+        LinearLayoutManager llm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+        int position = llm.findLastVisibleItemPosition();
+        if (position != llm.findFirstVisibleItemPosition()) {
+            return;
+        }
+        position++;
+        if (position >= mRecyclerView.getAdapter().getItemCount()) {
+            position = 0;
+            if (mIndicator != null) {
+                mIndicator.onPageChanged(position);
+            }
+            mRecyclerView.scrollToPosition(position);
+        } else {
+            mRecyclerView.smoothScrollToPosition(position);
+        }
+    }
+
+    public void onPause() {
+        if (mDisposable != null) {
+            mDisposable.dispose();
+            mDisposable = null;
+        }
+    }
+
+    public void onResume() {
+        if (enableAutoScroll) {
+            enableAutoScroll();
+        }
     }
 
     public interface OnPageChangedListener {

@@ -176,11 +176,15 @@
     <string name="tip_mail_info">将在1–5个工作日发货</string>
     <string name="virtual_address">充值号码</string>
     <string name="check_card">查看卡密</string>
+
+    <!-- bask -->
     <string name="check_bask">查看晒单</string>
     <string name="go_bask">去晒单</string>
     <string name="bask">晒单</string>
     <string name="send">发送</string>
     <string name="tip_bask">说点什么…</string>
+    <string name="expand">展开</string>
+    <string name="fold">收起</string>
 
     <!-- order pay -->
     <string name="order_pay">拍品购买</string>

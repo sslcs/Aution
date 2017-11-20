@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
@@ -59,23 +58,14 @@ public class ImageActivity extends BasePageActivity {
         mBinding.vList.setAdapter(adapter);
 
         if (data.size() > 1) {
+            helper.setIndicator(mBinding.circleIndicator);
+            mBinding.circleIndicator.setVisibility(View.VISIBLE);
+            mBinding.circleIndicator.setCount(data.size());
             int selection = getIntent().getIntExtra(KEY_SELECTION, 0);
-            final ImageView[] dot = new ImageView[]{mBinding.ivDot0, mBinding.ivDot1};
-            mBinding.ivDot0.setVisibility(View.VISIBLE);
-            mBinding.ivDot1.setVisibility(View.VISIBLE);
-            if (selection == 1) {
-                mBinding.ivDot1.setSelected(true);
+            if (selection > 0) {
+                mBinding.circleIndicator.onPageChanged(selection);
                 mBinding.vList.scrollToPosition(selection);
-            } else {
-                mBinding.ivDot0.setSelected(true);
             }
-            helper.setOnPageChangedListener(new PagingScrollHelper.OnPageChangedListener() {
-                @Override
-                public void onPageChanged(int index) {
-                    dot[0].setSelected(index == 0);
-                    dot[1].setSelected(index == 1);
-                }
-            });
         }
     }
 }

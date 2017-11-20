@@ -66,6 +66,7 @@ public class TabHomeFragment extends BaseFragment {
     private int mStart = 0;
     private String mType = GoodsParam.TYPE_HOT;
     private Disposable mDisposableRefresh;
+    private PagingScrollHelper mPageHelper;
 
     public static TabHomeFragment newInstance() {
         return new TabHomeFragment();
@@ -305,43 +306,18 @@ public class TabHomeFragment extends BaseFragment {
                     }
                 });
                 mBinding.rvBanner.setAdapter(adapter);
-                if (obj.data != null && obj.data.size() > 1) {
-                    PagingScrollHelper helper = new PagingScrollHelper();
-                    helper.setRecycleView(mBinding.rvBanner);
-                    helper.setIndicator(mBinding.circleIndicator);
-                    mBinding.circleIndicator.setVisibility(View.VISIBLE);
-                    mBinding.circleIndicator.setCount(obj.data.size());
-                    autoScroll(adapter.getRealCount());
+                if (obj.data != null && obj.data.size() > 0) {
+                    mPageHelper = new PagingScrollHelper();
+                    mPageHelper.setRecycleView(mBinding.rvBanner);
+                    if (obj.data.size() > 1) {
+                        mPageHelper.setIndicator(mBinding.circleIndicator);
+                        mPageHelper.enableAutoScroll();
+                        mBinding.circleIndicator.setVisibility(View.VISIBLE);
+                        mBinding.circleIndicator.setCount(obj.data.size());
+                    }
                 }
             }
         });
-    }
-
-    private void autoScroll(final int count) {
-        Observable.interval(5, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        scroll(count);
-                    }
-                });
-    }
-
-    private void scroll(int count) {
-        LinearLayoutManager llm = (LinearLayoutManager) mBinding.rvBanner.getLayoutManager();
-        int position = llm.findLastVisibleItemPosition();
-        if (position != llm.findFirstVisibleItemPosition()) {
-            return;
-        }
-        position++;
-        if (position >= count) {
-            position = 0;
-            mBinding.circleIndicator.onPageChanged(position);
-            mBinding.rvBanner.scrollToPosition(position);
-        } else {
-            mBinding.rvBanner.smoothScrollToPosition(position);
-        }
     }
 
     private void loadGoods() {
@@ -411,6 +387,17 @@ public class TabHomeFragment extends BaseFragment {
         super.onResume();
         if (getUserVisibleHint()) {
             refresh();
+            if (mPageHelper != null) {
+                mPageHelper.onResume();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mPageHelper != null) {
+            mPageHelper.onPause();
         }
     }
 }

@@ -43,19 +43,17 @@ public class LineTextView extends AppCompatTextView {
         if (mRealCount != -1) {
             return;
         }
+
         mRealCount = getLineCount();
         if (mListener != null) {
-            mListener.showExpand(canExpand());
+            mListener.showExpand(mRealCount > MAX_LINES);
         }
         setMaxLines(bExpand ? Integer.MAX_VALUE : MAX_LINES);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    public boolean canExpand() {
-        return mRealCount > MAX_LINES;
-    }
-
     public void initStatus(boolean expand) {
+        setText("");
         bExpand = expand;
         mRealCount = 0;
         setMaxLines(Integer.MAX_VALUE);
@@ -73,6 +71,7 @@ public class LineTextView extends AppCompatTextView {
     public interface ShowExpandListener {
         /**
          * 显示或隐藏按钮
+         *
          * @param show 是否显示
          */
         void showExpand(boolean show);
