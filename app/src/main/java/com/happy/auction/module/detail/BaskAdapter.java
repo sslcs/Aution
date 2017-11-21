@@ -3,6 +3,7 @@ package com.happy.auction.module.detail;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.happy.auction.R;
 import com.happy.auction.adapter.BaseCustomAdapter;
@@ -12,7 +13,6 @@ import com.happy.auction.databinding.ItemBaskDetailBinding;
 import com.happy.auction.entity.item.ItemBask;
 import com.happy.auction.glide.ImageLoader;
 import com.happy.auction.ui.LineTextView;
-import com.happy.auction.utils.DebugLog;
 
 import java.util.ArrayList;
 
@@ -38,29 +38,14 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
 
     @Override
     public void bindItem(final ItemBaskDetailBinding binding, final ItemBask item, final int position) {
-        binding.tvContent.setTag(position);
         binding.tvContent.initStatus(item.expand.get());
         binding.setData(item);
-        ImageLoader.displayImage(binding.ivImg, item.s_img.get(0));
-        if (item.s_img.size() > 1) {
-            binding.ivImg1.setVisibility(View.VISIBLE);
-            ImageLoader.displayImage(binding.ivImg1, item.s_img.get(1));
-        } else {
-            binding.ivImg1.setVisibility(View.GONE);
-        }
 
-        if (mListener != null) {
-            View.OnClickListener listener = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int selection = (view.getId() == binding.ivImg1.getId() ? 1 : 0);
-                    mListener.onClick(item.img, selection);
-                }
-            };
-            binding.ivImg.setOnClickListener(listener);
-            binding.ivImg1.setOnClickListener(listener);
-        }
+        displayImage(binding, item);
+        showContent(binding, item);
+    }
 
+    private void showContent(final ItemBaskDetailBinding binding, final ItemBask item) {
         binding.tvContent.setShowExpandListener(new LineTextView.ShowExpandListener() {
             @Override
             public void showExpand(boolean show) {
@@ -82,6 +67,45 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
         binding.tvContent.setOnClickListener(listener);
         binding.tvExpand.setOnClickListener(listener);
         binding.ivExpand.setOnClickListener(listener);
+    }
+
+    private ImageView getImageView(ItemBaskDetailBinding binding, int position) {
+        if (position == 1) {
+            return binding.ivImg1;
+        }
+
+        if (position == 2) {
+            return binding.ivImg2;
+        }
+
+        return binding.ivImg3;
+    }
+
+    private void displayImage(final ItemBaskDetailBinding binding, final ItemBask item) {
+        ImageLoader.displayImage(binding.ivImg, item.s_img.get(0));
+        View.OnClickListener listener = null;
+        if (mListener != null) {
+            listener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int selection = (view.getId() == binding.ivImg1.getId() ? 1 : 0);
+                    mListener.onClick(item.img, selection);
+                }
+            };
+            binding.ivImg.setOnClickListener(listener);
+        }
+
+        int size = item.s_img.size();
+        for (int i = 1; i < 4; i++) {
+            ImageView iv = getImageView(binding, i);
+            if (i < size) {
+                iv.setVisibility(View.VISIBLE);
+                ImageLoader.displayImage(iv, item.s_img.get(i));
+                iv.setOnClickListener(listener);
+            } else {
+                iv.setVisibility(View.GONE);
+            }
+        }
     }
 
     public void setOnClickImageListener(OnClickImageListener listener) {

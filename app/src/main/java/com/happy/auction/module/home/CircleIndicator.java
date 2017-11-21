@@ -22,7 +22,7 @@ import java.util.List;
  * @date 17-11-6
  */
 
-public class CircleIndicator extends View implements PagingScrollHelper.OnPageChangedListener {
+public class CircleIndicator extends View {
     private final int DEFAULT_INDICATOR_RADIUS = 10;
     private final int DEFAULT_INDICATOR_MARGIN = 40;
     private final int DEFAULT_INDICATOR_BACKGROUND = Color.BLUE;
@@ -104,6 +104,10 @@ public class CircleIndicator extends View implements PagingScrollHelper.OnPageCh
      * @param positionOffset
      */
     private void trigger(int position, float positionOffset) {
+        if (position >= tabItems.size() || position < 0) {
+            return;
+        }
+
         mCurItemPosition = position;
         mCurItemPositionOffset = positionOffset;
         requestLayout();
@@ -248,11 +252,6 @@ public class CircleIndicator extends View implements PagingScrollHelper.OnPageCh
 
     public void setIndicatorMode(Mode mIndicatorMode) {
         this.mIndicatorMode = mIndicatorMode;
-    }
-
-    @Override
-    public void onPageChanged(int position) {
-        trigger(position, 0);
     }
 
     public enum Gravity {

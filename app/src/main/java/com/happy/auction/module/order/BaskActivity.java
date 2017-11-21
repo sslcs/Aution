@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
@@ -44,13 +45,15 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 public class BaskActivity extends BaseBackActivity {
     private static final String KEY_SID = "KEY_SID";
     private static final int REQUEST_CODE_CHOOSE = 100;
+    private static final int MAX_COUNT = 4;
 
     private LoadingDialog mLoadingDialog;
     private ActivityBaskBinding mBinding;
     private int mSID;
-    private ArrayList<String> mUploadImages = new ArrayList<>(2);
-    private ArrayList<String> mSelectImages = new ArrayList<>(2);
+    private ArrayList<String> mUploadImages = new ArrayList<>(MAX_COUNT);
+    private ArrayList<String> mSelectImages = new ArrayList<>(MAX_COUNT);
     private boolean bSendEvent = true;
+    private ImageView[] ivArraySelect, ivArrayDelete;
 
     public static Intent newIntent(int sid) {
         Intent intent = new Intent(AppInstance.getInstance(), BaskActivity.class);
@@ -68,13 +71,19 @@ public class BaskActivity extends BaseBackActivity {
     private void initLayout() {
         mBinding.setActivity(this);
         mSID = getIntent().getIntExtra(KEY_SID, -1);
+
+        ivArraySelect = new ImageView[]{mBinding.ivSelected0, mBinding.ivSelected1, mBinding.ivSelected2, mBinding.ivSelected3};
+        ivArrayDelete = new ImageView[]{mBinding.ivDelete0, mBinding.ivDelete1, mBinding.ivDelete2, mBinding.ivDelete3};
+        for (int i = 0; i < MAX_COUNT; i++) {
+            ivArrayDelete[i].setTag(i);
+        }
     }
 
     public void onClickAlbum(View view) {
         EventAgent.onEvent(R.string.share_order_photo);
         MultiImageSelector.create()
                 .multi()
-                .count(2)
+                .count(4)
                 .start(this, REQUEST_CODE_CHOOSE);
     }
 
@@ -97,12 +106,21 @@ public class BaskActivity extends BaseBackActivity {
     }
 
     private void showImage() {
-        mBinding.ivDelete0.setVisibility(View.VISIBLE);
-        mBinding.ivSelected1.setVisibility(View.VISIBLE);
-        ImageLoader.displayImage(mBinding.ivSelected0, mSelectImages.get(0));
-        if (mSelectImages.size() > 1) {
-            mBinding.ivDelete1.setVisibility(View.VISIBLE);
-            ImageLoader.displayImage(mBinding.ivSelected1, mSelectImages.get(1));
+        int size = mSelectImages.size();
+        for (int i = 0; i < MAX_COUNT; i++) {
+            if (i < size) {
+                ivArrayDelete[i].setVisibility(View.VISIBLE);
+                ImageLoader.displayImage(ivArraySelect[i], mSelectImages.get(i));
+                if (i < MAX_COUNT - 1) {
+                    ivArraySelect[i + 1].setVisibility(View.VISIBLE);
+                }
+            } else if (i == size) {
+                ivArrayDelete[i].setVisibility(View.GONE);
+                ivArraySelect[i].setImageResource(R.drawable.ic_bask_add);
+            } else {
+                ivArrayDelete[i].setVisibility(View.GONE);
+                ivArraySelect[i].setVisibility(View.GONE);
+            }
         }
     }
 
@@ -184,22 +202,9 @@ public class BaskActivity extends BaseBackActivity {
     }
 
     public void onClickDelete(View view) {
-        if (view.getId() == R.id.iv_delete_0) {
-            mSelectImages.remove(0);
-            if (mSelectImages.isEmpty()) {
-                mBinding.ivDelete0.setVisibility(View.GONE);
-                mBinding.ivSelected0.setImageResource(R.drawable.ic_bask_add);
-                mBinding.ivSelected1.setVisibility(View.GONE);
-            } else {
-                ImageLoader.displayImage(mBinding.ivSelected0, mSelectImages.get(0));
-                mBinding.ivDelete1.setVisibility(View.GONE);
-                mBinding.ivSelected1.setImageResource(R.drawable.ic_bask_add);
-            }
-        } else {
-            mSelectImages.remove(1);
-            mBinding.ivDelete1.setVisibility(View.GONE);
-            mBinding.ivSelected1.setImageResource(R.drawable.ic_bask_add);
-        }
+        int position = (int) view.getTag();
+        mSelectImages.remove(position);
+        showImage();
         checkValid();
     }
 

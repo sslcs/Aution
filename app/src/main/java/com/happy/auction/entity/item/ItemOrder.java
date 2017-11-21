@@ -18,6 +18,7 @@ public class ItemOrder extends BaseGoods {
     public final static int STATUS_PAID = 3;
     public final static int STATUS_CONFIRM = 4;
     public final static int STATUS_BASK = 5;
+    public final static int STATUS_FINISH = 6;
     /**
      * 订单 id
      */
@@ -50,6 +51,14 @@ public class ItemOrder extends BaseGoods {
             return AppInstance.getInstance().getString(R.string.format_current_price, StringUtil.formatMoney(current_price));
         } else {
             return AppInstance.getInstance().getString(R.string.format_deal_price, StringUtil.formatMoney(current_price));
+        }
+    }
+
+    public String getBuyTimes() {
+        if (status == STATUS_GOING || status != STATUS_FINISH) {
+            return AppInstance.getInstance().getString(R.string.format_bid_times, buy);
+        } else {
+            return AppInstance.getInstance().getString(R.string.format_bid_refund, buy, refund_coin);
         }
     }
 }

@@ -66,7 +66,7 @@ public class TabHomeFragment extends BaseFragment {
     private int mStart = 0;
     private String mType = GoodsParam.TYPE_HOT;
     private Disposable mDisposableRefresh;
-    private PagingScrollHelper mPageHelper;
+    private PagerHelper mPageHelper;
 
     public static TabHomeFragment newInstance() {
         return new TabHomeFragment();
@@ -307,8 +307,8 @@ public class TabHomeFragment extends BaseFragment {
                 });
                 mBinding.rvBanner.setAdapter(adapter);
                 if (obj.data != null && obj.data.size() > 0) {
-                    mPageHelper = new PagingScrollHelper();
-                    mPageHelper.setRecycleView(mBinding.rvBanner);
+                    mPageHelper = new PagerHelper();
+                    mPageHelper.attachToRecyclerView(mBinding.rvBanner);
                     if (obj.data.size() > 1) {
                         mPageHelper.setIndicator(mBinding.circleIndicator);
                         mPageHelper.enableAutoScroll();

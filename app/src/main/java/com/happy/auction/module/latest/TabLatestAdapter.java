@@ -10,6 +10,8 @@ import com.happy.auction.entity.item.ItemLatest;
 
 /**
  * 最新成交Adapter
+ *
+ * @author LiuCongshan
  */
 public class TabLatestAdapter extends BaseCustomAdapter<ItemLatest, ItemLatestBinding> {
     @Override

@@ -104,7 +104,8 @@ public class TabMeFragment extends BaseFragment {
 
     public void onClickAvatar(View view) {
         EventAgent.onEvent(R.string.me_personal);
-        if (!isLogin(view)) {
+        if (!AppInstance.getInstance().isLogin()) {
+            startActivity(LoginActivity.newIntent());
             return;
         }
         startActivity(ManagerActivity.newIntent(getActivity()));

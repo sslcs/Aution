@@ -45,11 +45,14 @@
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="97dp"
+            android:layout_marginRight="8dp"
             android:layout_marginTop="20dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text='@{@string/format_deal_person(data.username)}'
             android:textColor="@color/text_normal"
             android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_percent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_time"
             tools:text="成交人：9爱吃芒果"/>

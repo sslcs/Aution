@@ -44,8 +44,8 @@ public class ImageActivity extends BasePageActivity {
     private void initLayout() {
         LinearLayoutManager llm = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mBinding.vList.setLayoutManager(llm);
-        PagingScrollHelper helper = new PagingScrollHelper();
-        helper.setRecycleView(mBinding.vList);
+        PagerHelper helper = new PagerHelper();
+        helper.attachToRecyclerView(mBinding.vList);
 
         ArrayList<String> data = getIntent().getStringArrayListExtra(KEY_DATA);
         ImageAdapter adapter = new ImageAdapter(data);
@@ -63,7 +63,7 @@ public class ImageActivity extends BasePageActivity {
             mBinding.circleIndicator.setCount(data.size());
             int selection = getIntent().getIntExtra(KEY_SELECTION, 0);
             if (selection > 0) {
-                mBinding.circleIndicator.onPageChanged(selection);
+                mBinding.circleIndicator.onPageSelected(selection);
                 mBinding.vList.scrollToPosition(selection);
             }
         }

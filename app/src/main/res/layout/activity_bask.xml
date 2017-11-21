@@ -56,8 +56,8 @@
 
         <ImageView
             android:id="@+id/iv_selected_0"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:onClick="onClickAlbum"
@@ -78,15 +78,16 @@
 
         <ImageView
             android:id="@+id/iv_selected_1"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginLeft="5dp"
             android:onClick="onClickAlbum"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_bask_add"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/iv_delete_0"
-            app:layout_constraintTop_toTopOf="@+id/iv_delete_0"/>
+            app:layout_constraintTop_toTopOf="@+id/iv_delete_0"
+            tools:visibility="visible"/>
 
         <ImageView
             android:id="@+id/iv_delete_1"
@@ -97,5 +98,51 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/iv_selected_1"
             app:layout_constraintTop_toTopOf="@+id/iv_selected_1"/>
+
+        <ImageView
+            android:id="@+id/iv_selected_2"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginLeft="5dp"
+            android:onClick="onClickAlbum"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_bask_add"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/iv_delete_1"
+            app:layout_constraintTop_toTopOf="@+id/iv_delete_1"
+            tools:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/iv_delete_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickDelete"
+            android:src="@drawable/ic_bask_delete"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/iv_selected_2"
+            app:layout_constraintTop_toTopOf="@+id/iv_selected_2"/>
+
+        <ImageView
+            android:id="@+id/iv_selected_3"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginLeft="5dp"
+            android:onClick="onClickAlbum"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_bask_add"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/iv_delete_2"
+            app:layout_constraintTop_toTopOf="@+id/iv_delete_2"
+            tools:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/iv_delete_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickDelete"
+            android:src="@drawable/ic_bask_delete"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/iv_selected_3"
+            app:layout_constraintTop_toTopOf="@+id/iv_selected_3"/>
     </android.support.constraint.ConstraintLayout>
 </layout>
