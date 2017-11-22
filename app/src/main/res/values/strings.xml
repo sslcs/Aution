@@ -59,6 +59,7 @@
     <string name="setting">设置</string>
     <string name="service_protocol">服务协议</string>
     <string name="about_us">关于我们</string>
+    <string name="clear_cache">清除缓存</string>
     <string name="logout">退出登录</string>
     <string name="tip_logout">是否确认退出该账号</string>
     <string name="cancel">取消</string>

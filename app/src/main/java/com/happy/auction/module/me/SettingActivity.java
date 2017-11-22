@@ -24,6 +24,8 @@ import com.happy.auction.utils.StringUtil;
  * @author LiuCongshan
  */
 public class SettingActivity extends BaseBackActivity {
+    private ActivitySettingBinding mBinding;
+
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), SettingActivity.class);
     }
@@ -31,11 +33,16 @@ public class SettingActivity extends BaseBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivitySettingBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
-        binding.setUser(AppInstance.getInstance().getUser());
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
+        initLayout();
+    }
+
+    private void initLayout() {
+        mBinding.setUser(AppInstance.getInstance().getUser());
         if (BuildConfig.DEBUG) {
-            binding.tvServer.setVisibility(View.VISIBLE);
+            mBinding.tvServer.setVisibility(View.VISIBLE);
         }
+        mBinding.tvCacheSize.setText(DataCleanManager.getTotalCacheSize(this));
     }
 
     public void onClickServiceProtocol(View view) {
@@ -69,5 +76,10 @@ public class SettingActivity extends BaseBackActivity {
 
     public void onClickServer(View view) {
         startActivity(new Intent("com.happy.DebugActivity"));
+    }
+
+    public void onClickCache(View view) {
+        DataCleanManager.clearAllCache(this);
+        mBinding.tvCacheSize.setText(DataCleanManager.getTotalCacheSize(this));
     }
 }

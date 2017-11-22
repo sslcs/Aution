@@ -343,6 +343,8 @@ public class AuctionDetailActivity extends BaseBackActivity {
 
     private void loadAuctionCoin() {
         if (!AppInstance.getInstance().isLogin()) {
+            mBinding.tvBidTimes.setVisibility(View.VISIBLE);
+            mBinding.tvLogin.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -356,6 +358,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
                 DataResponse<AuctionCoin> obj = GsonSingleton.get().fromJson(response, type);
                 mAuctionCoin = obj.data;
                 mBinding.setCoin(mAuctionCoin);
+                mBinding.tvBidTimes.setVisibility(View.VISIBLE);
             }
         });
     }
