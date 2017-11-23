@@ -42,6 +42,10 @@ public class SettingActivity extends BaseBackActivity {
         if (BuildConfig.DEBUG) {
             mBinding.tvServer.setVisibility(View.VISIBLE);
         }
+        setCacheSize();
+    }
+
+    private void setCacheSize() {
         mBinding.tvCacheSize.setText(DataCleanManager.getTotalCacheSize(this));
     }
 
@@ -79,7 +83,18 @@ public class SettingActivity extends BaseBackActivity {
     }
 
     public void onClickCache(View view) {
-        DataCleanManager.clearAllCache(this);
-        mBinding.tvCacheSize.setText(DataCleanManager.getTotalCacheSize(this));
+        new CustomDialog.Builder()
+                .content(getString(R.string.tip_cache))
+                .textLeft(getString(R.string.cancel))
+                .textRight(getString(R.string.ok))
+                .setOnClickRightListener(new CustomDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogFragment dialog) {
+                        dialog.dismiss();
+                        DataCleanManager.clearAllCache(SettingActivity.this);
+                        setCacheSize();
+                    }
+                })
+                .show(getSupportFragmentManager(), "Cache");
     }
 }

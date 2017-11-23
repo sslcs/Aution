@@ -481,15 +481,14 @@
             android:id="@+id/tv_bid_times"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
             android:background="@android:color/white"
             android:onClick="onClickNotLogin"
             android:paddingBottom="10dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="10dp"
             android:text="@{coin==null? activity.getNotLogin() : coin.getBidTimes(coin.bid_coin,coin.bid_gift_coin)}"
-            android:visibility="gone"
             android:textColor="@color/text_dark"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/btn_bid"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
@@ -499,42 +498,38 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:drawablePadding="5dp"
-            android:drawableRight="@drawable/selector_arrow_right"
+            android:drawableRight="@drawable/ic_arrow_red"
             android:gravity="center_vertical"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/login_now"
-            android:visibility="gone"
             android:textColor="@color/main_red"
             android:textSize="14sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tv_bid_times"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_bid_times"/>
 
         <TextView
             android:id="@+id/btn_bid"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
             android:background="@drawable/btn_bottom"
             android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="10dp"
             android:text="@{@string/detail_btn_bid(data.bid_fee)}"
             android:textColor="@android:color/white"
             android:textSize="16sp"
+            tools:text="@string/detail_btn_bid"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
         <View
             android:id="@+id/bg_times"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="49dp"
             android:background="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_bid"
             app:layout_constraintEnd_toStartOf="@+id/btn_bid"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_bid"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <EditText
             android:id="@+id/et_times"
@@ -564,7 +559,7 @@
             app:layout_constraintStart_toStartOf="@+id/et_times"
             app:layout_constraintTop_toTopOf="@+id/et_times"/>
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tv_minus"
             android:layout_width="46dp"
             android:layout_height="0dp"
             android:background="@drawable/btn_times_minus"
@@ -577,7 +572,7 @@
             app:layout_constraintEnd_toStartOf="@+id/et_times"
             app:layout_constraintTop_toTopOf="@+id/et_times"/>
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_plus"
             android:layout_width="46dp"
             android:layout_height="0dp"
             android:background="@drawable/btn_times_plus"
@@ -594,10 +589,11 @@
             android:id="@+id/tv_auto_bid"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="1dp"
             android:background="@android:color/white"
             android:gravity="center_horizontal"
             android:onClick="onClickAutoBid"
-            android:paddingTop="10dp"
+            android:paddingTop="8dp"
             android:text="@{coin.getProgress(coin.current_bidden_coins,coin.current_bid_coins,data.bid_fee)}"
             android:textColor="@color/text_dark"
             android:textSize="15sp"

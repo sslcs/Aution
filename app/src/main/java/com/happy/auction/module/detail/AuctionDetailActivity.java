@@ -13,7 +13,9 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
@@ -87,6 +89,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
     private int mIndexBask = 0;
     private PreviousAdapter mAdapterPrevious;
     private BaskAdapter mAdapterBask;
+    private NumberPicker mNumberPicker;
 
     public static Intent newIntent(BaseGoods goods) {
         Intent intent = new Intent(AppInstance.getInstance(), AuctionDetailActivity.class);
@@ -188,6 +191,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
             public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 if (bottom < oldBottom) {
                     EventAgent.onEvent(R.string.goods_detail_bid_choose);
+                    showNumberPicker();
                 }
             }
         });
@@ -213,6 +217,21 @@ public class AuctionDetailActivity extends BaseBackActivity {
         listenEvents();
         loadData();
         loadAuctionCoin();
+    }
+
+    private void showNumberPicker() {
+        if (mNumberPicker == null) {
+            mNumberPicker = new NumberPicker(AuctionDetailActivity.this, mTimes);
+        }
+        if (mNumberPicker.isShowing()) {
+            return;
+        }
+        mNumberPicker.reset();
+        int offsetX = AppInstance.getInstance().dp2px(25);
+        int[] location = new int[2];
+        mBinding.etTimes.getLocationOnScreen(location);
+        int offsetY = getResources().getDisplayMetrics().heightPixels - location[1];
+        mNumberPicker.showAtLocation(mBinding.getRoot(), Gravity.LEFT | Gravity.BOTTOM, offsetX, offsetY);
     }
 
     private void showBlackTitle(int verticalOffset) {
@@ -256,8 +275,8 @@ public class AuctionDetailActivity extends BaseBackActivity {
         if (mData.bid_records != null && !mData.bid_records.isEmpty()) {
             mAdapter.addAll(mData.bid_records);
             mBinding.setNewBid(mData.bid_records.get(0));
-            setBtnMoreVisibility();
         }
+        setBtnMoreVisibility();
     }
 
     private void setBtnMoreVisibility() {
@@ -308,6 +327,13 @@ public class AuctionDetailActivity extends BaseBackActivity {
                 }
                 mData.setStatus(0);
                 mBinding.tvAuctionStatus.finish();
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(mBinding.etTimes.getWindowToken(), 0);
+                }
+                if (mNumberPicker != null) {
+                    mNumberPicker.dismiss();
+                }
                 loadAuctionCoin();
             }
         });
@@ -485,11 +511,13 @@ public class AuctionDetailActivity extends BaseBackActivity {
         if (mTimes.get() > 1) {
             mTimes.set(mTimes.get() - 1);
         }
+        showNumberPicker();
     }
 
     public void onClickPlus(View view) {
         EventAgent.onEvent(R.string.goods_detail_bid_minus);
         mTimes.set(mTimes.get() + 1);
+        showNumberPicker();
     }
 
     public void afterTextChanged(Editable editable) {

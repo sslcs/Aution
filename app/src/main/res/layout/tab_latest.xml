@@ -2,5 +2,5 @@
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/TextTab"
-    android:drawableTop="@drawable/tab_latest"
+    android:drawableTop="@drawable/selector_tab_latest"
     android:text="@string/tab_latest"/>
