@@ -261,6 +261,7 @@ public class WebActivity extends BaseBackActivity {
         String url = mUrl.replace("client_index", "login");
         url += "?name=" + StringUtil.formatPhone(AppInstance.getInstance().getUser().phone);
         url += "&uid=" + AppInstance.getInstance().uid;
+        url += "&state=3";
         oks.setUrl(url);
         oks.setSilent(true);
         oks.show(this);

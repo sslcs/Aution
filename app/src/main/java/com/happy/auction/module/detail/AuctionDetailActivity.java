@@ -49,6 +49,7 @@ import com.happy.auction.module.home.ImageActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.pay.AuctionPayActivity;
+import com.happy.auction.module.pay.ChartActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.EventAgent;
@@ -71,9 +72,7 @@ import io.reactivex.functions.Consumer;
  */
 public class AuctionDetailActivity extends BaseBackActivity {
     private static final String KEY_GOODS = "GOODS";
-    private static final int REQUEST_CODE_LOGIN_BID = 100;
     private static final int REQUEST_CODE_PAY = 101;
-    private static final int REQUEST_CODE_LOGIN = 102;
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -125,6 +124,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
         mBinding.listRecord.setAdapter(mAdapter);
         DecorationSpace decoration = new DecorationSpace();
         decoration.enableHeader();
+        decoration.enableFooter();
         mBinding.listRecord.addItemDecoration(decoration);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mBinding.listRecord.setLayoutManager(manager);
@@ -192,6 +192,8 @@ public class AuctionDetailActivity extends BaseBackActivity {
                 if (bottom < oldBottom) {
                     EventAgent.onEvent(R.string.goods_detail_bid_choose);
                     showNumberPicker();
+                } else if (mNumberPicker != null) {
+                    mNumberPicker.dismiss();
                 }
             }
         });
@@ -282,7 +284,6 @@ public class AuctionDetailActivity extends BaseBackActivity {
     private void setBtnMoreVisibility() {
         int visible = mAdapter.getRealCount() > 3 ? View.VISIBLE : View.GONE;
         mBinding.tvMore.setVisibility(visible);
-        mBinding.bgMore.setVisibility(visible);
     }
 
     private void listenEvents() {
@@ -385,18 +386,24 @@ public class AuctionDetailActivity extends BaseBackActivity {
                 mAuctionCoin = obj.data;
                 mBinding.setCoin(mAuctionCoin);
                 mBinding.tvBidTimes.setVisibility(View.VISIBLE);
+                mBinding.tvLogin.setVisibility(View.GONE);
             }
         });
     }
 
     public void onClickBid(View view) {
         EventAgent.onEvent(R.string.goods_detail_bid);
-        if (!AppInstance.getInstance().isLogin()) {
-            startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN_BID);
+        if (AppInstance.getInstance().isLogin()) {
+            getBalance();
             return;
         }
-
-        getBalance();
+        startActivity(LoginActivity.newIntent(new LoginActivity.OnLoginListener() {
+            @Override
+            public void onLogin() {
+                getBalance();
+                loadAuctionCoin();
+            }
+        }));
     }
 
     private void getBalance() {
@@ -496,13 +503,8 @@ public class AuctionDetailActivity extends BaseBackActivity {
             return;
         }
 
-        if (REQUEST_CODE_LOGIN_BID == requestCode) {
-            getBalance();
-            loadAuctionCoin();
-        } else if (REQUEST_CODE_PAY == requestCode) {
+        if (REQUEST_CODE_PAY == requestCode) {
             onPaySuccess(mTimes.get());
-        } else if (REQUEST_CODE_LOGIN == requestCode) {
-            loadAuctionCoin();
         }
     }
 
@@ -615,8 +617,25 @@ public class AuctionDetailActivity extends BaseBackActivity {
     }
 
     public void onClickNotLogin(View view) {
-        if (!AppInstance.getInstance().isLogin()) {
-            startActivityForResult(LoginActivity.newIntent(), REQUEST_CODE_LOGIN);
+        if (AppInstance.getInstance().isLogin()) {
+            return;
         }
+
+        startActivity(LoginActivity.newIntent(new LoginActivity.OnLoginListener() {
+            @Override
+            public void onLogin() {
+                loadAuctionCoin();
+            }
+        }));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBinding.tvRules.requestLayout();
+    }
+
+    public void onClickChart(View view) {
+        startActivity(ChartActivity.newIntent(mData.getBaseGoods()));
     }
 }

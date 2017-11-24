@@ -164,6 +164,9 @@
     <string name="number_picker_1">30</string>
     <string name="number_picker_2">50</string>
     <string name="number_picker_3">100</string>
+    <string name="title_chart">历史走势</string>
+    <string name="axis_y">成交价(￥)</string>
+    <string name="axis_x">期数</string>
 
     <!-- order detail -->
     <string name="order_detail">拍品详情</string>

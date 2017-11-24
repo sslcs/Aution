@@ -3,8 +3,10 @@ package com.happy.auction.entity.item;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by LiuCongshan on 17-9-26.<br/>
+ *
  * 往期成交item
+ * @author LiuCongshan
+ * @date 17-9-26
  */
 
 public class ItemPrevious {

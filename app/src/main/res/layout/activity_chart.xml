@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.happy.auction.utils.StringUtil"/>
+        <variable
+            name="data"
+            type="com.happy.auction.entity.item.BaseGoods"/>
+    </data>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.happy.auction.module.me.SettingActivity">
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            style="@style/TextTitle"
+            android:text="@string/title_chart"/>
+
+        <ImageView
+            style="@style/IconBack"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_toolbar_title"
+            app:layout_constraintTop_toTopOf="@+id/tv_toolbar_title"/>
+
+        <View
+            android:id="@+id/bg_info"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/tv_toolbar_title"/>
+
+        <ImageView
+            android:id="@+id/iv_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:image_url="@{data.icon}"
+            app:layout_constraintBottom_toBottomOf="@+id/bg_info"
+            app:layout_constraintEnd_toStartOf="@+id/tv_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bg_info"
+            app:srcCompat="@drawable/ic_default"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="118dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{@string/format_title(data.period, data.title)}"
+            android:textColor="@color/text_normal"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bg_info"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="(第123期) 名称名称名称"/>
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="6dp"
+            android:text="@{@string/format_current_price(StringUtil.formatMoney(data.current_price))}"
+            android:textColor="@color/main_red"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bg_info"
+            app:layout_constraintStart_toStartOf="@+id/tv_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            tools:text="当前价：￥10.00"/>
+
+        <View
+            android:id="@+id/bg_chart"
+            android:layout_width="0dp"
+            android:layout_height="220dp"
+            android:layout_marginTop="7.5dp"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/bg_info"/>
+
+        <TextView
+            android:id="@+id/tv_y"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/axis_y"
+            android:textColor="@color/text_dark"
+            android:textSize="12sp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bg_chart"/>
+        <TextView
+            android:id="@+id/tv_x"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/axis_x"
+            android:textColor="@color/text_dark"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bg_chart"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/v_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            app:layout_constraintBottom_toBottomOf="@+id/bg_chart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_y"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

@@ -42,7 +42,7 @@
             android:background="@null"
             android:gravity="top"
             android:hint="@string/tip_bask"
-            android:maxLength="38"
+            android:maxLength="200"
             android:paddingBottom="20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"

@@ -62,4 +62,17 @@ public class BaseGoods extends BaseObservable implements Serializable {
         }
         return super.equals(obj);
     }
+
+
+    public BaseGoods getBaseGoods() {
+        BaseGoods goods = new BaseGoods();
+        goods.sid = sid;
+        goods.gid = gid;
+        goods.period = period;
+        goods.title = title;
+        goods.icon = icon;
+        goods.market_price = market_price;
+        goods.current_price = current_price;
+        return goods;
+    }
 }
