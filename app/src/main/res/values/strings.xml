@@ -167,6 +167,10 @@
     <string name="title_chart">历史走势</string>
     <string name="axis_y">成交价(￥)</string>
     <string name="axis_x">期数</string>
+    <string name="chart_title">最新50期统计</string>
+    <string name="chart_min">最低成交价: ￥%1$s</string>
+    <string name="chart_max">最高成交价: ￥%1$s</string>
+    <string name="chart_tip">(说明：走势图仅供参考娱乐)</string>
 
     <!-- order detail -->
     <string name="order_detail">拍品详情</string>

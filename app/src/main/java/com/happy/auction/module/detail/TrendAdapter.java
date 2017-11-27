@@ -16,6 +16,7 @@ import com.happy.auction.entity.item.ItemTrend;
 
 public class TrendAdapter extends BaseCustomAdapter<ItemTrend, ItemTrendBinding> {
     private int mMax;
+    private int[] colors = new int[]{0xffe53ca7, 0xffe53c3f, 0xff52ba54, 0xff5f78e1, 0xff9320ff, 0xffff4e00};
 
     @Override
     public ItemTrendBinding getBinding(ViewGroup parent, LayoutInflater inflater) {
@@ -24,9 +25,10 @@ public class TrendAdapter extends BaseCustomAdapter<ItemTrend, ItemTrendBinding>
 
     @Override
     public void bindItem(ItemTrendBinding binding, ItemTrend item, int position) {
-        ItemTrend itemLeft = getItem(position + 1);
-        ItemTrend itemRight = getItem(position - 1);
+        ItemTrend itemLeft = getItem(position - 1);
+        ItemTrend itemRight = getItem(position + 1);
         binding.itemView.setData(item, mMax, itemLeft, itemRight);
+        binding.itemView.setColor(colors[position % 6]);
     }
 
     public void setMax(int max) {

@@ -3,6 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <com.happy.auction.ui.ChartItemView
         android:id="@+id/item_view"
-        android:layout_width="50dp"
+        android:layout_width="43dp"
         android:layout_height="match_parent"/>
 </layout>

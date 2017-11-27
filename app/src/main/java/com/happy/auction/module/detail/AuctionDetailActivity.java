@@ -49,7 +49,6 @@ import com.happy.auction.module.home.ImageActivity;
 import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.pay.AuctionPayActivity;
-import com.happy.auction.module.pay.ChartActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
 import com.happy.auction.utils.EventAgent;
@@ -429,7 +428,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
         int count = mTimes.get();
         final int coin = count * mData.bid_fee;
         if (AppInstance.getInstance().getBalance() < coin) {
-            Intent pay = AuctionPayActivity.newIntent(this, mData.getItemGoods(), count);
+            Intent pay = AuctionPayActivity.newIntent(this, mData.getBaseGoods(), count);
             startActivityForResult(pay, REQUEST_CODE_PAY);
             return;
         }
@@ -636,6 +635,6 @@ public class AuctionDetailActivity extends BaseBackActivity {
     }
 
     public void onClickChart(View view) {
-        startActivity(ChartActivity.newIntent(mData.getBaseGoods()));
+        startActivity(ChartActivity.newIntent(mData.getItemGoods()));
     }
 }

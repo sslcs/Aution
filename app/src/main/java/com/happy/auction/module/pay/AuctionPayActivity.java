@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.databinding.ActivityAuctionPayBinding;
+import com.happy.auction.entity.item.BaseGoods;
 import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.entity.item.ItemPayType;
 import com.happy.auction.entity.param.BaseRequest;
@@ -37,11 +38,11 @@ public class AuctionPayActivity extends BasePayActivity {
     private static final String KEY_EXTRA_COUNT = "EXTRA_COUNT";
 
     private ActivityAuctionPayBinding mBinding;
-    private ItemGoods mData;
+    private BaseGoods mData;
     private ConfigInfo mConfigInfo;
     private int mCount;
 
-    public static Intent newIntent(Context context, ItemGoods data, int count) {
+    public static Intent newIntent(Context context, BaseGoods data, int count) {
         Intent intent = new Intent(context, AuctionPayActivity.class);
         intent.putExtra(KEY_EXTRA_DATA, data);
         intent.putExtra(KEY_EXTRA_COUNT, count);
@@ -57,7 +58,7 @@ public class AuctionPayActivity extends BasePayActivity {
     }
 
     private void initLayout() {
-        mData = (ItemGoods) getIntent().getSerializableExtra(KEY_EXTRA_DATA);
+        mData = (BaseGoods) getIntent().getSerializableExtra(KEY_EXTRA_DATA);
         mCount = getIntent().getIntExtra(KEY_EXTRA_COUNT, 0);
         mBinding.setData(mData);
         mBinding.setPay(new PayData(mCount));

@@ -3,10 +3,12 @@ package com.happy.auction.ui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.entity.item.ItemTrend;
 
@@ -19,12 +21,15 @@ public class ChartItemView extends View {
     private ItemTrend mLeft, mRight, mMiddle;
     private int mMax;
     private Paint mPaint;
-    private int mColorLine,mColorPoint;
+    private Rect mBounds;
+    private int mColorLine, mColorPoint, mColorText;
+    private int mRadius;
 
     public ChartItemView(Context context) {
         super(context);
         init();
     }
+
 
     public ChartItemView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -38,8 +43,14 @@ public class ChartItemView extends View {
 
     private void init() {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mColorLine = getResources().getColor(R.color.text_light);
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        mPaint.setTextSize(AppInstance.getInstance().dp2px(12));
+        mPaint.setStrokeWidth(2);
+        mBounds = new Rect();
+        mColorLine = getResources().getColor(R.color.line_chart);
+        mColorText = getResources().getColor(R.color.text_title);
         mColorPoint = getResources().getColor(R.color.main_red);
+        mRadius = AppInstance.getInstance().dp2px(4);
     }
 
     public void setData(ItemTrend middle, int max, ItemTrend left, ItemTrend right) {
@@ -47,6 +58,10 @@ public class ChartItemView extends View {
         mLeft = left;
         mRight = right;
         mMax = max;
+    }
+
+    public void setColor(int color) {
+        mColorPoint = color;
     }
 
     @Override
@@ -62,24 +77,52 @@ public class ChartItemView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int height = getHeight() - 100;
+        int axisBottom = getHeight() - AppInstance.getInstance().dp2px(60);
+        int height = axisBottom - AppInstance.getInstance().dp2px(10);
         int width = getWidth();
+        int halfWidth = width / 2;
 
+        // draw axis X
         mPaint.setColor(mColorLine);
-        canvas.drawLine(width / 2, height - 2, width / 2, height, mPaint);
-        canvas.drawLine(0, height, width, height, mPaint);
+        canvas.drawLine(halfWidth, axisBottom - 10, halfWidth, axisBottom, mPaint);
+        canvas.drawLine(0, axisBottom, width, axisBottom, mPaint);
 
-        int middleY = height * mMiddle.deal_price / mMax;
+        // draw line, 如果成交价大于市场价，取市场价
+        int price = mMiddle.deal_price > mMax ? mMax : mMiddle.deal_price;
+        int middleY = axisBottom - height * price / mMax;
         if (mLeft != null) {
-            int leftY = height * mLeft.deal_price / mMax;
-            canvas.drawLine(width / 2, middleY, -width / 2, leftY, mPaint);
+            // 绘制左边的连线
+            price = mLeft.deal_price > mMax ? mMax : mLeft.deal_price;
+            int leftY = axisBottom - height * price / mMax;
+            canvas.drawLine(halfWidth, middleY, -halfWidth, leftY, mPaint);
         }
         if (mRight != null) {
-            int rightY = height * mRight.deal_price / mMax;
-            canvas.drawLine(width / 2, middleY, width * 3 / 2, rightY, mPaint);
+            // 绘制右边的连线
+            price = mRight.deal_price > mMax ? mMax : mRight.deal_price;
+            int rightY = axisBottom - height * price / mMax;
+            canvas.drawLine(halfWidth, middleY, halfWidth * 3, rightY, mPaint);
         }
 
+        // draw period
+        mPaint.setColor(mColorText);
+        mPaint.getTextBounds(mMiddle.period, 0, mMiddle.period.length(), mBounds);
+        int periodY = axisBottom + 10 + mBounds.height();
+        int periodX = halfWidth - mBounds.width() / 4;
+        canvas.save();
+        canvas.rotate(-45, halfWidth + mBounds.width() / 4, axisBottom);
+        canvas.drawText(mMiddle.period, periodX, periodY, mPaint);
+        canvas.restore();
+
+        // draw point and price
         mPaint.setColor(mColorPoint);
-        canvas.drawCircle(width / 2, middleY, 10, mPaint);
+        String text = mMiddle.getPrice();
+        int textY = middleY - mRadius * 2;
+        // 在圆点下面绘制数值
+        if (mMiddle.deal_price >= mMax) {
+            mPaint.getTextBounds(text, 0, text.length(), mBounds);
+            textY = middleY + mRadius * 2 + mBounds.height();
+        }
+        canvas.drawText(text, halfWidth, textY, mPaint);
+        canvas.drawCircle(halfWidth, middleY, mRadius, mPaint);
     }
 }

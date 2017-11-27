@@ -4,6 +4,7 @@
     <color name="main_red_alpha">#a0e93f37</color>
     <color name="main_blue">#179fe6</color>
     <color name="main_yellow">#ffff00</color>
+    <color name="tip_yellow">#fff2cf</color>
 
     <color name="text_title">#666666</color>
     <color name="text_dark">#333333</color>
@@ -14,4 +15,5 @@
     <color name="transparent">#aaffffff</color>
     <color name="transparent_black">#aa000000</color>
     <color name="green">#00C236</color>
+    <color name="line_chart">#dddddd</color>
 </resources>

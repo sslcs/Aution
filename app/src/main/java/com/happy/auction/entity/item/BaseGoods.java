@@ -63,7 +63,6 @@ public class BaseGoods extends BaseObservable implements Serializable {
         return super.equals(obj);
     }
 
-
     public BaseGoods getBaseGoods() {
         BaseGoods goods = new BaseGoods();
         goods.sid = sid;

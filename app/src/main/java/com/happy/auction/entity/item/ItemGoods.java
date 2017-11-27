@@ -3,7 +3,10 @@ package com.happy.auction.entity.item;
 import android.databinding.Bindable;
 
 import com.google.gson.annotations.SerializedName;
+import com.happy.auction.AppInstance;
 import com.happy.auction.BR;
+import com.happy.auction.R;
+import com.happy.auction.utils.StringUtil;
 
 /**
  * 商品item
@@ -42,5 +45,26 @@ public class ItemGoods extends BaseGoods {
             }
         }
         return super.equals(obj);
+    }
+
+    public ItemGoods getItemGoods() {
+        ItemGoods goods = new ItemGoods();
+        goods.sid = sid;
+        goods.gid = gid;
+        goods.period = period;
+        goods.title = title;
+        goods.icon = icon;
+        goods.market_price = market_price;
+        goods.current_price = current_price;
+        goods.status = status;
+        return goods;
+    }
+
+    public String getPrice(int status, int price) {
+        String strPrice = StringUtil.formatMoney(price);
+        if (status == 0) {
+            return AppInstance.getInstance().getString(R.string.format_deal_price, strPrice);
+        }
+        return AppInstance.getInstance().getString(R.string.format_current_price, strPrice);
     }
 }
