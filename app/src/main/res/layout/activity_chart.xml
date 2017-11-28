@@ -39,6 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:image_url="@{data.icon}"
+            app:image_width="@{118}"
+            app:image_height="@{120}"
             app:layout_constraintBottom_toBottomOf="@+id/bg_info"
             app:layout_constraintEnd_toStartOf="@+id/tv_title"
             app:layout_constraintStart_toStartOf="parent"

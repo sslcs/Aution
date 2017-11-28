@@ -1,6 +1,7 @@
 package com.happy.auction.module.detail;
 
 import android.databinding.ObservableInt;
+import android.graphics.drawable.ColorDrawable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -30,7 +31,11 @@ public class NumberPicker extends PopupWindow {
         setContentView(mBinding.getRoot());
         setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        // 点击外部隐藏弹框，有些手机需要设置背景才能成功（OPPO）
         setOutsideTouchable(true);
+        ColorDrawable cd = new ColorDrawable(0x000000);
+        setBackgroundDrawable(cd);
 
         mBinding.setPicker(this);
         mBinding.setNumber(number);

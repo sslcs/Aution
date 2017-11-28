@@ -41,6 +41,7 @@ import com.happy.auction.module.main.WebActivity;
 import com.happy.auction.module.message.MessageActivity;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.utils.DebugLog;
 import com.happy.auction.utils.EventAgent;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.RxBus;
@@ -50,6 +51,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -306,15 +308,13 @@ public class TabHomeFragment extends BaseFragment {
                     }
                 });
                 mBinding.rvBanner.setAdapter(adapter);
-                if (obj.data != null && obj.data.size() > 0) {
+                if (obj.data != null && obj.data.size() > 1) {
                     mPageHelper = new PagerHelper();
                     mPageHelper.attachToRecyclerView(mBinding.rvBanner);
-                    if (obj.data.size() > 1) {
-                        mPageHelper.setIndicator(mBinding.circleIndicator);
-                        mPageHelper.enableAutoScroll();
-                        mBinding.circleIndicator.setVisibility(View.VISIBLE);
-                        mBinding.circleIndicator.setCount(obj.data.size());
-                    }
+                    mPageHelper.setIndicator(mBinding.circleIndicator);
+                    mPageHelper.enableAutoScroll();
+                    mBinding.circleIndicator.setVisibility(View.VISIBLE);
+                    mBinding.circleIndicator.setCount(obj.data.size());
                 }
             }
         });

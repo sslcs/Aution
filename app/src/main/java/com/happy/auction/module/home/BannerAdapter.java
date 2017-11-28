@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.happy.auction.adapter.BaseAdapter;
+import com.happy.auction.adapter.CustomViewHolder;
 import com.happy.auction.databinding.ItemBannerBinding;
 import com.happy.auction.entity.item.ItemBanner;
 
@@ -29,5 +30,20 @@ public class BannerAdapter extends BaseAdapter<ItemBanner, ItemBannerBinding> {
     @Override
     public void bindItem(final ItemBannerBinding binding, ItemBanner item, int position) {
         binding.setData(item);
+    }
+
+    @Override
+    public int getItemCount() {
+        if (getRealCount() > 1) {
+            return Integer.MAX_VALUE;
+        }
+        return super.getItemCount();
+    }
+
+    @Override
+    public void onBindViewHolder(CustomViewHolder<ItemBannerBinding> holder, int position) {
+        ItemBanner item = getItem(position % getRealCount());
+        bindItem(holder.mBinding, item, position);
+        setClickListener(holder, item);
     }
 }

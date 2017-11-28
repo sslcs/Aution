@@ -34,7 +34,7 @@
             android:layout_marginTop="20dp"
             app:image_height="@{66}"
             app:image_url="@{data.icon}"
-            app:image_width="@{71}"
+            app:image_width="@{97}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_username"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,9 +43,10 @@
 
         <TextView
             android:id="@+id/tv_username"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
+            android:layout_marginLeft="97dp"
             android:layout_marginTop="20dp"
             android:ellipsize="end"
             android:singleLine="true"

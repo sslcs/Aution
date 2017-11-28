@@ -33,7 +33,7 @@ import com.happy.auction.utils.ToastUtil;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareUtil;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -131,7 +131,7 @@ public class WebActivity extends BaseBackActivity {
 
     private boolean handleUrl(String url) {
         if (!url.startsWith(SCHEME_LOCAL)) {
-            return false;
+            return handleOther(url);
         }
 
         String param = url.substring(24);
@@ -166,6 +166,21 @@ public class WebActivity extends BaseBackActivity {
             return false;
         }
         return true;
+    }
+
+    private boolean handleOther(String url) {
+        if (url.startsWith(SCHEME_QQ)) {
+            try {
+                Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                intent.addCategory("android.intent.category.BROWSABLE");
+                startActivity(intent);
+                finish();
+            } catch (Exception e) {
+                ToastUtil.show(R.string.error_qq);
+            }
+            return true;
+        }
+        return false;
     }
 
     private void onActivityComplete() {
@@ -206,22 +221,6 @@ public class WebActivity extends BaseBackActivity {
                     super.onReceivedSslError(view, handler, error);
                 }
             }
-
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String url) {
-                if (url.startsWith(SCHEME_QQ)) {
-                    try {
-                        Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-                        intent.addCategory("android.intent.category.BROWSABLE");
-                        startActivity(intent);
-                        finish();
-                    } catch (Exception e) {
-                        ToastUtil.show(R.string.error_qq);
-                    }
-                } else {
-                    super.onReceivedError(view, errorCode, description, url);
-                }
-            }
         });
     }
 
@@ -250,20 +249,12 @@ public class WebActivity extends BaseBackActivity {
         RxBus.getDefault().unsubscribe(this);
     }
 
-
     private void share(String title, String content) {
-        OnekeyShare oks = new OnekeyShare();
-        oks.disableSSOWhenAuthorize();
-        oks.setTitle(title);
-        oks.setText(content);
         Bitmap logo = BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo);
-        oks.setImageData(logo);
         String url = mUrl.replace("client_index", "login");
         url += "?name=" + StringUtil.formatPhone(AppInstance.getInstance().getUser().phone);
         url += "&uid=" + AppInstance.getInstance().uid;
         url += "&state=3";
-        oks.setUrl(url);
-        oks.setSilent(true);
-        oks.show(this);
+        ShareUtil.share(title, content, url, logo, this);
     }
 }

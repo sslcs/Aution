@@ -104,8 +104,12 @@ public class CircleIndicator extends View {
      * @param positionOffset
      */
     private void trigger(int position, float positionOffset) {
-        if (position >= tabItems.size() || position < 0) {
+        if (position < 0) {
             return;
+        }
+
+        if (position >= tabItems.size()) {
+            position %= tabItems.size();
         }
 
         mCurItemPosition = position;

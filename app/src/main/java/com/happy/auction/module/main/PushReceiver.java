@@ -19,6 +19,7 @@ public class PushReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             DebugLog.e("JPush PushReceiver : " + JPushInterface.getRegistrationID(context));
+            return;
         }
 
         Bundle bundle = intent.getExtras();

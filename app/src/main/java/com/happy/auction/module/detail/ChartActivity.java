@@ -24,6 +24,7 @@ import com.happy.auction.utils.RxBus;
 import com.happy.auction.utils.StringUtil;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.Locale;
 
 import io.reactivex.functions.Consumer;
@@ -100,6 +101,7 @@ public class ChartActivity extends BaseBackActivity {
                 if (obj.data == null || obj.data.trend_data == null) {
                     return;
                 }
+                Collections.reverse(obj.data.trend_data);
                 mAdapter.addAll(obj.data.trend_data);
                 mBinding.vList.setAdapter(mAdapter);
                 mBinding.vList.smoothScrollToPosition(obj.data.trend_data.size() - 1);

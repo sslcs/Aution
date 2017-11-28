@@ -16,8 +16,8 @@ import java.util.List;
  * @date 17-09-23
  */
 public abstract class BaseAdapter<T, B extends ViewDataBinding> extends RecyclerView.Adapter<CustomViewHolder<B>> {
-    private List<T> data;
-    private OnItemClickListener<T> onListener;
+    private List<T> mData;
+    private OnItemClickListener<T> mListener;
 
     public BaseAdapter() {}
 
@@ -26,44 +26,44 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
     }
 
     public void clear() {
-        if (data == null) {
+        if (mData == null) {
             return;
         }
-        data.clear();
+        mData.clear();
         notifyDataSetChanged();
     }
 
     public void addAll(List<T> items) {
-        if (data == null) {
-            data = new ArrayList<>();
+        if (mData == null) {
+            mData = new ArrayList<>();
         }
-        data.addAll(items);
+        mData.addAll(items);
         notifyDataSetChanged();
     }
 
     public List<T> getData() {
-        return data;
+        return mData;
     }
 
     public T getItem(int position) {
-        if (data == null || position >= data.size() || position < 0) {
+        if (mData == null || position >= mData.size() || position < 0) {
             return null;
         }
-        return data.get(position);
+        return mData.get(position);
     }
 
     public int getPosition(T item) {
-        if (data == null || data.isEmpty()) {
+        if (mData == null || mData.isEmpty()) {
             return -1;
         }
-        return data.indexOf(item);
+        return mData.indexOf(item);
     }
 
     public T getLast() {
-        if (data == null) {
+        if (mData == null) {
             return null;
         }
-        return getItem(data.size() - 1);
+        return getItem(mData.size() - 1);
     }
 
     @Override
@@ -72,66 +72,77 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
         return new CustomViewHolder<>(getBinding(parent, inflater));
     }
 
+    /**
+     * 获取Binding
+     *
+     * @param parent   parent
+     * @param inflater inflater
+     * @return Binding
+     */
     public abstract B getBinding(ViewGroup parent, LayoutInflater inflater);
 
     @Override
     public void onBindViewHolder(final CustomViewHolder<B> holder, final int position) {
         final T item = getItem(position);
         if (item != null) {
-            bindItem(holder.getBinding(), item, position);
-
-            if (onListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        onListener.onItemClick(view, item, holder.getAdapterPosition());
-                    }
-                });
-            }
+            bindItem(holder.mBinding, item, position);
+            setClickListener(holder, item);
         }
+    }
+
+    protected void setClickListener(final CustomViewHolder<B> holder, final T item) {
+        if (mListener == null) {
+            return;
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onItemClick(view, item, holder.getAdapterPosition());
+            }
+        });
     }
 
     public abstract void bindItem(B binding, T item, int position);
 
     @Override
     public int getItemCount() {
-        return data == null ? 0 : data.size();
+        return mData == null ? 0 : mData.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener<T> listener) {
-        this.onListener = listener;
+        this.mListener = listener;
     }
 
     public void addItem(T item) {
-        if (data == null) {
-            data = new ArrayList<>();
+        if (mData == null) {
+            mData = new ArrayList<>();
         }
-        data.add(item);
-        notifyItemInserted(data.size() - 1);
+        mData.add(item);
+        notifyItemInserted(mData.size() - 1);
     }
 
     public void addItem(int position, T item) {
-        if (data == null) {
-            data = new ArrayList<>();
+        if (mData == null) {
+            mData = new ArrayList<>();
         }
-        data.add(position, item);
+        mData.add(position, item);
         notifyItemInserted(position);
     }
 
     public T removeItem(int position) {
-        if (data == null || position < 0 || position >= data.size()) {
+        if (mData == null || position < 0 || position >= mData.size()) {
             return null;
         }
-        T item = data.remove(position);
+        T item = mData.remove(position);
         notifyItemRemoved(position);
         return item;
     }
 
     final public int getRealCount() {
-        return data == null ? 0 : data.size();
+        return mData == null ? 0 : mData.size();
     }
 
     final public boolean isEmpty() {
-        return data == null || data.isEmpty();
+        return mData == null || mData.isEmpty();
     }
 }

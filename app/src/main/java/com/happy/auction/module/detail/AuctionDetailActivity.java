@@ -224,9 +224,6 @@ public class AuctionDetailActivity extends BaseBackActivity {
         if (mNumberPicker == null) {
             mNumberPicker = new NumberPicker(AuctionDetailActivity.this, mTimes);
         }
-        if (mNumberPicker.isShowing()) {
-            return;
-        }
         mNumberPicker.reset();
         int offsetX = AppInstance.getInstance().dp2px(25);
         int[] location = new int[2];
@@ -526,9 +523,8 @@ public class AuctionDetailActivity extends BaseBackActivity {
             int number = Integer.parseInt(editable.toString());
             mTimes.set(number);
         } catch (NumberFormatException e) {
-            if (!TextUtils.isEmpty(editable)) {
-                mTimes.set(0);
-            }
+            mBinding.etTimes.setText("0");
+            mBinding.etTimes.setSelection(1);
         }
     }
 

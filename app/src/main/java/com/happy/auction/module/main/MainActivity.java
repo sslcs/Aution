@@ -31,6 +31,7 @@ import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.module.category.TabCategoryFragment;
 import com.happy.auction.module.home.TabHomeFragment;
 import com.happy.auction.module.latest.TabLatestFragment;
+import com.happy.auction.module.login.LoginActivity;
 import com.happy.auction.module.login.SetPasswordActivity;
 import com.happy.auction.module.me.TabMeFragment;
 import com.happy.auction.net.NetCallback;

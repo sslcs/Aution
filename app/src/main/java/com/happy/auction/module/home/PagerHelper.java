@@ -54,12 +54,12 @@ public class PagerHelper extends PagerSnapHelper {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        scroll();
+                        autoScroll();
                     }
                 });
     }
 
-    private void scroll() {
+    private void autoScroll() {
         if (mRecyclerView == null) {
             return;
         }
