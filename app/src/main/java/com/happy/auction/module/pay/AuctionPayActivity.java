@@ -11,7 +11,6 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.databinding.ActivityAuctionPayBinding;
 import com.happy.auction.entity.item.BaseGoods;
-import com.happy.auction.entity.item.ItemGoods;
 import com.happy.auction.entity.item.ItemPayType;
 import com.happy.auction.entity.param.BaseRequest;
 import com.happy.auction.entity.param.BidParam;
@@ -41,6 +40,7 @@ public class AuctionPayActivity extends BasePayActivity {
     private BaseGoods mData;
     private ConfigInfo mConfigInfo;
     private int mCount;
+    private PayData mPayData;
 
     public static Intent newIntent(Context context, BaseGoods data, int count) {
         Intent intent = new Intent(context, AuctionPayActivity.class);
@@ -60,8 +60,12 @@ public class AuctionPayActivity extends BasePayActivity {
     private void initLayout() {
         mData = (BaseGoods) getIntent().getSerializableExtra(KEY_EXTRA_DATA);
         mCount = getIntent().getIntExtra(KEY_EXTRA_COUNT, 0);
+        mPayData = new PayData(mCount);
         mBinding.setData(mData);
-        mBinding.setPay(new PayData(mCount));
+        mBinding.setPay(mPayData);
+        if (AppInstance.getInstance().getBalance() > 0) {
+            mBinding.tvMinus.setSelected(true);
+        }
 
         initList(mBinding.vList);
 
@@ -106,5 +110,16 @@ public class AuctionPayActivity extends BasePayActivity {
 
     public void onClickInvite(View view) {
         startActivity(WebActivity.newIntent(mConfigInfo.title, mConfigInfo.link));
+    }
+
+    public void onClickBalance(View view) {
+        if (AppInstance.getInstance().getBalance() == 0) {
+            return;
+        }
+
+        boolean select = !mBinding.tvMinus.isSelected();
+        mBinding.tvMinus.setSelected(select);
+        int minus = select ? AppInstance.getInstance().getBalance() : 0;
+        mPayData.minus.set(minus);
     }
 }

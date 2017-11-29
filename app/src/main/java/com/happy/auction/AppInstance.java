@@ -128,4 +128,12 @@ public class AppInstance extends Application {
     public void minusMessageCount() {
         mMessageCount.set(mMessageCount.get() - 1);
     }
+
+    public String getHost() {
+        String host = BuildConfig.HOST;
+        if (BuildConfig.DEBUG) {
+            host = PreferenceUtil.getHost();
+        }
+        return host;
+    }
 }

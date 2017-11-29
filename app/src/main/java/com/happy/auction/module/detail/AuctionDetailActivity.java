@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.reflect.TypeToken;
 import com.happy.auction.AppInstance;
-import com.happy.auction.BuildConfig;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
@@ -602,7 +601,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
     public void onClickDetail(View view) {
         EventAgent.onEvent(R.string.goods_detail_more);
         String title = getString(R.string.goods_detail);
-        String url = "http://" + BuildConfig.HOST + "/web/goods/detail?gid=" + mData.gid;
+        String url = "http://" + AppInstance.getInstance().getHost() + "/web/goods/detail?gid=" + mData.gid;
         startActivity(WebActivity.newIntent(title, url));
     }
 

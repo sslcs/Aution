@@ -1,5 +1,7 @@
 package com.happy.auction.module.pay;
 
+import android.databinding.BaseObservable;
+import android.databinding.ObservableInt;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -8,14 +10,18 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 
 /**
- * Created by LiuCongshan on 17-10-12.
+ * @author LiuCongshan
+ * @date 17-10-12
  */
 
-public class PayData {
+public class PayData extends BaseObservable {
     public int count;
+
+    public final ObservableInt minus = new ObservableInt();
 
     public PayData(int count) {
         this.count = count;
+        minus.set(AppInstance.getInstance().getBalance());
     }
 
     public SpannableString getStringBalance() {
@@ -28,11 +34,7 @@ public class PayData {
         return ss;
     }
 
-    public int getIntBalance() {
-        return AppInstance.getInstance().getBalance();
-    }
-
-    public String getPay() {
-        return "￥" + (count - getIntBalance());
+    public String getPay(int minus) {
+        return "￥" + (count - minus);
     }
 }

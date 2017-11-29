@@ -69,6 +69,7 @@ public class WebActivity extends BaseBackActivity {
             return null;
         }
 
+        DebugLog.e("url : " + url);
         Intent intent = new Intent(AppInstance.getInstance(), WebActivity.class);
         intent.putExtra(KEY_TITLE, title);
         intent.putExtra(KEY_URL, url);

@@ -150,12 +150,8 @@ public class MainActivity extends BaseTimeActivity {
 
     private void initWebSocket() {
         OkHttpClient httpClient = new OkHttpClient.Builder().build();
-        String host = BuildConfig.HOST;
-        if (BuildConfig.DEBUG) {
-            host = PreferenceUtil.getHost();
-        }
         Request request = new Request.Builder()
-                .url("ws://" + host + "/ws")
+                .url("ws://" + AppInstance.getInstance().getHost() + "/ws")
                 .build();
         httpClient.newWebSocket(request, new WebSocketListener() {
             @Override
