@@ -69,16 +69,16 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
         binding.ivExpand.setOnClickListener(listener);
     }
 
-    private ImageView getImageView(ItemBaskDetailBinding binding, int position) {
+    private ImageView getImageView(ItemBaskDetailBinding binding, int position, boolean isMask) {
         if (position == 1) {
-            return binding.ivImg1;
+            return isMask ? binding.ivMask1 : binding.ivImg1;
         }
 
         if (position == 2) {
-            return binding.ivImg2;
+            return isMask ? binding.ivMask2 : binding.ivImg2;
         }
 
-        return binding.ivImg3;
+        return isMask ? binding.ivMask2 : binding.ivImg3;
     }
 
     private void displayImage(final ItemBaskDetailBinding binding, final ItemBask item) {
@@ -97,12 +97,15 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
 
         int size = item.s_img.size();
         for (int i = 1; i < 4; i++) {
-            ImageView iv = getImageView(binding, i);
+            ImageView iv = getImageView(binding, i, false);
+            ImageView ivMask = getImageView(binding, i, true);
             if (i < size) {
+                ivMask.setVisibility(View.VISIBLE);
                 iv.setVisibility(View.VISIBLE);
                 ImageLoader.displayImage(iv, item.s_img.get(i));
                 iv.setOnClickListener(listener);
             } else {
+                ivMask.setVisibility(View.GONE);
                 iv.setVisibility(View.GONE);
             }
         }

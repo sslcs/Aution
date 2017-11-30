@@ -22,6 +22,7 @@ import com.happy.auction.AppInstance;
 import com.happy.auction.R;
 import com.happy.auction.adapter.DecorationSpace;
 import com.happy.auction.adapter.LoadMoreListener;
+import com.happy.auction.adapter.OnItemClickListener;
 import com.happy.auction.base.BaseBackActivity;
 import com.happy.auction.databinding.ActivityAuctionDetailBinding;
 import com.happy.auction.entity.event.AuctionEndEvent;
@@ -132,6 +133,14 @@ public class AuctionDetailActivity extends BaseBackActivity {
             @Override
             public void loadMore() {
                 loadPrevious();
+            }
+        });
+        mAdapterPrevious.setOnItemClickListener(new OnItemClickListener<ItemPrevious>() {
+            @Override
+            public void onItemClick(View view, ItemPrevious item, int position) {
+                BaseGoods goods = mData.getBaseGoods();
+                goods.sid = item.sid;
+                startActivity(newIntent(goods));
             }
         });
         mAdapterBask = new BaskAdapter();
@@ -388,6 +397,11 @@ public class AuctionDetailActivity extends BaseBackActivity {
 
     public void onClickBid(View view) {
         EventAgent.onEvent(R.string.goods_detail_bid);
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(mBinding.etTimes.getWindowToken(), 0);
+        }
+
         if (AppInstance.getInstance().isLogin()) {
             getBalance();
             return;
@@ -469,10 +483,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
-                mBinding.setCoin(null);
                 mBinding.setNewBid(null);
-                setBtnMoreVisibility();
-
                 Type type = new TypeToken<DataResponse<AuctionDetail>>() {}.getType();
                 DataResponse<AuctionDetail> obj = GsonSingleton.get().fromJson(response, type);
                 mData = obj.data;

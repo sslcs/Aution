@@ -28,13 +28,17 @@
 
         <TextView
             android:id="@+id/tv_username"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="9dp"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text='@{data.username}'
             android:textColor="@color/main_blue"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/tv_time"
             app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
             app:layout_constraintTop_toTopOf="@+id/iv_avatar"
             tools:text="9爱吃芒果"/>
@@ -96,6 +100,11 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="@+id/tv_username"
             app:layout_constraintTop_toBottomOf="@+id/tv_expand"/>
+        <ImageView
+            android:id="@+id/iv_mask"
+            style="@style/Mask"
+            app:layout_constraintEnd_toEndOf="@+id/iv_img"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_img"/>
 
         <ImageView
             android:id="@+id/iv_img_1"
@@ -106,6 +115,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_img"
             app:layout_constraintTop_toTopOf="@+id/iv_img"/>
+        <ImageView
+            android:id="@+id/iv_mask_1"
+            style="@style/Mask"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/iv_img_1"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_img_1"/>
 
         <ImageView
             android:id="@+id/iv_img_2"
@@ -116,6 +131,12 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/tv_username"
             app:layout_constraintTop_toBottomOf="@+id/iv_img"/>
+        <ImageView
+            android:id="@+id/iv_mask_2"
+            style="@style/Mask"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/iv_img_2"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_img_2"/>
 
         <ImageView
             android:id="@+id/iv_img_3"
@@ -126,6 +147,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_img_2"
             app:layout_constraintTop_toTopOf="@+id/iv_img_2"/>
+        <ImageView
+            android:id="@+id/iv_mask_3"
+            style="@style/Mask"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/iv_img_3"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_img_3"/>
 
         <TextView
             android:id="@+id/tv_label"

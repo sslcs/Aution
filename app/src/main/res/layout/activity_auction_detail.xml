@@ -441,20 +441,27 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tv_return_label"/>
                         <TextView
-                            android:id="@+id/tv_chart"
+                            android:id="@+id/tv_chart_arrow"
                             android:layout_width="0dp"
-                            android:drawableLeft="@drawable/ic_chart"
-                            android:drawablePadding="5dp"
                             android:layout_height="40dp"
                             android:drawableRight="@drawable/ic_arrow_dark"
                             android:gravity="center_vertical"
                             android:onClick="onClickChart"
-                            android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingRight="@dimen/activity_horizontal_margin"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/divider_chart"/>
+                        <TextView
+                            android:id="@+id/tv_chart"
+                            android:layout_width="wrap_content"
+                            android:drawableRight="@drawable/ic_chart"
+                            android:drawablePadding="5dp"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:text="@string/title_chart"
                             android:textColor="@color/text_dark"
                             android:textSize="14sp"
-                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/divider_chart"/>
                         <View
