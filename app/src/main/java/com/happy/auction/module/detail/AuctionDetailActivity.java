@@ -196,7 +196,7 @@ public class AuctionDetailActivity extends BaseBackActivity {
         mBinding.etTimes.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                if (bottom < oldBottom) {
+                if (oldBottom - bottom > view.getHeight()) {
                     EventAgent.onEvent(R.string.goods_detail_bid_choose);
                     showNumberPicker();
                 } else if (mNumberPicker != null) {

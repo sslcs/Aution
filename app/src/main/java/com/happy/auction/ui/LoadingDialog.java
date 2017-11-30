@@ -22,13 +22,8 @@ public class LoadingDialog extends BaseDialog {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setCancelable(false);
         mBinding = DialogLoadingBinding.inflate(inflater, container, false);
         return mBinding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setCancelable(false);
     }
 }

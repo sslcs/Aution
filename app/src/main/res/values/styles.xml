@@ -138,12 +138,6 @@
         <item name="android:textSize">15sp</item>
     </style>
 
-    <style name="BaseDialog" parent="android:style/Theme.Dialog">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:backgroundDimEnabled">true</item>
-    </style>
-
     <style name="LoginEditText">
         <item name="android:background">@android:color/white</item>
         <item name="android:layout_height">50dp</item>
@@ -173,9 +167,6 @@
 
     <style name="ProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_bar</item>
-    </style>
-
-    <style name="LoadingDialog" parent="Widget.AppCompat.ProgressBar">
     </style>
 
     <style name="TextProgress">

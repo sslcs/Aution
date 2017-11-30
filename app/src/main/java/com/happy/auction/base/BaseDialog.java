@@ -2,12 +2,10 @@ package com.happy.auction.base;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
-import com.happy.auction.R;
 
 /**
  * 弹框基类
@@ -17,11 +15,11 @@ import com.happy.auction.R;
  */
 
 public abstract class BaseDialog extends DialogFragment {
-
-    @Nullable
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Dialog(getActivity(), R.style.BaseDialog);
+        setStyle(STYLE_NO_TITLE, 0);
+        return super.onCreateDialog(savedInstanceState);
     }
 
     @Override

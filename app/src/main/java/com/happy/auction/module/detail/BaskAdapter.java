@@ -78,7 +78,7 @@ public class BaskAdapter extends BaseCustomAdapter<ItemBask, ItemBaskDetailBindi
             return isMask ? binding.ivMask2 : binding.ivImg2;
         }
 
-        return isMask ? binding.ivMask2 : binding.ivImg3;
+        return isMask ? binding.ivMask3 : binding.ivImg3;
     }
 
     private void displayImage(final ItemBaskDetailBinding binding, final ItemBask item) {
