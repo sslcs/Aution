@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -233,11 +232,9 @@ public class AuctionDetailActivity extends BaseBackActivity {
             mNumberPicker = new NumberPicker(AuctionDetailActivity.this, mTimes);
         }
         mNumberPicker.reset();
-        int offsetX = AppInstance.getInstance().dp2px(25);
-        int[] location = new int[2];
-        mBinding.etTimes.getLocationOnScreen(location);
-        int offsetY = getResources().getDisplayMetrics().heightPixels - location[1];
-        mNumberPicker.showAtLocation(mBinding.getRoot(), Gravity.LEFT | Gravity.BOTTOM, offsetX, offsetY);
+        int offsetX = -mBinding.etTimes.getWidth() / 2;
+        int offsetY = -mBinding.etTimes.getHeight() - AppInstance.getInstance().dp2px(94);
+        mNumberPicker.showAsDropDown(mBinding.etTimes, offsetX, offsetY);
     }
 
     private void showBlackTitle(int verticalOffset) {

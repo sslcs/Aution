@@ -46,24 +46,10 @@ public class CustomWebView extends WebView {
         // enabled flash plugin or other
         settings.setPluginState(WebSettings.PluginState.ON);
 
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
-
-        try {
-            File cacheDir = AppInstance.getInstance().getExternalCacheDir();
-            if (cacheDir == null) {
-                cacheDir = AppInstance.getInstance().getCacheDir();
-            }
-            if (cacheDir != null) {
-                settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-                settings.setAppCachePath(cacheDir.getAbsolutePath());
-                settings.setAppCacheEnabled(true);
-                settings.setAllowFileAccess(true);
-                settings.setDomStorageEnabled(true);
-                settings.setLoadsImagesAutomatically(true);
-            }
-        } catch (Exception ignored) {
-        }
 
         final String ua = settings.getUserAgentString() + getBaseUserAgent();
         settings.setUserAgentString(ua);
