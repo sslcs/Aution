@@ -369,6 +369,7 @@ public class TabHomeFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         RxBus.getDefault().unsubscribe(this);
+        mBinding.tvAnnounce.stop();
     }
 
     @Override

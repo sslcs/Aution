@@ -17,6 +17,7 @@ public class PreferenceUtil {
     private static final String KEY_UID = "uid";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_TIP_CAPTCHA = "tip_captcha";
+    private static final String KEY_LOGIN_CAPTCHA = "login_captcha";
     private static final String KEY_MODIFY_PASSWORD = "modify_password";
 
     private static void saveString(String key, String value) {
@@ -90,5 +91,13 @@ public class PreferenceUtil {
 
     public static boolean showTipCaptcha() {
         return getBoolean(KEY_TIP_CAPTCHA, true);
+    }
+
+    public static void setLoginCaptcha(boolean isCaptcha) {
+        saveBoolean(KEY_LOGIN_CAPTCHA, isCaptcha);
+    }
+
+    public static boolean loginCaptcha() {
+        return getBoolean(KEY_LOGIN_CAPTCHA, true);
     }
 }

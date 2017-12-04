@@ -15,13 +15,12 @@ import com.happy.auction.entity.response.LoginResponse;
 import com.happy.auction.entity.response.UserInfo;
 import com.happy.auction.net.NetCallback;
 import com.happy.auction.net.NetClient;
+import com.happy.auction.ui.LoadingDialog;
 import com.happy.auction.utils.GsonSingleton;
 import com.happy.auction.utils.PreferenceUtil;
 import com.happy.auction.utils.RxBus;
 
 import java.lang.reflect.Type;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * 登录界面
@@ -31,6 +30,7 @@ import io.reactivex.functions.Consumer;
 public class LoginActivity extends BaseTabActivity {
     private static OnLoginListener mListener;
     private String phone;
+    private LoadingDialog mLoadingDialog;
 
     public static Intent newIntent() {
         return new Intent(AppInstance.getInstance(), LoginActivity.class);
@@ -49,13 +49,9 @@ public class LoginActivity extends BaseTabActivity {
         adapter.setTitles(new String[]{getString(R.string.captcha_login), getString(R.string.password_login)});
         mBinding.viewPager.setAdapter(adapter);
         mBinding.tabLayout.setupWithViewPager(mBinding.viewPager);
-
-        RxBus.getDefault().subscribe(this, LoginResponse.class, new Consumer<LoginResponse>() {
-            @Override
-            public void accept(LoginResponse response) throws Exception {
-                getUserInfo();
-            }
-        });
+        if (!PreferenceUtil.loginCaptcha()) {
+            mBinding.viewPager.setCurrentItem(1);
+        }
     }
 
     private void getUserInfo() {
@@ -64,6 +60,7 @@ public class LoginActivity extends BaseTabActivity {
         NetClient.query(request, new NetCallback() {
             @Override
             public void onSuccess(String response, String message) {
+                mLoadingDialog.dismiss();
                 Type type = new TypeToken<DataResponse<UserInfo>>() {}.getType();
                 DataResponse<UserInfo> obj = GsonSingleton.get().fromJson(response, type);
                 AppInstance.getInstance().setUser(obj.data);
@@ -80,10 +77,21 @@ public class LoginActivity extends BaseTabActivity {
                     mListener.onLogin();
                 }
             }
+
+            @Override
+            public void onError(int code, String message) {
+                super.onError(code, message);
+                mLoadingDialog.dismiss();
+            }
         });
     }
 
     public void login(LoginParam param) {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog();
+            mLoadingDialog.show(getSupportFragmentManager(), "loading");
+        }
+        PreferenceUtil.setLoginCaptcha(LoginParam.TYPE_CAPTCHA.equals(param.login_type));
         BaseRequest<LoginParam> request = new BaseRequest<>(param);
         NetClient.query(request, new NetCallback() {
             @Override
@@ -91,6 +99,13 @@ public class LoginActivity extends BaseTabActivity {
                 Type type = new TypeToken<DataResponse<LoginResponse>>() {}.getType();
                 DataResponse<LoginResponse> obj = GsonSingleton.get().fromJson(response, type);
                 RxBus.getDefault().post(obj.data);
+                getUserInfo();
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                super.onError(code, message);
+                mLoadingDialog.dismiss();
             }
         });
     }
@@ -107,7 +122,6 @@ public class LoginActivity extends BaseTabActivity {
     protected void onDestroy() {
         super.onDestroy();
         mListener = null;
-        RxBus.getDefault().unsubscribe(this);
     }
 
     public interface OnLoginListener {
